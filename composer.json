@@ -1,12 +1,6 @@
 {
     "name": "renardeau/klusbib-module",
     "description": "",
-    "authors": [
-        {
-            "name": "Nicolas Widart",
-            "email": "n.widart@gmail.com"
-        }
-    ],
     "extra": {
         "laravel": {
             "providers": [
@@ -21,5 +15,12 @@
         "psr-4": {
             "Modules\\Klusbib\\": ""
         }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "cloudcreativity/laravel-json-api": "^1.5"
+    },
+    "require-dev": {
+        "cloudcreativity/json-api-testing": "^1.2|^2.0"
     }
 }

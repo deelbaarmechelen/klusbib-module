@@ -13,7 +13,7 @@
     <table
             data-advanced-search="true"
             data-click-to-select="true"
-            data-columns="{{ \Klusbib\Modules\Presenters\ToolPresenter::dataTableLayout() }}"
+            data-columns="{{ \Modules\Klusbib\Presenters\ToolPresenter::dataTableLayout() }}"
             data-cookie-id-table="assetsListingTable"
             data-pagination="true"
             data-id-table="assetsListingTable"
