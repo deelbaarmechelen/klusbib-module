@@ -23,6 +23,12 @@ Route::middleware('auth:api')->get('/klusbib', function (Request $request) {
 Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'api'], function () {
 
     Route::group(['prefix' => 'klusbib'], function () {
+        Route::get('users',
+            [
+                'as' => 'api.klusbib.users.index',
+                'uses' => 'UsersController@index'
+            ]
+        );
         Route::get('users/avatar',
             [
                 'as' => 'api.avatar.show',

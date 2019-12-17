@@ -16,4 +16,7 @@ Route::prefix('klusbib')->group(function() {
     Route::get('/', [
         'as' => 'klusbib',
         'uses' => 'KlusbibController@index' ]);
+    Route::get('/users', [
+        'as' => 'klusbib.users.index',
+        'uses' => 'UsersController@index' ]);
 });

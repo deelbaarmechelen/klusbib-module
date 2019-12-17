@@ -1,5 +1,7 @@
 <?php
 
     return [
-    'name'			=> 'Klusbib',
+        'name'			=> 'Klusbib',
+        'membership_state' => 'Lidmaatschap status',
+        'membership_expiry' => 'Lidm. vervaldatum'
     ];
