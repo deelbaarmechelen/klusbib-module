@@ -2,8 +2,12 @@
 
 namespace Modules\Klusbib\Providers;
 
+use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use Modules\Klusbib\Api\Client;
+use Torann\RemoteModel\Model;
 
 class KlusbibServiceProvider extends ServiceProvider
 {
@@ -19,13 +23,32 @@ class KlusbibServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(Router $router)
     {
+        Log::debug("Booting Klusbib Service Provider");
+
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
         $this->registerFactories();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
+
+        $this->registerApiClient($router);
+
+    }
+    private function registerApiClient(Router $router) {
+
+        Log::debug('aliasMiddleware added');
+        $router->aliasMiddleware('apicontext', \Modules\Klusbib\Http\Middleware\ApiContextMiddleware::class);
+
+        $this->app->singleton('apiclient', function ()
+        {
+            Log::debug("API Service Provider: creating Client singleton with base_uri=" . config('klusbib.api_url'));
+            return new Client(new \GuzzleHttp\Client([
+                'base_uri' => config('klusbib.api_url'),
+            ]), config('klusbib.api_user'), config('klusbib.api_pwd'));
+        });
+        Model::setClient($this->app['apiclient']);
     }
 
     /**
@@ -35,7 +58,9 @@ class KlusbibServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        Log::debug("Registering Klusbib Service Provider");
         $this->app->register(RouteServiceProvider::class);
+//        $this->app->register(ApiServiceProvider::class);
     }
 
     /**

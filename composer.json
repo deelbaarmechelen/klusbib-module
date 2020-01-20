@@ -16,9 +16,17 @@
             "Modules\\Klusbib\\": ""
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/renardeau/remote-model"
+        }
+    ],
     "require": {
         "guzzlehttp/guzzle": "^6.3",
-        "cloudcreativity/laravel-json-api": "^1.5"
+        "cloudcreativity/laravel-json-api": "^1.5",
+        "calebporzio/parental": "0.9",
+        "renardeau/remote-model": "dev-master"
     },
     "require-dev": {
         "cloudcreativity/json-api-testing": "^1.2|^2.0"

@@ -21,11 +21,22 @@ Route::group(
             'uses' => 'KlusbibController@index'
 //            'uses' => 'AssetsController@dueForAudit'
         ]);
-
         // Sample override referring to controller in main app
 //        Route::get('audit/overdue', [
 //            'as' => 'assets.audit.overdue',
 //            'uses' => '\App\Http\Controllers\AssetsController@overdueForAudit'
 //        ]);
 
+    });
+
+Route::group(
+    ['prefix' => 'users',
+        'middleware' => ['auth']],
+    function () {
+        // override user edit
+        Route::get('{user}/edit', [
+            'as' => 'users.edit',
+            'uses' => '\Modules\Klusbib\Http\Controllers\UsersController@edit'
+            //            'uses' => 'AssetsController@dueForAudit'
+        ]);
     });

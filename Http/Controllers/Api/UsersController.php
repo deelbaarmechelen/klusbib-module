@@ -3,12 +3,12 @@
 namespace Modules\Klusbib\Http\Controllers\Api;
 
 use App\Helpers\Helper;
+use Illuminate\Support\Facades\Log;
 use Modules\Klusbib\Http\Transformers\UsersTransformer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use Modules\Klusbib\Http\KlusbibApi;
 
 class UsersController extends Controller
 {
@@ -18,10 +18,10 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = KlusbibApi::instance()->getUsers();
-        $total = count($users);
+//        $users = KlusbibApi::instance()->getUsers();
+        $usersPaginator = \Modules\Klusbib\Models\Api\User::all();
 //        $users = $users->skip($offset)->take($limit)->get();
-        return (new UsersTransformer)->transformUsers($users, $total);
+        return (new UsersTransformer)->transformUsers($usersPaginator->items(), $usersPaginator->total());
     }
 
     /**
@@ -50,7 +50,16 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        return response()->json(Helper::formatStandardApiResponse('error', null, 'Not yet implemented'), 200);
+        Log::debug("Api/UsersController::show for id " . $id);
+        $this->authorize('view', User::class);
+        $user = User::findOrFail($id);
+        if ($user == null || $user->employee_num == null) {
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'User unknown or no Klusbib id (employee_num)'), 404);
+        }
+//        $klusbibUser = KlusbibApi::instance()->getUser($user->employee_num);
+        $klusbibUser = \Modules\Klusbib\Models\Api\User::find($user->employee_num);
+
+        return (new UsersTransformer)->transformUser($klusbibUser);
     }
 
     /**
@@ -60,6 +69,7 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
+        Log::debug('Api/UsersController edit for id ' . $id);
         return response()->json(Helper::formatStandardApiResponse('error', null, 'Not yet implemented'), 200);
     }
 
@@ -71,7 +81,25 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return response()->json(Helper::formatStandardApiResponse('error', null, 'Not yet implemented'), 200);
+        // TODO: get body to update received data
+        Log::debug('Api/UsersController update for id ' . $id);
+        $this->authorize('update', User::class);
+        $snipeUser = User::find($id);
+        if ($snipeUser == null) {
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'User unknown'), 404);
+        }
+        if (isset($snipeUser->employee_num)) {
+            $user = \Modules\Klusbib\Models\Api\User::find($snipeUser->employee_num);
+        }
+        if ($user == null || $snipeUser->employee_num == null) {
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'API User unknown or no Klusbib id (employee_num)'), 404);
+        }
+        Log::debug('Api/UsersController update user found: ' . $user);
+        $user->address = 'test2';
+        $user->save();
+        Log::debug('Api/UsersController user saved');
+        Log::debug('Api/UsersController transform user');
+        return (new UsersTransformer)->transformUser($user);
     }
 
     /**

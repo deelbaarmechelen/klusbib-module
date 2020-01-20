@@ -19,24 +19,37 @@ Route::middleware('auth:api')->get('/klusbib', function (Request $request) {
 
 
 
-
+\Illuminate\Support\Facades\Log::debug('API routes definition Klusbib');
 Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'api'], function () {
 
-    Route::group(['prefix' => 'klusbib'], function () {
+//    Route::middleware(['apicontext'])->group(['prefix' => 'klusbib'], function () {
+    Route::group(['prefix' => 'klusbib', 'middleware' => 'apicontext'], function () {
         Route::get('users',
             [
                 'as' => 'api.klusbib.users.index',
                 'uses' => 'UsersController@index'
             ]
         );
-        Route::get('users/avatar',
+        Route::get('users/{user_id}',
+            [
+                'as' => 'api.klusbib.users.show',
+                'uses' => 'UsersController@show'
+            ]
+        );
+        Route::put('users/{user_id}',
+            [
+                'as' => 'api.klusbib.users.update',
+                'uses' => 'UsersController@update'
+            ]
+        );
+        Route::get('users/{user_id}/avatar',
             [
                 'as' => 'api.avatar.show',
                 'uses' => 'AvatarController@show'
             ]
         );
 
-        Route::post('users/avatar',
+        Route::post('users/{user_id}/avatar',
             [
                 'as' => 'api.avatar.create',
 //                'uses' => 'AvatarController@create'
@@ -44,7 +57,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'api'], fun
             ]
         );
 
-        Route::put('users/avatar/{user_id}',
+        Route::put('users/{user_id}/avatar',
             [
                 'as' => 'api.avatar.update',
                 'uses' => 'AvatarController@update'

@@ -19,4 +19,18 @@ Route::prefix('klusbib')->group(function() {
     Route::get('/users', [
         'as' => 'klusbib.users.index',
         'uses' => 'UsersController@index' ]);
+    Route::get('/users/{user}/edit', [
+        'as' => 'klusbib.users.edit',
+        'uses' => 'UsersController@edit' ]);
 });
+Route::group(
+    ['prefix' => 'users',
+        'middleware' => ['auth']],
+    function () {
+        // override user edit
+        Route::get('{user}/edit', [
+            'as' => 'users.edit',
+            'uses' => '\Modules\Klusbib\Http\Controllers\UsersController@edit'
+            //            'uses' => 'AssetsController@dueForAudit'
+        ]);
+    });

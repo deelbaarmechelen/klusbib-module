@@ -4,6 +4,7 @@ namespace Modules\Klusbib\Http\Transformers;
 use App\Http\Transformers\DatatablesTransformer;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 use phpDocumentor\Reflection\Types\Integer;
 use Gate;
 use App\Helpers\Helper;
@@ -22,6 +23,9 @@ class UsersTransformer
 
     public function transformUser ($user)
     {
+//        Log::debug('user = ' . \json_encode($user));
+        Log::debug("membership_start_date: " . $user->membership_start_date);
+        Log::debug("created at: " . $user->created_at);
         $array = [
             'id' => (int) $user->user_ext_id,
             'user_id' => (int) $user->user_id,
@@ -42,8 +46,8 @@ class UsersTransformer
             'registration_number' => (int) $user->registration_number,
             'payment_mode' => ($user->payment_mode) ? e($user->payment_mode) : null,
             'accept_terms_date' => Helper::getFormattedDateObject($user->accept_terms_date, 'date'),
-            'created_at' => Helper::getFormattedDateObject($user->created_at, 'datetime'),
-            'updated_at' => Helper::getFormattedDateObject($user->updated_at, 'datetime'),
+            'created_at' => (isset($user->created_at) && isset($user->created_at->date)) ? Helper::getFormattedDateObject($user->created_at->date, 'datetime') : null,
+            'updated_at' => (isset($user->updated_at) && isset($user->updated_at->date)) ? Helper::getFormattedDateObject($user->updated_at->date, 'datetime') : null,
             ];
 
         $permissions_array['available_actions'] = [

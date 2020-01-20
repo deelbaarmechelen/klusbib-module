@@ -59,7 +59,7 @@
 
             <table
                     data-click-to-select="true"
-                    data-columns="{{ \Modules\Klusbib\Presenters::dataTableLayout() }}"
+                    data-columns="{{ \Modules\Klusbib\Presenters\UserPresenter::dataTableLayout() }}"
                     data-cookie-id-table="usersTable"
                     data-pagination="true"
                     data-id-table="usersTable"

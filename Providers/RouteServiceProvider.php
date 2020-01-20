@@ -2,6 +2,7 @@
 
 namespace Modules\Klusbib\Providers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
