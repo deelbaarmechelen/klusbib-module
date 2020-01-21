@@ -25,10 +25,14 @@
     "require": {
         "guzzlehttp/guzzle": "^6.3",
         "cloudcreativity/laravel-json-api": "^1.5",
-        "calebporzio/parental": "0.9",
         "renardeau/remote-model": "dev-master"
     },
     "require-dev": {
         "cloudcreativity/json-api-testing": "^1.2|^2.0"
+    },
+    "config": {
+        "platform": {
+            "php": "7.1.2"
+        }
     }
 }
