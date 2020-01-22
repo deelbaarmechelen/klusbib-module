@@ -1,6 +1,7 @@
 {
     "name": "renardeau/klusbib-module",
     "description": "",
+    "type": "laravel-module",
     "extra": {
         "laravel": {
             "providers": [
@@ -25,7 +26,8 @@
     "require": {
         "guzzlehttp/guzzle": "^6.3",
         "cloudcreativity/laravel-json-api": "^1.5",
-        "renardeau/remote-model": "dev-master"
+        "renardeau/remote-model": "dev-master",
+        "joshbrw/laravel-module-installer": "^0.1.4"
     },
     "require-dev": {
         "cloudcreativity/json-api-testing": "^1.2|^2.0"
