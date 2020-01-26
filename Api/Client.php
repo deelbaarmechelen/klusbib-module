@@ -254,7 +254,16 @@ class Client
         $contentType = $res->getHeader('content-type')[0];
         Log::debug("Response body message=" . $res->getBody());
         if (strpos($contentType, 'application/json') !== false ) {
-            return \GuzzleHttp\json_decode($res->getBody(), true);
+
+            $decoded = \GuzzleHttp\json_decode($res->getBody(), true);
+            if ($res->hasHeader('X-Total-Count')) {
+                $result = array();
+                $result['Total-Count'] = $res->getHeader('X-Total-Count')[0]; // pick value of first X-Total-Count header
+                $result['items'] = $decoded;
+                return $result;
+            } else {
+                return $decoded;
+            }
         }
         return $res->getBody();
     }

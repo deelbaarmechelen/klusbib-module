@@ -94,9 +94,12 @@ class Users
                 $target .= $key . '=' . $value;
             }
         }
-        $users = $this->client->get($target);
-        $result['items'] = $users;
-        $result['pagination'] = array ('total' => count($users), 'perPage' => count($users));
+        $usersResult = $this->client->get($target);
+        $result['items'] = $usersResult['items'];
+        $totalCount = intval($usersResult['Total-Count']);
+        $perPage = count($usersResult['items']);
+        $result['pagination'] = array ('total' => $totalCount, 'perPage' => $perPage);
+        Log::debug('pagination=' .\json_encode($result['pagination']));
         return $result;
     }
 
