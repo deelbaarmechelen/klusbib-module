@@ -84,7 +84,17 @@ class Users
     {
         $result = array();
         // API call returns an array
-        $users = $this->client->get('users');
+        $target = 'users';
+        if (count($params) > 0) {
+            $target .= '?';
+            foreach ($params as $key => $value) {
+                if (substr($target, -1) != '?') {
+                    $target .= '&';
+                }
+                $target .= $key . '=' . $value;
+            }
+        }
+        $users = $this->client->get($target);
         $result['items'] = $users;
         $result['pagination'] = array ('total' => count($users), 'perPage' => count($users));
         return $result;

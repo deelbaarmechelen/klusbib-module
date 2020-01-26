@@ -24,8 +24,6 @@ class UsersTransformer
     public function transformUser ($user)
     {
 //        Log::debug('user = ' . \json_encode($user));
-        Log::debug("membership_start_date: " . $user->membership_start_date);
-        Log::debug("created at: " . $user->created_at);
         $array = [
             'id' => (int) $user->user_ext_id,
             'user_id' => (int) $user->user_id,
@@ -51,7 +49,7 @@ class UsersTransformer
             ];
 
         $permissions_array['available_actions'] = [
-//            'update' => (Gate::allows('update', User::class) && ($user->deleted_at==''))  ? true : false,
+            'update' => (Gate::allows('update', User::class) && ($user->deleted_at==''))  ? true : false,
 //            'delete' => (Gate::allows('delete', User::class) && ($user->deleted_at=='') && ($user->assets_count == 0) && ($user->licenses_count == 0)  && ($user->accessories_count == 0)  && ($user->consumables_count == 0)) ? true : false,
 //            'clone' => (Gate::allows('create', User::class) && ($user->deleted_at=='')) ,
 //            'restore' => (Gate::allows('create', User::class) && ($user->deleted_at!='')) ? true : false,

@@ -5,7 +5,6 @@ namespace Modules\Klusbib\Http\Controllers\Api;
 use App\Helpers\Helper;
 use Illuminate\Support\Facades\Log;
 use Modules\Klusbib\Http\Transformers\UsersTransformer;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
@@ -16,10 +15,50 @@ class UsersController extends Controller
      * Display a listing of the resource.
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-//        $users = KlusbibApi::instance()->getUsers();
-        $usersPaginator = \Modules\Klusbib\Models\Api\User::all();
+//        $this->authorize('view', \Modules\Klusbib\Models\Api\User::class);
+
+        //        $users = KlusbibApi::instance()->getUsers();
+
+        $order = $request->input('order') === 'asc' ? 'asc' : 'desc';
+        $requestedSort = $request->get('sort');
+        Log::debug("Requested sort order = " . $requestedSort);
+        if ($requestedSort == 'name') { // name is concatenation of firstname and lastname
+            $requestedSort = 'firstname';
+        }
+        $allowed_columns =
+            [
+                'user_id', 'state', 'firstname', 'lastname', 'email', 'email_state',
+                'role','membership_start_date','membership_end_date','address' ,'postal_code' ,'city' ,'phone' ,'mobile' ,'registration_number',
+                'payment_mode' ,'accept_terms_date' ,'created_at' ,'updated_at', 'id'
+            ];
+
+        $sort = in_array($requestedSort, $allowed_columns) ? $requestedSort : 'firstname';
+        Log::debug("Real sort order = " . $sort);
+        $offset = request('offset', 0);
+
+        // Check to make sure the limit is not higher than the max allowed
+        ((config('app.max_results') >= $request->input('limit')) && ($request->filled('limit')))
+            ? $limit = $request->input('limit') : $limit = config('app.max_results');
+//        if (($request->filled('deleted')) && ($request->input('deleted')=='true')) {
+//            $usersPaginator = $usersPaginator->GetDeleted();
+//        }
+
+        $params = array();
+        $params["_perPage"] = $limit;
+        $params["_page"] = intdiv($offset, $limit) +1;
+        $params["_sortDir"] = $order;
+        $params["_sortField"] = $sort;
+        if ($request->filled('search')) {
+            $params["_query"] = $request->input('search');
+        }
+        if (($request->filled('deleted')) && ($request->input('deleted')=='true')) {
+            $params["state"] = 'DELETED';
+        }
+        $usersPaginator = \Modules\Klusbib\Models\Api\User::all($params);
+
+
 //        $users = $users->skip($offset)->take($limit)->get();
         return (new UsersTransformer)->transformUsers($usersPaginator->items(), $usersPaginator->total());
     }

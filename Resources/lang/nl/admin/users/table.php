@@ -1,0 +1,26 @@
+<?php
+
+return array(
+    'user_id'               => 'Klusbib Id',
+    'state'                 => 'Status',
+    'name'                  => 'Volledige naam',
+    'firstname'             => 'Voornaam',
+    'lastname'              => 'Achternaam',
+    'email'                 => 'E-mail',
+    'email_state'           => 'E-mail status',
+    'role'                  => 'Rol',
+    'membership_state'      => 'Lidmaatschap status',
+    'membership_expiry'     => 'Lidm. vervaldatum',
+    'membership_start_date' => 'Startdatum lidmaatschap',
+    'membership_end_date'   => 'Einddatum lidmaatschap',
+    'address'               => 'Adres',
+    'postal_code'           => 'Postcode',
+    'city'                  => 'Gemeente',
+    'phone'                 => 'Telefoon',
+    'mobile'                => 'gsm',
+    'registration_number'   => 'Registratienummer',
+    'payment_mode'          => 'Betalingswijze',
+    'accept_terms_date'     => 'Datum goedkeuring voorwaarden',
+    'created_at'            => 'Aangemaakt',
+    'updated_at'            => 'Laatst bijgewerkt',
+);

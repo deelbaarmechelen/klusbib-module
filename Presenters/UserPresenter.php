@@ -32,8 +32,16 @@ class UserPresenter extends Presenter
                 "searchable" => false,
                 "sortable" => true,
                 "switchable" => true,
-                "title" => trans('general.id'),
+                "title" => trans('klusbib::general.id'),
                 "visible" => false
+            ],
+            [
+                "field" => "user_id",
+                "searchable" => true,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('klusbib::admin/users/table.user_id'),
+                "visible" => true
             ],
             [
                 "field" => "avatar",
@@ -45,20 +53,27 @@ class UserPresenter extends Presenter
                 "formatter" => "imageFormatter"
             ],
             [
-                "field" => "company",
-                "searchable" => true,
-                "sortable" => true,
-                "switchable" => true,
-                "title" => trans('admin/companies/table.title'),
-                "visible" => false,
-                "formatter" => "companiesLinkObjFormatter"
-            ],
-            [
                 "field" => "name",
                 "searchable" => true,
                 "sortable" => true,
-                "title" => trans('admin/users/table.name'),
+                "title" => trans('klusbib::admin/users/table.name'),
                 "visible" => true,
+                "formatter" => "usersLinkFormatter"
+            ],
+            [
+                "field" => "firstname",
+                "searchable" => true,
+                "sortable" => true,
+                "title" => trans('klusbib::admin/users/table.firstname'),
+                "visible" => false,
+                "formatter" => "usersLinkFormatter"
+            ],
+            [
+                "field" => "lastname",
+                "searchable" => true,
+                "sortable" => true,
+                "title" => trans('klusbib::admin/users/table.lastname'),
+                "visible" => false,
                 "formatter" => "usersLinkFormatter"
             ],
             [
@@ -66,15 +81,24 @@ class UserPresenter extends Presenter
                 "searchable" => true,
                 "sortable" => true,
                 "switchable" => true,
-                "title" => trans('klusbib::general.membership_state'),
+                "title" => trans('klusbib::admin/users/table.membership_state'),
                 "visible" => true,
+            ],
+            [
+                "field" => "membership_start_date",
+                "searchable" => true,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('klusbib::admin/users/table.membership_start_date'),
+                "visible" => false,
+                "formatter" => "dateDisplayFormatter"
             ],
             [
                 "field" => "membership_end_date",
                 "searchable" => true,
                 "sortable" => true,
                 "switchable" => true,
-                "title" => trans('klusbib::general.membership_expiry'),
+                "title" => trans('klusbib::admin/users/table.membership_expiry'),
                 "visible" => true,
                 "formatter" => "dateDisplayFormatter"
             ],
@@ -83,16 +107,25 @@ class UserPresenter extends Presenter
                 "searchable" => true,
                 "sortable" => true,
                 "switchable" => true,
-                "title" => trans('admin/users/table.email'),
+                "title" => trans('klusbib::admin/users/table.email'),
                 "visible" => true,
                 "formatter" => "emailFormatter"
+            ],
+            [
+                "field" => "email_state",
+                "searchable" => true,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('klusbib::admin/users/table.email_state'),
+                "visible" => true,
+//                "formatter" => "emailFormatter"
             ],
             [
                 "field" => "phone",
                 "searchable" => true,
                 "sortable" => true,
                 "switchable" => true,
-                "title" => trans('admin/users/table.phone'),
+                "title" => trans('klusbib::admin/users/table.phone'),
                 "visible" => true,
                 "formatter"    => "phoneFormatter",
             ],
@@ -101,7 +134,15 @@ class UserPresenter extends Presenter
                 "searchable" => true,
                 "sortable" => true,
                 "switchable" => true,
-                "title" => trans('general.address'),
+                "title" => trans('klusbib::admin/users/table.address'),
+                "visible" => false,
+            ],
+            [
+                "field" => "postal_code",
+                "searchable" => true,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('klusbib::admin/users/table.postal_code'),
                 "visible" => false,
             ],
             [
@@ -109,127 +150,92 @@ class UserPresenter extends Presenter
                 "searchable" => true,
                 "sortable" => true,
                 "switchable" => true,
-                "title" => trans('general.city'),
+                "title" => trans('klusbib::admin/users/table.city'),
                 "visible" => false,
             ],
             [
-                "field" => "state",
+                "field" => "role",
                 "searchable" => true,
                 "sortable" => true,
                 "switchable" => true,
-                "title" => trans('general.state'),
+                "title" => trans('klusbib::admin/users/table.role'),
                 "visible" => false,
             ],
             [
-                "field" => "country",
+                "field" => "registration_number",
                 "searchable" => true,
                 "sortable" => true,
                 "switchable" => true,
-                "title" => trans('general.country'),
+                "title" => trans('klusbib::admin/users/table.registration_number'),
                 "visible" => false,
             ],
             [
-                "field" => "zip",
+                "field" => "payment_mode",
                 "searchable" => true,
                 "sortable" => true,
                 "switchable" => true,
-                "title" => trans('general.zip'),
+                "title" => trans('klusbib::admin/users/table.payment_mode'),
                 "visible" => false,
             ],
             [
-                "field" => "username",
+                "field" => "accept_terms_date",
                 "searchable" => true,
                 "sortable" => true,
                 "switchable" => true,
-                "title" => trans('admin/users/table.username'),
-                "visible" => true,
-                "formatter" => "usersLinkFormatter"
+                "title" => trans('klusbib::admin/users/table.accept_terms_date'),
+                "visible" => false,
+                "formatter" => "dateDisplayFormatter"
             ],
-            [
-                "field" => "employee_num",
-                "searchable" => true,
-                "sortable" => true,
-                "switchable" => true,
-                "title" => trans('admin/users/table.employee_num'),
-                "visible" => false
-            ],
-            [
-                "field" => "location",
-                "searchable" => true,
-                "sortable" => true,
-                "switchable" => true,
-                "title" => trans('admin/users/table.location'),
-                "visible" => true,
-                "formatter" => "locationsLinkObjFormatter"
-            ],
-            [
-                "field" => "assets_count",
-                "searchable" => false,
-                "sortable" => true,
-                "switchable" => true,
-                "title" => ' <span class="hidden-md hidden-lg">Assets</span>'
-                            .'<span class="hidden-xs"><i class="fa fa-barcode fa-lg"></i></span>',
-                "visible" => true,
-            ],
-            [
-                "field" => "consumables_count",
-                "searchable" => false,
-                "sortable" => true,
-                "switchable" => true,
-                "title" => ' <span class="hidden-md hidden-lg">Consumables</span>'
-                    .'<span class="hidden-xs"><i class="fa fa-tint fa-lg"></i></span>',
-                "visible" => true,
-            ],
-            [
-                "field" => "accessories_count",
-                "searchable" => false,
-                "sortable" => true,
-                "switchable" => true,
-                "title" => ' <span class="hidden-md hidden-lg">Accessories</span>'
-                    .'<span class="hidden-xs"><i class="fa fa-keyboard-o fa-lg"></i></span>',
-                "visible" => true,
-            ],
-            [
-                "field" => "notes",
-                "searchable" => true,
-                "sortable" => true,
-                "switchable" => true,
-                "title" => trans('general.notes'),
-                "visible" => true,
-            ],
-            [
-                "field" => "groups",
-                "searchable" => false,
-                "sortable" => false,
-                "switchable" => true,
-                "title" => trans('general.groups'),
-                "visible" => true,
-                'formatter' => 'groupsFormatter'
-            ],
-            [
-                "field" => "activated",
-                "searchable" => false,
-                "sortable" => true,
-                "switchable" => true,
-                "title" => trans('general.login_enabled'),
-                "visible" => true,
-                'formatter' => 'trueFalseFormatter'
-            ],
+//            [
+//                "field" => "location",
+//                "searchable" => true,
+//                "sortable" => true,
+//                "switchable" => true,
+//                "title" => trans('admin/users/table.location'),
+//                "visible" => true,
+//                "formatter" => "locationsLinkObjFormatter"
+//            ],
+//            [
+//                "field" => "assets_count",
+//                "searchable" => false,
+//                "sortable" => true,
+//                "switchable" => true,
+//                "title" => ' <span class="hidden-md hidden-lg">Assets</span>'
+//                            .'<span class="hidden-xs"><i class="fa fa-barcode fa-lg"></i></span>',
+//                "visible" => true,
+//            ],
+//            [
+//                "field" => "consumables_count",
+//                "searchable" => false,
+//                "sortable" => true,
+//                "switchable" => true,
+//                "title" => ' <span class="hidden-md hidden-lg">Consumables</span>'
+//                    .'<span class="hidden-xs"><i class="fa fa-tint fa-lg"></i></span>',
+//                "visible" => true,
+//            ],
+//            [
+//                "field" => "accessories_count",
+//                "searchable" => false,
+//                "sortable" => true,
+//                "switchable" => true,
+//                "title" => ' <span class="hidden-md hidden-lg">Accessories</span>'
+//                    .'<span class="hidden-xs"><i class="fa fa-keyboard-o fa-lg"></i></span>',
+//                "visible" => true,
+//            ],
+//            [
+//                "field" => "notes",
+//                "searchable" => true,
+//                "sortable" => true,
+//                "switchable" => true,
+//                "title" => trans('general.notes'),
+//                "visible" => true,
+//            ],
             [
                 "field" => "created_at",
                 "searchable" => true,
                 "sortable" => true,
                 "switchable" => true,
                 "title" => trans('general.created_at'),
-                "visible" => false,
-                'formatter' => 'dateDisplayFormatter'
-            ],
-            [
-                "field" => "last_login",
-                "searchable" => false,
-                "sortable" => true,
-                "switchable" => true,
-                "title" => trans('general.last_login'),
                 "visible" => false,
                 'formatter' => 'dateDisplayFormatter'
             ],
