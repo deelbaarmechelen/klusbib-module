@@ -72,7 +72,7 @@
                     data-toolbar="#toolbar"
                     id="usersTable"
                     class="table table-striped snipe-table"
-                    data-url="{{ route('api.users.index',
+                    data-url="{{ route('api.klusbib.users.index',
               array('deleted'=> (Input::get('status')=='deleted') ? 'true' : 'false','company_id'=>e(Input::get('company_id')))) }}"
                     data-export-options='{
                 "fileName": "export-users-{{ date('Y-m-d') }}",
