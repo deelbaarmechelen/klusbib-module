@@ -2,11 +2,13 @@
 
 namespace Modules\Klusbib\Providers;
 
+use App\Models\Asset;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Modules\Klusbib\Api\Client;
+use Modules\Klusbib\Notifications\NotifyAssetCheckout;
 use Torann\RemoteModel\Model;
 
 class KlusbibServiceProvider extends ServiceProvider
@@ -35,20 +37,8 @@ class KlusbibServiceProvider extends ServiceProvider
 
         $this->registerApiClient($router);
 
-    }
-    private function registerApiClient(Router $router) {
+        $this->registerNotifications();
 
-        Log::debug('aliasMiddleware added');
-        $router->aliasMiddleware('apicontext', \Modules\Klusbib\Http\Middleware\ApiContextMiddleware::class);
-
-        $this->app->singleton('apiclient', function ()
-        {
-            Log::debug("API Service Provider: creating Client singleton with base_uri=" . config('klusbib.api_url'));
-            return new Client(new \GuzzleHttp\Client([
-                'base_uri' => config('klusbib.api_url'),
-            ]), config('klusbib.api_user'), config('klusbib.api_pwd'));
-        });
-        Model::setClient($this->app['apiclient']);
     }
 
     /**
@@ -124,6 +114,25 @@ class KlusbibServiceProvider extends ServiceProvider
         if (! app()->environment('production')) {
             app(Factory::class)->load(__DIR__ . '/../Database/factories');
         }
+    }
+
+    private function registerApiClient(Router $router) {
+
+        Log::debug('aliasMiddleware added');
+        $router->aliasMiddleware('apicontext', \Modules\Klusbib\Http\Middleware\ApiContextMiddleware::class);
+
+        $this->app->singleton('apiclient', function ()
+        {
+            Log::debug("API Service Provider: creating Client singleton with base_uri=" . config('klusbib.api_url'));
+            return new Client(new \GuzzleHttp\Client([
+                'base_uri' => config('klusbib.api_url'),
+            ]), config('klusbib.api_user'), config('klusbib.api_pwd'));
+        });
+        Model::setClient($this->app['apiclient']);
+    }
+
+    private function registerNotifications() {
+        Asset::$checkoutClass = NotifyAssetCheckout::class;
     }
 
     /**

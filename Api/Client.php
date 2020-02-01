@@ -67,6 +67,10 @@ class Client
                 $api = new Endpoints\Users($this);
                 break;
 
+            case 'lendings':
+                $api = new Endpoints\Lendings($this);
+                break;
+
             case 'token':
                 $api = new Endpoints\Token($this);
                 break;
@@ -136,8 +140,8 @@ class Client
             . "; options=" . \json_encode($options) . ")");
         try {
             $res = $this->httpClient->post('token', $options);
-            $contentType = $res->getHeader('content-type')[0];
             Log::debug("Klusbib API token response=" . $res->getBody());
+            $contentType = $this->getContentType($res);
             if (strpos($contentType, 'application/json') !== false ) {
                 $body = \GuzzleHttp\json_decode($res->getBody());
                 Log::debug("token: " . $body->token);
@@ -251,8 +255,8 @@ class Client
             Log::error('Klusbib API request to "' . $target . '" failed with status code ' . $res->getStatusCode());
             throw new \RuntimeException('Klusbib API request to "' . $target . '" failed with status code ' . $res->getStatusCode());
         }
-        $contentType = $res->getHeader('content-type')[0];
         Log::debug("Response body message=" . $res->getBody());
+        $contentType = $this->getContentType($res);
         if (strpos($contentType, 'application/json') !== false ) {
 
             $decoded = \GuzzleHttp\json_decode($res->getBody(), true);
@@ -266,6 +270,18 @@ class Client
             }
         }
         return $res->getBody();
+    }
+
+    /**
+     * @param $res
+     * @return mixed
+     */
+    private function getContentType($res)
+    {
+        if ($res->hasHeader('content-type')) {
+            return $res->getHeader('content-type')[0];
+        }
+        return 'text/HTML';
     }
 
 }

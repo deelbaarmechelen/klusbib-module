@@ -30,7 +30,7 @@ class UserPresenter extends Presenter
             [
                 "field" => "id",
                 "searchable" => false,
-                "sortable" => true,
+                "sortable" => false,
                 "switchable" => true,
                 "title" => trans('klusbib::general.id'),
                 "visible" => false
