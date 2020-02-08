@@ -71,4 +71,52 @@ class Lendings
         }
     }
 
+    public function findActiveByUserTool($userId, $toolId, $toolType) {
+        try {
+            $lendingsResult = $this->client->get('lendings?user_id='.rawurlencode($userId).'&tool_id='. rawurlencode($toolId)
+                .'&tool_type='. rawurlencode($toolType). '&active=true&_sortDir=asc');
+
+            if (count($lendingsResult['items']) == 0) {
+                return null;
+            } else if (count($lendingsResult['items']) > 1 && $toolType == 'TOOL') {
+                Log::error('duplicate active lendings for user ' . $userId . '; tool ' . $toolId . '; tool_type='.$toolType);
+                return null;
+            }
+            return $lendingsResult['items'][0];
+        } catch (NotFoundException $nfe) {
+            return null;
+        }
+
+    }
+
+    /**
+     * Get all lendings.
+     *
+     * @param array $params query parameters
+     *
+     * @return array
+     */
+    public function all(array $params = [])
+    {
+        $result = array();
+        // API call returns an array
+        $target = 'lendings';
+        if (count($params) > 0) {
+            $target .= '?';
+            foreach ($params as $key => $value) {
+                if (substr($target, -1) != '?') {
+                    $target .= '&';
+                }
+                $target .= $key . '=' . $value;
+            }
+        }
+        $lendingsResult = $this->client->get($target);
+        $result['items'] = $lendingsResult['items'];
+        $totalCount = intval($lendingsResult['Total-Count']);
+        $perPage = count($lendingsResult['items']);
+        $result['pagination'] = array ('total' => $totalCount, 'perPage' => $perPage);
+        Log::debug('pagination=' .\json_encode($result['pagination']));
+        return $result;
+    }
+
 }

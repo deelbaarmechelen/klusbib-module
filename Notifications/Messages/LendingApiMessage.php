@@ -5,14 +5,21 @@ namespace Modules\Klusbib\Notifications\Messages;
 
 class LendingApiMessage
 {
+    public const METHOD_CREATE = "POST";
+    public const METHOD_UPDATE = "PUT";
+    public const TOOL_TYPE_ASSET = "TOOL";
+    public const TOOL_TYPE_ACCESSORY = "ACCESSORY";
+
     private $startDate;
     private $dueDate;
-    private $returnDate;
+    private $returnedDate;
     private $toolId;
+    private $toolType;
     private $userId;
     private $comments;
     private $createdBy;
 
+    private $method;
     private $target;
     private $item;
     private $admin;
@@ -23,12 +30,13 @@ class LendingApiMessage
      * @param $item
      * @param $note
      */
-    public function __construct($target, $item, $note, $admin)
+    public function __construct($method, $target, $item, $note, $admin)
     {
         $this->target = $target;
         $this->item = $item;
         $this->comments = $note;
         $this->admin = $admin;
+        $this->method = $method;
     }
 
     /**
@@ -56,14 +64,27 @@ class LendingApiMessage
         return $this;
     }
     /**
-     * Set the tool id of the lending.
+     * Set the returned date of the lending.
+     *
+     * @param  \DateTime $returnedDate
+     * @return $this
+     */
+    public function returnedDate($returnedDate)
+    {
+        $this->returnedDate = $returnedDate;
+
+        return $this;
+    }
+    /**
+     * Set the tool id and type of the lending.
      *
      * @param  $toolId
      * @return $this
      */
-    public function toolId($toolId)
+    public function tool($toolId, $toolType)
     {
         $this->toolId = $toolId;
+        $this->toolType = $toolType;
 
         return $this;
     }
@@ -78,6 +99,14 @@ class LendingApiMessage
         $this->userId = $userId;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMethod()
+    {
+        return $this->method;
     }
     /**
      * @return mixed
@@ -98,9 +127,9 @@ class LendingApiMessage
     /**
      * @return mixed
      */
-    public function getReturnDate()
+    public function getReturnedDate()
     {
-        return $this->returnDate;
+        return $this->returnedDate;
     }
 
     /**
@@ -109,6 +138,17 @@ class LendingApiMessage
     public function getToolId()
     {
         return $this->toolId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getToolType()
+    {
+        if (isset($this->toolType)) {
+            return $this->toolType;
+        }
+        return self::TOOL_TYPE_ASSET;
     }
 
     /**

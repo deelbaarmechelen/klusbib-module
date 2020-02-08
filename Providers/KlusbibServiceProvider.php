@@ -2,12 +2,16 @@
 
 namespace Modules\Klusbib\Providers;
 
+use App\Models\Accessory;
 use App\Models\Asset;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Modules\Klusbib\Api\Client;
+use Modules\Klusbib\Notifications\NotifyAccessoryCheckin;
+use Modules\Klusbib\Notifications\NotifyAccessoryCheckout;
+use Modules\Klusbib\Notifications\NotifyAssetCheckin;
 use Modules\Klusbib\Notifications\NotifyAssetCheckout;
 use Torann\RemoteModel\Model;
 
@@ -133,6 +137,9 @@ class KlusbibServiceProvider extends ServiceProvider
 
     private function registerNotifications() {
         Asset::$checkoutClass = NotifyAssetCheckout::class;
+        Asset::$checkinClass = NotifyAssetCheckin::class;
+        Accessory::$checkoutClass = NotifyAccessoryCheckout::class;
+        Accessory::$checkinClass = NotifyAccessoryCheckin::class;
     }
 
     /**
