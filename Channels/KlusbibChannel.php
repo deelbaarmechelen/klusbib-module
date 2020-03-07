@@ -50,7 +50,7 @@ class KlusbibChannel
                 try {
                     $lending->update($params);
                 } catch (\Exception $ex) {
-                    Log::error("Unexpected error creating lending: " . $ex->getMessage());
+                    Log::error("Unexpected error updating lending: " . $ex->getMessage());
                 }
              }
         }

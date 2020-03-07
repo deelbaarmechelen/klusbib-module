@@ -88,6 +88,24 @@ class Lendings
         }
 
     }
+    public function findByUserToolStart($userId, $toolId, $toolType, $startDate) {
+        try {
+            $lendingsResult = $this->client->get('lendings?user_id='.rawurlencode($userId).'&tool_id='. rawurlencode($toolId)
+                .'&tool_type='. rawurlencode($toolType). '&start_date='. rawurlencode($startDate) . '&_sortDir=asc');
+
+            if (count($lendingsResult['items']) == 0) {
+                return null;
+            } else if (count($lendingsResult['items']) > 1 && $toolType == 'TOOL') {
+                Log::error('duplicate lendings for user ' . $userId . '; tool ' . $toolId . '; tool_type='.$toolType
+                    . '; start_date=' . $startDate);
+                return null;
+            }
+            return $lendingsResult['items'][0];
+        } catch (NotFoundException $nfe) {
+            return null;
+        }
+
+    }
 
     /**
      * Get all lendings.

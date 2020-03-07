@@ -9,11 +9,12 @@ class Lending extends BaseModel
     protected $primaryKey = 'lending_id';
 
     /**
-     * Execute the query and get the first result.
+     * Lookup an active lending for given user id, tool id, tool type.
      *
-     * @param  string $id
-     * @param  array  $params
-     * @return mixed|static
+     * @param  string $userId
+     * @param  string $toolId
+     * @param  string $toolType
+     * @return mixed|static the lending or null if no lending exist
      */
     public static function findActiveByUserTool($userId, $toolId, $toolType)
     {
@@ -22,5 +23,20 @@ class Lending extends BaseModel
         return $instance->request($instance->getEndpoint(), 'findActiveByUserTool', [$userId, $toolId, $toolType]);
     }
 
+    /**
+     * Lookup a lending for given user id, tool id, tool type and start date.
+     *
+     * @param  string $userId
+     * @param  string $toolId
+     * @param  string $toolType
+     * @param  string $startDate
+     * @return mixed|static the lending or null if no lending exist
+     */
+    public static function findByUserToolStart($userId, $toolId, $toolType, $startDate)
+    {
+        $instance = new static([], static::getParentID());
+
+        return $instance->request($instance->getEndpoint(), 'findByUserToolStart', [$userId, $toolId, $toolType, $startDate]);
+    }
 
 }
