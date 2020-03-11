@@ -114,9 +114,9 @@ class SyncLendings extends Command
             }
         }
         print_r($lendings);
-        foreach ($lendings as $lending) {
-            $this->pushLending($lending);
-        }
+//        foreach ($lendings as $lending) {
+//            $this->pushLending($lending);
+//        }
 
     }
     public function activeLendingForUserTool($key, $lending) {
