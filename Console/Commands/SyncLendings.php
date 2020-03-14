@@ -113,7 +113,24 @@ class SyncLendings extends Command
 
             }
         }
-        print_r($lendings);
+        $returnedLendings = array_filter($lendings, function ($v) {
+            if (isset($v["returned_date"]) ) {
+                return true;
+            }
+            return false;
+        });
+//        print_r($returnedLendings);
+        $openLendings = array_filter($lendings, function ($v) {
+            if (!isset($v["returned_date"]) ) {
+                return true;
+            }
+            return false;
+        });
+        echo "Lendings count:" . count($lendings) . "\n";
+        echo "Returned lendings count:" . count($returnedLendings) . "\n";
+        echo "Open lendings count:" . count($openLendings) . "\n";
+        echo "Open lendings:\n";
+        print_r($openLendings);
 //        foreach ($lendings as $lending) {
 //            $this->pushLending($lending);
 //        }
