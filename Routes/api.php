@@ -63,5 +63,34 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'api'], fun
                 'uses' => 'AvatarController@update'
             ]
         );
+
+        Route::post('assets',
+            [
+                'as' => 'api.klusbib.assets.store',
+                'uses' => 'AssetsController@customStore'
+            ]
+        );
+
+        Route::get('reservations',
+            [
+                'as' => 'api.klusbib.reservations.index',
+                'uses' => 'ReservationsController@index'
+            ]
+        );
     });
 });
+// extract from snipe api routes:
+//Route::resource('hardware', 'AssetsController',
+//    [
+//        'names' =>
+//            [
+//                'index' => 'api.assets.index',
+//                'show' => 'api.assets.show',
+//                'store' => 'api.assets.store',
+//                'update' => 'api.assets.update',
+//                'destroy' => 'api.assets.destroy'
+//            ],
+//        'except' => ['create', 'edit'],
+//        'parameters' => ['asset' => 'asset_id']
+//    ]
+//); // Hardware resource

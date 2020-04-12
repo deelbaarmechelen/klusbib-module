@@ -71,8 +71,16 @@ class Client
                 $api = new Endpoints\Lendings($this);
                 break;
 
+             case 'reservations':
+                $api = new Endpoints\Reservations($this);
+                break;
+
             case 'token':
                 $api = new Endpoints\Token($this);
+                break;
+
+            case 'stats':
+                $api = new Endpoints\Stats($this);
                 break;
 
             default:

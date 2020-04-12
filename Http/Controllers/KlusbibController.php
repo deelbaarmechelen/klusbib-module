@@ -5,6 +5,7 @@ namespace Modules\Klusbib\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Modules\Klusbib\Models\Api\Stat;
 
 class KlusbibController extends Controller
 {
@@ -14,7 +15,18 @@ class KlusbibController extends Controller
      */
     public function index()
     {
-        return view('klusbib::index');
+        $monthlyStats = Stat::monthly();
+//        \Log::debug('Klusbib Dashboard: monthly stats=' . var_dump($monthlyStats));
+        $counts['user'] = isset($monthlyStats["user"]) ? $monthlyStats["user"]["total-count"] : "0";
+        $counts['asset'] = isset($monthlyStats["tool"]) ? $monthlyStats["tool"]["total-count"] : "0";
+        $counts['accessory'] = isset($monthlyStats["accessory"]) ? $monthlyStats["accessory"]["total-count"] : "0";
+        $counts['license'] = \App\Models\License::assetcount();
+        $counts['consumable'] = \App\Models\Consumable::count();
+        $counts['grand_total'] =  $counts['asset'] +  $counts['accessory'] +  $counts['license'] +  $counts['consumable'];
+
+//        return view('dashboard')->with('asset_stats', $asset_stats)->with('counts', $counts);
+        return view('klusbib::dashboard')->with('counts', $counts);
+//        return view('klusbib::index');
     }
 
     /**

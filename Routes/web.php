@@ -14,7 +14,7 @@
 Route::prefix('klusbib')->group(function() {
 //    Route::get('/', 'KlusbibController@index');
     Route::get('/', [
-        'as' => 'klusbib',
+        'as' => 'klusbib.home',
         'uses' => 'KlusbibController@index' ]);
     Route::get('/users', [
         'as' => 'klusbib.users.index',
@@ -22,6 +22,15 @@ Route::prefix('klusbib')->group(function() {
     Route::get('/users/{user}/edit', [
         'as' => 'klusbib.users.edit',
         'uses' => 'UsersController@edit' ]);
+    Route::get('/reservations', [
+        'as' => 'klusbib.reservations.index',
+        'uses' => 'ReservationsController@index' ]);
+    Route::get('/reservations/export', [
+        'as' => 'klusbib.reservations.export',
+        'uses' => 'ReservationsController@export' ]);
+    Route::get('/deliveries', [
+        'as' => 'klusbib.deliveries.index',
+        'uses' => 'DeliveriesController@index' ]);
 });
 Route::group(
     ['prefix' => 'users',

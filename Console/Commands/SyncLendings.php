@@ -52,7 +52,7 @@ class SyncLendings extends Command
     {
         \Log::debug('Handle SyncLendings');
         $settings = Setting::getSettings();
-        $actionlogs = Actionlog::with('item', 'user', 'target','location');
+        $actionlogs = Actionlog::with('item', 'user', 'target');
         $actionlogs = $actionlogs->where('target_type','=',"App\\Models\\User");
         $actionlogs = $actionlogs->whereIn('item_type',["App\\Models\\Accessory", "App\\Models\\Asset"]);
         $actionlogs = $actionlogs->whereIn('action_type',['checkout', 'checkin from'])->orderBy('created_at', 'asc')->get();
@@ -89,16 +89,28 @@ class SyncLendings extends Command
             if ($log->action_type == 'checkin from') {
                 // Update lending in array
 
-                $matchingLendings = array_filter($lendings, function ($lending, $key) {
+                $openLendings = array_filter($lendings, function ($lending, $key) {
 //                    \Log::debug('Searching lending with key ' . $key . ' and value ');
                     if (isset($lending["returned_date"] ) ){
                         return FALSE;
                     }
-                    if (strpos($key, $lending["user_id"] . "|" . $lending["tool_id"] . "|" . $lending["tool_type"] . "|") === 0) {
-                        return TRUE;
-                    }
-                    return FALSE;
+                    return TRUE;
                 },ARRAY_FILTER_USE_BOTH);
+                $userId = $target->employee_num;
+                $toolId = $item->id;
+                if ($log->item_type == "App\\Models\\Accessory") {
+                    $toolType = LendingApiMessage::TOOL_TYPE_ACCESSORY;
+                }
+                if ($log->item_type == "App\\Models\\Asset") {
+                    $toolType = LendingApiMessage::TOOL_TYPE_ASSET;
+                }
+                $lendingKey = $userId . "|" . $toolId . "|" . $toolType . "|";
+                $matchingLendings = array();
+                foreach ($openLendings as $key => $value) {
+                    if (strpos($key, $lendingKey) === 0) {
+                        $matchingLendings[$key] = $value;
+                    }
+                }
                 if (count($matchingLendings) == 1) {
                     $lendings[key($matchingLendings)]["returned_date"] = $log->created_at->format('Y-m-d');
                     \Log::debug('Updated lending with key ' . key($matchingLendings));
@@ -131,9 +143,9 @@ class SyncLendings extends Command
         echo "Open lendings count:" . count($openLendings) . "\n";
         echo "Open lendings:\n";
         print_r($openLendings);
-//        foreach ($lendings as $lending) {
-//            $this->pushLending($lending);
-//        }
+        foreach ($lendings as $lending) {
+            $this->pushLending($lending);
+        }
 
     }
     public function activeLendingForUserTool($key, $lending) {
@@ -148,22 +160,27 @@ class SyncLendings extends Command
     }
 
     private function pushLending($lending) {
-        $existingLending = Lending::findByUserToolStart($lending["user_id"], $lending["tool_id"], $lending["tool_type"], $lending["start_date"]);
-        if (!isset($existingLending)) {
-            $this->createLending($lending);
-        } else if (!isset($existingLending->returned_date) && isset($lending["returned_date"])) {
-            $params = array(
-                'returned_date' => $lending["returned_date"],
-                'comments' => empty($existingLending->comments) ? $lending["comments"] : $existingLending->comments . " / On return: " . $lending["comments"]
-            );
-            \Log::debug('Klusbib Channel: update existing lending=' . \json_encode($params));
-            try {
-                $existingLending->update($params);
-            } catch (\Exception $ex) {
-                \Log::error("Unexpected error updating lending: " . $ex->getMessage());
+        try {
+
+            $existingLending = Lending::findByUserToolStart($lending["user_id"], $lending["tool_id"], $lending["tool_type"], $lending["start_date"]);
+            if (!isset($existingLending)) {
+                $this->createLending($lending);
+            } else if (!isset($existingLending->returned_date) && isset($lending["returned_date"])) {
+                $params = array(
+                    'returned_date' => $lending["returned_date"],
+                    'comments' => empty($existingLending->comments) ? $lending["comments"] : $existingLending->comments . " / On return: " . $lending["comments"]
+                );
+                \Log::debug('Klusbib Channel: update existing lending=' . \json_encode($params));
+                try {
+                    $existingLending->update($params);
+                } catch (\Exception $ex) {
+                    \Log::error("Unexpected error updating lending: " . $ex->getMessage());
+                }
+            } else {
+                // nothing to do - lending already up to date
             }
-        } else {
-            // nothing to do - lending already up to date
+        } catch (\Exception $ex) {
+            \Log::error("Unable to push lending " . \json_encode($lending) . ". Manual correction might be required!");
         }
     }
 

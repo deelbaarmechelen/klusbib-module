@@ -41,8 +41,6 @@ class UsersController extends Controller
      */
     public function index()
     {
-//        $users = KlusbibApi::instance()->getUsers();
-        $users = \Modules\Klusbib\Models\Api\User::all();
 //        $this->authorize('index', User::class);
         return view('klusbib::users/index');
     }
