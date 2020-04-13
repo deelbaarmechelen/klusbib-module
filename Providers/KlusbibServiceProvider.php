@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Modules\Klusbib\Api\Client;
+use Modules\Klusbib\Models\AssetTagPattern;
+use Modules\Klusbib\Observers\AssetObserver;
 use Modules\Klusbib\Notifications\NotifyAccessoryCheckin;
 use Modules\Klusbib\Notifications\NotifyAccessoryCheckout;
 use Modules\Klusbib\Notifications\NotifyAssetCheckin;
@@ -42,6 +44,8 @@ class KlusbibServiceProvider extends ServiceProvider
         $this->registerApiClient($router);
 
         $this->registerNotifications();
+//        $this->registerCommands();
+        $this->registerObservers();
 
     }
 
@@ -140,6 +144,16 @@ class KlusbibServiceProvider extends ServiceProvider
         Asset::$checkinClass = NotifyAssetCheckin::class;
         Accessory::$checkoutClass = NotifyAccessoryCheckout::class;
         Accessory::$checkinClass = NotifyAccessoryCheckin::class;
+    }
+
+//    private function registerCommands() {
+//        Log::debug('Regsitering Klusbib commands');
+//        $kernel = $this->app->make(\Illuminate\Contracts\Console\Kernel::class);
+//        $kernel->registerCommand(\Modules\Klusbib\Console\SyncLendings::class);
+//    }
+    private function registerObservers() {
+        Log::debug('Registering Klusbib observers');
+        Asset::observe(AssetObserver::class);
     }
 
     /**
