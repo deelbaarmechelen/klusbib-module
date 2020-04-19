@@ -25,6 +25,12 @@ Route::prefix('klusbib')->group(function() {
     Route::get('/reservations', [
         'as' => 'klusbib.reservations.index',
         'uses' => 'ReservationsController@index' ]);
+    Route::get('/reservations/{reservation}/cancel', [
+        'as' => 'klusbib.reservations.cancel',
+        'uses' => 'ReservationsController@cancel' ]);
+    Route::get('/reservations/{reservation}/confirm', [
+        'as' => 'klusbib.reservations.confirm',
+        'uses' => 'ReservationsController@confirm' ]);
     Route::get('/reservations/export', [
         'as' => 'klusbib.reservations.export',
         'uses' => 'ReservationsController@export' ]);
@@ -32,6 +38,30 @@ Route::prefix('klusbib')->group(function() {
         'as' => 'klusbib.deliveries.index',
         'uses' => 'DeliveriesController@index' ]);
 });
+Route::resource('klusbib/reservations', 'ReservationsController', [
+    'middleware' => ['auth'],
+    'parameters' => ['reservation' => 'reservation_id'],
+])->names([
+    'index' => 'klusbib.reservations.index',
+    'create' => 'klusbib.reservations.create',
+    'store' => 'klusbib.reservations.store',
+    'show' => 'klusbib.reservations.show',
+    'edit' => 'klusbib.reservations.edit',
+    'update' => 'klusbib.reservations.update',
+    'destroy' => 'klusbib.reservations.destroy',
+]);
+
+/*
+ * Resource actions (see https://laravel.com/docs/7.x/controllers#resource-controllers)
+ * Verb 	URI 	        Action 	    Route Name
+ * GET 	    /photos 	    index 	    photos.index
+ * GET 	    /photos/create 	create 	    photos.create
+ * POST 	/photos 	    store 	    photos.store
+ * GET 	    /photos/{photo} show 	    photos.show
+ * GET 	    /photos/{photo}/edit edit 	photos.edit
+ * PUT/PATCH /photos/{photo}update 	    photos.update
+ * DELETE 	/photos/{photo} destroy 	photos.destroy
+ */
 Route::group(
     ['prefix' => 'users',
         'middleware' => ['auth']],

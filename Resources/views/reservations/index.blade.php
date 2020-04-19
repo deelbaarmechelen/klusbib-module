@@ -15,7 +15,7 @@
 
 @section('header_right')
     @can('create', \Modules\Klusbib\Models\Api\Reservation::class)
-      <a href="{{ route('users.create') }}" class="btn btn-primary pull-right" style="margin-right: 5px;">  {{ trans('general.create') }}</a>
+      <a href="{{ route('klusbib.reservations.create') }}" class="btn btn-primary pull-right" style="margin-right: 5px;">  {{ trans('general.create') }}</a>
     @endcan
 
     @if (Input::get('status')=='deleted')

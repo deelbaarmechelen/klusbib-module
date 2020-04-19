@@ -32,7 +32,7 @@ class Reservations
      *
      * @return array
      */
-    public function add(array $params)
+    public function create(array $params)
     {
         return $this->client->post('reservations', $params);
     }
@@ -47,8 +47,8 @@ class Reservations
      */
     public function update($reservation_id, array $params)
     {
-        $excludedFields = array('user_id', 'reservations', 'created_at', 'updated_at');
-        Log::debug("update of user with id $reservation_id and params: " . \json_encode($params));
+        $excludedFields = array('created_at', 'updated_at');
+        Log::debug("update of reservation with id $reservation_id and params: " . \json_encode($params));
         $filteredParams = array_filter($params, function ($needle) use ($excludedFields) {
             return !in_array($needle, $excludedFields);
         }, ARRAY_FILTER_USE_KEY);
@@ -58,7 +58,23 @@ class Reservations
     }
 
     /**
-     * Get extended information about a user by its id.
+     * Remove a reservation by its id.
+     *
+     * @param  string $reservation_id
+     *
+     * @return array
+     */
+    public function destroy($reservation_id)
+    {
+        try {
+            return $this->client->delete('reservations/'.rawurlencode($reservation_id));
+        } catch (NotFoundException $nfe) {
+            return null;
+        }
+    }
+
+    /**
+     * Get extended information about a reservation by its id.
      *
      * @param  string $reservation_id
      *

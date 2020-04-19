@@ -50,7 +50,8 @@ class ReservationsTransformer
         $permissions_array['available_actions'] = [
             'update' => (Gate::allows('update', Reservation::class) && ($reservation->deleted_at==''))  ? true : false,
             'cancel' => (Gate::allows('update', Reservation::class) && ($reservation->deleted_at=='')) && ($reservation->state != 'CANCELLED') ? true : false,
-//            'delete' => (Gate::allows('delete', Reservation::class) && ($reservation->deleted_at=='') && ($reservation->assets_count == 0) && ($reservation->licenses_count == 0)  && ($reservation->accessories_count == 0)  && ($reservation->consumables_count == 0)) ? true : false,
+            'confirm' => (Gate::allows('update', Reservation::class) && ($reservation->deleted_at=='')) && ($reservation->state == 'REQUESTED') ? true : false,
+            'delete' => (Gate::allows('delete', Reservation::class) && ($reservation->deleted_at=='')) ? true : false,
 //            'clone' => (Gate::allows('create', Reservation::class) && ($reservation->deleted_at=='')) ,
 //            'restore' => (Gate::allows('create', Reservation::class) && ($reservation->deleted_at!='')) ? true : false,
         ];

@@ -244,6 +244,9 @@ class Client
                 // access forbidden is considered as not found (can be an asset or user from another company)
                 throw new NotFoundException();
             }
+            else if (isset($statusCode) && ($statusCode == 400)) {
+                Log::error( "Bad request: " . $response->getBody());
+            }
             else if (isset($statusCode) && ($statusCode >= 500)) {
                 throw new \Exception("Unable to access Klusbib API", null, $clientException);
             }
