@@ -48,10 +48,14 @@ class ReservationsTransformer
             ];
 
         $permissions_array['available_actions'] = [
-            'update' => (Gate::allows('update', Reservation::class) && ($reservation->deleted_at==''))  ? true : false,
-            'cancel' => (Gate::allows('update', Reservation::class) && ($reservation->deleted_at=='')) && ($reservation->state != 'CANCELLED') ? true : false,
-            'confirm' => (Gate::allows('update', Reservation::class) && ($reservation->deleted_at=='')) && ($reservation->state == 'REQUESTED') ? true : false,
-            'delete' => (Gate::allows('delete', Reservation::class) && ($reservation->deleted_at=='')) ? true : false,
+            'update' => (($reservation->deleted_at==''))  ? true : false,
+            'cancel' => (($reservation->deleted_at=='')) && ($reservation->state != 'CANCELLED') ? true : false,
+            'confirm' => (($reservation->deleted_at=='')) && ($reservation->state == 'REQUESTED') ? true : false,
+            'delete' => (($reservation->deleted_at=='')) ? true : false,
+//            'update' => (Gate::allows('update', Reservation::class) && ($reservation->deleted_at==''))  ? true : false,
+//            'cancel' => (Gate::allows('update', Reservation::class) && ($reservation->deleted_at=='')) && ($reservation->state != 'CANCELLED') ? true : false,
+//            'confirm' => (Gate::allows('update', Reservation::class) && ($reservation->deleted_at=='')) && ($reservation->state == 'REQUESTED') ? true : false,
+//            'delete' => (Gate::allows('delete', Reservation::class) && ($reservation->deleted_at=='')) ? true : false,
 //            'clone' => (Gate::allows('create', Reservation::class) && ($reservation->deleted_at=='')) ,
 //            'restore' => (Gate::allows('create', Reservation::class) && ($reservation->deleted_at!='')) ? true : false,
         ];
