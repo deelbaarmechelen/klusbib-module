@@ -1,5 +1,5 @@
 {
-    "name": "renardeau/klusbib-module",
+    "name": "deelbaarmechelen/klusbib-module",
     "description": "",
     "type": "laravel-module",
     "extra": {
@@ -20,13 +20,13 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/renardeau/remote-model"
+            "url": "https://github.com/deelbaarmechelen/remote-model"
         }
     ],
     "require": {
         "guzzlehttp/guzzle": "^6.3",
         "cloudcreativity/laravel-json-api": "^1.5",
-        "renardeau/remote-model": "dev-master",
+	"deelbaarmechelen/remote-model": "dev-master",
         "joshbrw/laravel-module-installer": "^0.1.4"
     },
     "require-dev": {
