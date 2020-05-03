@@ -63,23 +63,6 @@
 
   <div class="col-lg-3 col-xs-6">
     <!-- small box -->
-    <div class="small-box bg-maroon">
-      <div class="inner">
-        <h3>{{ number_format($counts['license']) }}</h3>
-        <p>{{ trans('general.total_licenses') }}</p>
-      </div>
-      <div class="icon">
-        <i class="fa fa-floppy-o"></i>
-      </div>
-        @can('view', \App\Models\License::class)
-          <a href="{{ route('licenses.index') }}" class="small-box-footer">{{ trans('general.moreinfo') }} <i class="fa fa-arrow-circle-right"></i></a>
-        @endcan
-    </div>
-  </div><!-- ./col -->
-
-
-  <div class="col-lg-3 col-xs-6">
-    <!-- small box -->
     <div class="small-box bg-orange">
       <div class="inner">
         <h3> {{ number_format($counts['accessory']) }}</h3>

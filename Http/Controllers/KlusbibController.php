@@ -20,13 +20,11 @@ class KlusbibController extends Controller
         $counts['user'] = isset($monthlyStats["user"]) ? $monthlyStats["user"]["total-count"] : "0";
         $counts['asset'] = isset($monthlyStats["tool"]) ? $monthlyStats["tool"]["total-count"] : "0";
         $counts['accessory'] = isset($monthlyStats["accessory"]) ? $monthlyStats["accessory"]["total-count"] : "0";
-        $counts['license'] = \App\Models\License::assetcount();
         $counts['consumable'] = \App\Models\Consumable::count();
-        $counts['grand_total'] =  $counts['asset'] +  $counts['accessory'] +  $counts['license'] +  $counts['consumable'];
+        $counts['grand_total'] = $counts['asset'] + $counts['accessory'] + $counts['consumable'];
 
 //        return view('dashboard')->with('asset_stats', $asset_stats)->with('counts', $counts);
         return view('klusbib::dashboard')->with('counts', $counts);
-//        return view('klusbib::index');
     }
 
     /**
