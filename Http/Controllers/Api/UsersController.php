@@ -3,6 +3,9 @@
 namespace Modules\Klusbib\Http\Controllers\Api;
 
 use App\Helpers\Helper;
+use App\Http\Transformers\SelectlistTransformer;
+use App\Models\Company;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Modules\Klusbib\Http\Transformers\UsersTransformer;
 use Illuminate\Http\Request;
@@ -150,4 +153,64 @@ class UsersController extends Controller
     {
         return response()->json(Helper::formatStandardApiResponse('error', null, 'Not yet implemented'), 200);
     }
+
+
+    /**
+     * Gets a paginated collection for the select2 menus
+     * @see https://select2.org/data-sources/formats
+     * @see \App\Http\Transformers\SelectlistTransformer
+     *
+     */
+    public function selectlist(Request $request)
+    {
+        Log::debug('Klusbib: Api/UsersController selectlist');
+        //lookup all data locally, no need to call api
+        $users = User::select(
+            [
+                'users.id',
+                'users.username',
+                'users.employee_num',
+                'users.first_name',
+                'users.last_name',
+                'users.gravatar',
+                'users.avatar',
+                'users.email',
+            ]
+        )->where('show_in_list', '=', '1')
+         ->whereNotNull('employee_num');
+
+        $users = Company::scopeCompanyables($users);
+
+        if ($request->filled('search')) {
+            $users = $users->SimpleNameSearch($request->get('search'))
+                ->orWhere('username', 'LIKE', '%'.$request->get('search').'%')
+                ->orWhere('employee_num', 'LIKE', '%'.$request->get('search').'%');
+        }
+
+        $users = $users->orderBy('last_name', 'asc')->orderBy('first_name', 'asc');
+        $users = $users->paginate(50);
+
+        foreach ($users as $user) {
+            $name_str = '';
+            if ($user->last_name!='') {
+                $name_str .= e($user->last_name).', ';
+            }
+            $name_str .= e($user->first_name);
+
+            if ($user->username!='') {
+                $name_str .= ' ('.e($user->username).')';
+            }
+
+            if ($user->employee_num!='') {
+                $name_str .= ' - #'.e($user->employee_num);
+            }
+            $user->id = $user->employee_num; // force id to employee_num as this is the primary key used in klusbib API
+            $user->use_text = $name_str;
+            $user->use_image = ($user->present()->gravatar) ? $user->present()->gravatar : null;
+        }
+
+        return (new SelectlistTransformer)->transformSelectlist($users);
+
+    }
+
 }

@@ -30,6 +30,12 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'api'], fun
                 'uses' => 'UsersController@index'
             ]
         );
+        Route::get('users/selectlist',
+            [
+                'as' => 'api.klusbib.users.selectlist',
+                'uses' => 'UsersController@selectlist'
+            ]
+        );
         Route::get('users/{user_id}',
             [
                 'as' => 'api.klusbib.users.show',
