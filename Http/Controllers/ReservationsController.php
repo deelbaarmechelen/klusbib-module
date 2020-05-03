@@ -7,6 +7,7 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\MessageBag;
 use Modules\Klusbib\Http\KlusbibApi;
 use Modules\Klusbib\Models\Api\Reservation;
 
@@ -141,12 +142,14 @@ class ReservationsController extends Controller
         }
         Log::info('Reservation exists: ' . $reservation->exists);
         $this->authorize('update', $reservation);
+        // test validating error
+//        return redirect()->back()->withInput()->withErrors(new MessageBag(array ("state" => "Invalid state - test")) );
 
         $reservation->start_date   = $request->input('start_date');
         $reservation->end_date          = $request->input('end_date');
 //        $reservation->name              = $request->input('name');
         $reservation->comment           = $request->input('notes');
-        $reservation->tool_id           = $request->input('asset');
+        $reservation->tool_id           = $request->input('tool_id');
         $reservation->state             = $request->input('state');
         $reservation->user_id           = $request->input('user_id');
         $reservation->cancel_reason     = $request->input('cancel_reason');
@@ -156,8 +159,23 @@ class ReservationsController extends Controller
             return redirect()->route('klusbib.reservations.show', ['reservation' => $reservationId])
                 ->with('success', trans('klusbib::admin/reservations/message.update.success'));
         }
-        // If we can't adjust the number of seats, the error is flashed to the session by the event handler in Reservation.php
-        return redirect()->back()->withInput()->withErrors($reservation->getErrors());
+
+        // TODO: for "Bad Request" errors: parse the error message to identify erroneous field and return appropriate error array (field name is key in error array)
+        // Note: getErrors returns validation errors linked to specific field (field name is key in error array)
+        // From doc: An inherited member from a base class is overridden by a member inserted by a Trait.
+        // The precedence order is that members from the current class override Trait methods, which in turn override inherited methods.
+        // How to get API client errors?
+        Log::info('Reservation update errors: ' . $reservation->getErrorCode() . \json_encode($reservation->getClientError())
+            . \json_encode($reservation->getErrors()));
+
+        // Add error message to Session, it will be shown by notifications.blade.php (included in layouts/default.blade.php)
+        // Note: for Snipe models (e.g. License), the error is flashed to the session by the event handler (defined in model boot method e.g. License.php:boot)
+//        $request->session()->flash('error', \json_encode($reservation->getClientError()));
+//        return redirect()->back()->withInput()->withErrors($reservation->getErrors());
+
+        // Show generic failure message
+        return redirect()->route('klusbib.reservations.edit', ['reservation' => $reservationId])
+            ->with('error', trans('klusbib::admin/reservations/message.update.error'));
     }
 
     /**
@@ -201,7 +219,7 @@ class ReservationsController extends Controller
         $reservation = Reservation::find($id);
 
         if ($reservation) {
-            $this->authorize('view', $reservation);
+//            $this->authorize('view', $reservation);
             $reservation->id = $reservation->reservation_id;
             Log::info(\json_encode(compact('reservation')));
             return view('klusbib::reservations/view', compact('reservation'));

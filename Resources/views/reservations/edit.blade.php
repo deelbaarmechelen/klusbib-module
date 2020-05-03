@@ -10,37 +10,10 @@
 @section('inputFields')
 {{--@include ('partials.forms.edit.name', ['translated_name' => trans('klusbib::admin/reservations/form.name')])--}}
 
-{{--TODO: translate asset_id to tool_id and vice-versa--}}
-{{--TODO: translate assigned_user_id to user_id and vice-versa--}}
-{{--@include ('partials.forms.edit.asset-select', ['translated_name' => trans('general.select_asset'), 'fieldname' => 'asset_id', 'required'=>'true'])--}}
-{{--@include ('partials.forms.edit.user-select', ['translated_name' => trans('general.user'), 'fieldname' => 'user', 'required'=>'true'])--}}
-
-<!-- Asset-->
-<div class="form-group {{ $errors->has('asset') ? ' has-error' : '' }}">
-    <label for="asset" class="col-md-3 control-label">{{ trans('klusbib::admin/reservations/form.asset') }}</label>
-    <div class="col-md-7{{  (\App\Helpers\Helper::checkIfRequired($item, 'asset')) ? ' required' : '' }}">
-        <textarea class="form-control" type="text" name="asset" id="asset">{{ Input::old('asset', $item->tool_id) }}</textarea>
-        {!! $errors->first('asset', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
-    </div>
-</div>
-
-<!-- User-->
-<div class="form-group {{ $errors->has('user_id') ? ' has-error' : '' }}">
-    <label for="user_id" class="col-md-3 control-label">{{ trans('klusbib::admin/reservations/form.user_id') }}</label>
-    <div class="col-md-7{{  (\App\Helpers\Helper::checkIfRequired($item, 'user_id')) ? ' required' : '' }}">
-        <textarea class="form-control" type="text" name="user_id" id="user_id">{{ Input::old('user_id', $item->user_id) }}</textarea>
-        {!! $errors->first('user_id', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
-    </div>
-</div>
+@include ('partials.forms.edit.asset-select', ['translated_name' => trans('general.select_asset'), 'fieldname' => 'tool_id', 'required'=>'true'])
+@include ('klusbib::partials.forms.edit.custom-user-select', ['translated_name' => trans('general.user'), 'fieldname' => 'user_id', 'required'=>'true'])
 
 <!-- State-->
-{{--<div class="form-group {{ $errors->has('state') ? ' has-error' : '' }}">--}}
-    {{--<label for="state" class="col-md-3 control-label">{{ trans('klusbib::admin/reservations/form.state') }}</label>--}}
-    {{--<div class="col-md-7{{  (\App\Helpers\Helper::checkIfRequired($item, 'state')) ? ' required' : '' }}">--}}
-        {{--<textarea class="form-control" type="text" name="state" id="state">{{ Input::old('state', $item->state) }}</textarea>--}}
-        {{--{!! $errors->first('state', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}--}}
-    {{--</div>--}}
-{{--</div>--}}
 <div class="form-group {{ $errors->has('state') ? ' has-error' : '' }}">
     <label for="state" class="col-md-3 control-label">{{ trans('klusbib::admin/reservations/form.state') }}</label>
     <div class="col-md-7{{  (\App\Helpers\Helper::checkIfRequired($item, 'state')) ? ' required' : '' }}">
@@ -90,6 +63,7 @@
         {!! $errors->first('notes', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
     </div>
 </div>
+
 <!-- Cancel reason -->
 <div class="form-group {{ $errors->has('cancel_reason') ? ' has-error' : '' }}">
     <label for="cancel_reason" class="col-md-3 control-label">{{ trans('klusbib::admin/reservations/form.cancel_reason') }}</label>
