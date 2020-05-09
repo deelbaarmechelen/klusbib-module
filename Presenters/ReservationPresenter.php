@@ -37,7 +37,7 @@ class ReservationPresenter extends Presenter
             ],
             [
                 "field" => "tool_id",
-                "searchable" => true,
+                "searchable" => false,
                 "sortable" => true,
                 "switchable" => true,
                 "title" => trans('klusbib::admin/reservations/table.tool_id'),
@@ -45,7 +45,7 @@ class ReservationPresenter extends Presenter
             ],
             [
                 "field" => "tool",
-                "searchable" => true,
+                "searchable" => false,
                 "sortable" => false,
                 "switchable" => true,
                 "title" => trans('klusbib::admin/reservations/table.tool'),
@@ -54,7 +54,7 @@ class ReservationPresenter extends Presenter
             ],
             [
                 "field" => "user_id",
-                "searchable" => true,
+                "searchable" => false,
                 "sortable" => true,
                 "switchable" => true,
                 "title" => trans('klusbib::admin/reservations/table.user_id'),
@@ -71,7 +71,7 @@ class ReservationPresenter extends Presenter
             ],
             [
                 "field" => "state",
-                "searchable" => true,
+                "searchable" => false,
                 "sortable" => true,
                 "switchable" => true,
                 "title" => trans('klusbib::admin/reservations/table.state'),
@@ -88,7 +88,7 @@ class ReservationPresenter extends Presenter
 //            ],
             [
                 "field" => "startsAt",
-                "searchable" => true,
+                "searchable" => false,
                 "sortable" => true,
                 "switchable" => true,
                 "title" => trans('klusbib::admin/reservations/table.startsAt'),
@@ -96,7 +96,7 @@ class ReservationPresenter extends Presenter
                 'formatter' => 'dateDisplayFormatter'
             ],            [
                 "field" => "endsAt",
-                "searchable" => true,
+                "searchable" => false,
                 "sortable" => true,
                 "switchable" => true,
                 "title" => trans('klusbib::admin/reservations/table.endsAt'),
@@ -104,7 +104,7 @@ class ReservationPresenter extends Presenter
                 'formatter' => 'dateDisplayFormatter'
             ],            [
                 "field" => "comments",
-                "searchable" => true,
+                "searchable" => false,
                 "sortable" => true,
                 "switchable" => true,
                 "title" => trans('general.notes'),
@@ -112,7 +112,7 @@ class ReservationPresenter extends Presenter
             ],
             [
                 "field" => "created_at",
-                "searchable" => true,
+                "searchable" => false,
                 "sortable" => true,
                 "switchable" => true,
                 "title" => trans('general.created_at'),
