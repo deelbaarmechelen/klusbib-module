@@ -18,14 +18,14 @@
       <a href="{{ route('klusbib.reservations.create') }}" class="btn btn-primary pull-right" style="margin-right: 5px;">  {{ trans('general.create') }}</a>
     @endcan
 
-    @if (Input::get('status')=='deleted')
-      <a class="btn btn-default pull-right" href="{{ route('klusbib.reservations.index') }}" style="margin-right: 5px;">{{ trans('klusbib::admin/reservations/table.show_current') }}</a>
-    @else
-      <a class="btn btn-default pull-right" href="{{ route('klusbib.reservations.index', ['status' => 'deleted']) }}" style="margin-right: 5px;">{{ trans('klusbib::admin/reservations/table.show_deleted') }}</a>
-    @endif
-    @can('view', \Modules\Klusbib\Models\Api\Reservation::class)
-        <a class="btn btn-default pull-right" href="{{ route('klusbib.reservations.export') }}" style="margin-right: 5px;">Export</a>
-    @endcan
+    {{--@if (Input::get('status')=='deleted')--}}
+      {{--<a class="btn btn-default pull-right" href="{{ route('klusbib.reservations.index') }}" style="margin-right: 5px;">{{ trans('klusbib::admin/reservations/table.show_current') }}</a>--}}
+    {{--@else--}}
+      {{--<a class="btn btn-default pull-right" href="{{ route('klusbib.reservations.index', ['status' => 'deleted']) }}" style="margin-right: 5px;">{{ trans('klusbib::admin/reservations/table.show_deleted') }}</a>--}}
+    {{--@endif--}}
+    {{--@can('view', \Modules\Klusbib\Models\Api\Reservation::class)--}}
+        {{--<a class="btn btn-default pull-right" href="{{ route('klusbib.reservations.export') }}" style="margin-right: 5px;">Export</a>--}}
+    {{--@endcan--}}
 @stop
 
 {{-- Page content --}}
