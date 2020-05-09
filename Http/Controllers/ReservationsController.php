@@ -6,6 +6,7 @@ use App\Helpers\Helper;
 //use Illuminate\Routing\Controller;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
 use Modules\Klusbib\Http\KlusbibApi;
@@ -60,9 +61,9 @@ class ReservationsController extends Controller
         // Save the reservation data
         $reservation->start_date   = $request->input('start_date');
         $reservation->end_date          = $request->input('end_date');
-        $reservation->name              = $request->input('name');
+//        $reservation->name              = $request->input('name');
         $reservation->comment           = $request->input('notes');
-        $reservation->tool_id           = $request->input('asset');
+        $reservation->tool_id           = $request->input('tool_id');
         $reservation->state             = $request->input('state');
         $reservation->user_id           = $request->input('user_id');
         $reservation->cancel_reason     = $request->input('cancel_reason');
@@ -72,7 +73,22 @@ class ReservationsController extends Controller
         if ($reservation->save()) {
             return redirect()->route("klusbib.reservations.index")->with('success', trans('klusbib::admin/reservations/message.create.success'));
         }
-        return redirect()->back()->withInput()->withErrors($reservation->getErrors());
+//        return redirect()->back()->withInput()->withErrors($reservation->getErrors());
+        $errorMessage = trans('klusbib::admin/reservations/message.create.error');
+        $errors = Arr::get($reservation->getClientError(), 'errors');
+        if (is_array($errors)) {
+            $errorMessage .= " (API fout: ";
+            foreach($errors as $key => $value) {
+                if (\is_string($key)) {
+                    $errorMessage .= $key . ": ";
+                }
+                $errorMessage .= $value;
+            }
+            $errorMessage .= ")";
+        }
+        // Show generic failure message
+        return redirect()->back()->withInput()
+            ->with('error', $errorMessage);
     }
 
     public function cancel($reservationId = null)
@@ -173,9 +189,21 @@ class ReservationsController extends Controller
 //        $request->session()->flash('error', \json_encode($reservation->getClientError()));
 //        return redirect()->back()->withInput()->withErrors($reservation->getErrors());
 
+        $errorMessage = trans('klusbib::admin/reservations/message.update.error');
+        $errors = Arr::get($reservation->getClientError(), 'errors');
+        if (is_array($errors)) {
+            $errorMessage .= " (API fout: ";
+            foreach($errors as $key => $value) {
+                if (\is_string($key)) {
+                    $errorMessage .= $key . ": ";
+                }
+                $errorMessage .= $value;
+            }
+            $errorMessage .= ")";
+        }
         // Show generic failure message
         return redirect()->route('klusbib.reservations.edit', ['reservation' => $reservationId])
-            ->with('error', trans('klusbib::admin/reservations/message.update.error'));
+            ->with('error', $errorMessage);
     }
 
     /**

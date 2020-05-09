@@ -33,29 +33,20 @@ class ReservationPresenter extends Presenter
                 "sortable" => true,
                 "switchable" => true,
                 "title" => trans('klusbib::general.id'),
-                "visible" => false
+                "visible" => true
             ],
-//            [
-//                "field" => "reservation",
-//                "searchable" => true,
-//                "sortable" => true,
-//                "switchable" => true,
-//                "title" => trans('klusbib::admin/reservations/table.reservation_id'),
-//                "visible" => true
-//            ],
             [
                 "field" => "tool_id",
                 "searchable" => true,
                 "sortable" => true,
                 "switchable" => true,
                 "title" => trans('klusbib::admin/reservations/table.tool_id'),
-                "visible" => true,
-                "formatter" => "hardwareLinkFormatter"
+                "visible" => false
             ],
             [
                 "field" => "tool",
                 "searchable" => true,
-                "sortable" => true,
+                "sortable" => false,
                 "switchable" => true,
                 "title" => trans('klusbib::admin/reservations/table.tool'),
                 "visible" => true,
@@ -67,8 +58,7 @@ class ReservationPresenter extends Presenter
                 "sortable" => true,
                 "switchable" => true,
                 "title" => trans('klusbib::admin/reservations/table.user_id'),
-                "visible" => true,
-                "formatter" => "usersLinkFormatter"
+                "visible" => false
             ],
             [
                 "field" => "user",

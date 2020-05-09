@@ -4,7 +4,9 @@ namespace Modules\Klusbib\Api;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Contracts\Session\Session;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\MessageBag;
 use Modules\Klusbib\Api\Exception\BadMethodCallException;
 use Modules\Klusbib\Api\Exception\InvalidArgumentException;
 use GuzzleHttp\ClientInterface;
@@ -31,6 +33,11 @@ class Client
     private $apiKeyExpiration;
 
     /**
+     * @var array
+     */
+    protected $messageBag;
+
+    /**
      * API Client constructor.
      * @param $client ClientInterface to call inventory
      * @param $apikey api key used for authentication at inventory
@@ -49,6 +56,7 @@ class Client
         }
         $this->user = $user;
         $this->password = $password;
+        $this->messageBag = array();
 //            $this->updateToken();
     }
 
@@ -90,9 +98,14 @@ class Client
         return $api;
     }
 
+    /**
+     * return an error array containing these elements
+     * 'code'   : HTTP response code
+     * 'errors' : array of errors. When a key is provided for an error, it matches the faulty field name
+     * @return array errors from last request
+     */
     public function errors() {
-        // TODO: method required by Torann/RemoteModel/Model::makeRequest, but unclear what it is expected to return
-        //       error message from last request?
+        return $this->messageBag;
     }
 
     /**
@@ -201,6 +214,8 @@ class Client
     }
     private function request($method, $target, $data = null) {
         Log::info("Klusbib API request: $method; $target; " . json_encode($data));
+        $this->messageBag = array(); // reset message bag
+
         if (!isset($this->apiKey)) {
             $this->updateToken();
         }
@@ -228,10 +243,13 @@ class Client
         } catch (ClientException $clientException) {
             Log::error( $clientException->getMessage());
             if ($clientException->hasResponse()) {
+
                 $response = $clientException->getResponse();
                 $statusCode = $response->getStatusCode();
+                Arr::set($this->messageBag, 'code', $statusCode);
             }
             if (isset($statusCode) && ($statusCode == 401)) {
+                Arr::set($this->messageBag, 'errors', array("Unauthorized (token expired?)"));
                 // refresh api token
                 $now = new \DateTime('now');
                 $tokenAge =($this->apiKeyTimestamp) ? $now->diff($this->apiKeyTimestamp, true) : null;
@@ -241,21 +259,33 @@ class Client
             }
 
             if (isset($statusCode) && ($statusCode == 404 || $statusCode == 403)) {
+                Arr::set($this->messageBag, 'errors', array("Not found"));
                 // access forbidden is considered as not found (can be an asset or user from another company)
                 throw new NotFoundException();
             }
             else if (isset($statusCode) && ($statusCode == 400)) {
-                Log::error( "Bad request: " . $response->getBody());
+                $body = $response->getBody()->getContents();
+                $msg = "Bad request" . " - " . $body;
+                Arr::set($this->messageBag, 'errors', array($msg));
+                Log::error($msg);
+                return;
             }
             else if (isset($statusCode) && ($statusCode >= 500)) {
+                $msg = "Unable to access Klusbib API" . $clientException->getMessage();
+                Arr::set($this->messageBag, 'errors', array($msg));
+                Log::error( $msg);
                 throw new \Exception("Unable to access Klusbib API", null, $clientException);
             }
             throw new \Exception("Unexpected client exception!!", null, $clientException);
         } catch (ServerException $serverException) {
-            Log::error( 'ServerException:' . $serverException->getMessage());
+            $msg = 'ServerException:' . $serverException->getMessage();
+            Arr::set($this->messageBag, 'errors', array($msg));
+            Log::error( $msg);
             throw new \Exception("Klusbib API unavailable", null, $serverException);
         } catch (\Exception $exception) {
-            Log::error( "Unexpected exception: " . $exception->getMessage());
+            $msg = "Unexpected exception: " . $exception->getMessage();
+            Arr::set($this->messageBag, 'errors', array($msg));
+            Log::error( $msg);
             throw new \Exception("Unexpected exception!!", null, $exception);
         }
 
@@ -263,7 +293,10 @@ class Client
             if ($res->getStatusCode() == 404) {
                 throw new NotFoundException();
             }
-            Log::error('Klusbib API request to "' . $target . '" failed with status code ' . $res->getStatusCode());
+            $msg = 'Klusbib API request to "' . $target . '" failed with status code ' . $res->getStatusCode();
+            Arr::set($this->messageBag, 'code', $res->getStatusCode());
+            Arr::set($this->messageBag, 'errors', array($msg));
+            Log::error($msg);
             throw new \RuntimeException('Klusbib API request to "' . $target . '" failed with status code ' . $res->getStatusCode());
         }
         Log::debug("Response body message=" . $res->getBody());

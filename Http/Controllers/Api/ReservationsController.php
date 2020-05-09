@@ -24,12 +24,15 @@ class ReservationsController extends Controller
         $order = $request->input('order') === 'asc' ? 'asc' : 'desc';
         $requestedSort = $request->get('sort');
         Log::debug("Requested sort order = " . $requestedSort);
-        if ($requestedSort == 'name') { // name is concatenation of firstname and lastname
-            $requestedSort = 'firstname';
+        if ($requestedSort == 'user') { // no sort on user available in API, sort on username instead
+            $requestedSort = 'username';
+        }
+        if ($requestedSort == 'tool') { // no sort on tool available in API, sort on tool_id instead
+            $requestedSort = 'tool_id';
         }
         $allowed_columns =
             [
-                'reservation_id', 'tool_id', 'user_id', 'state', 'startsAt', 'endsAt', 'type', 'comment',
+                'reservation_id', 'tool_id', 'user_id', 'username', 'state', 'startsAt', 'endsAt', 'type', 'comment',
                 'title'
             ];
 
