@@ -22,5 +22,4 @@ class Reservation extends BaseModel
         'state' => 'required|string',
         'user_id' => 'required|date',
     );
-
 }

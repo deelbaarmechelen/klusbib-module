@@ -9,13 +9,16 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Modules\Klusbib\Api\Client;
+use Modules\Klusbib\Models\Api\Reservation;
 use Modules\Klusbib\Models\AssetTagPattern;
 use Modules\Klusbib\Observers\AssetObserver;
 use Modules\Klusbib\Notifications\NotifyAccessoryCheckin;
 use Modules\Klusbib\Notifications\NotifyAccessoryCheckout;
 use Modules\Klusbib\Notifications\NotifyAssetCheckin;
 use Modules\Klusbib\Notifications\NotifyAssetCheckout;
+use Modules\Klusbib\Policies\ReservationPolicy;
 use Torann\RemoteModel\Model;
+use Gate;
 
 class KlusbibServiceProvider extends ServiceProvider
 {
@@ -25,6 +28,15 @@ class KlusbibServiceProvider extends ServiceProvider
      * @var bool
      */
     protected $defer = false;
+
+    /**
+     * The policy mappings for the application.
+     *
+     * @var array
+     */
+    protected $policies = [
+        Reservation::class => ReservationPolicy::class,
+    ];
 
     /**
      * Boot the application events.
@@ -37,6 +49,7 @@ class KlusbibServiceProvider extends ServiceProvider
 
         $this->registerTranslations();
         $this->registerConfig();
+        $this->updatePermissions();
         $this->registerViews();
         $this->registerFactories();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
@@ -46,6 +59,7 @@ class KlusbibServiceProvider extends ServiceProvider
         $this->registerNotifications();
 //        $this->registerCommands();
         $this->registerObservers();
+        $this->registerPolicies();
 
     }
 
@@ -74,6 +88,78 @@ class KlusbibServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/../Config/config.php', 'klusbib'
         );
+
+
+    }
+
+    /**
+     * Update permissions array to allow config of reservations and deliveries permissions
+     * @return void
+     */
+    protected function updatePermissions() {
+        // update permissions
+        $permissions = config('permissions');
+
+        // add reservations permissions
+        $reservationPermissions =     array(
+            array(
+                'permission' => 'klusbib.reservations.view',
+                'label'      => 'View ',
+                'note'       => '',
+                'display'    => true,
+            ),
+            array(
+                'permission' => 'klusbib.reservations.create',
+                'label'      => 'Create ',
+                'note'       => '',
+                'display'    => true,
+            ),
+            array(
+                'permission' => 'klusbib.reservations.edit',
+                'label'      => 'Edit ',
+                'note'       => '',
+                'display'    => true,
+            ),
+            array(
+                'permission' => 'klusbib.reservations.delete',
+                'label'      => 'Delete ',
+                'note'       => '',
+                'display'    => true,
+            ),
+        );
+        $permissions['Klusbib.Reservations'] = $reservationPermissions;
+
+        // Add deliveries permissions
+        $reservationPermissions =     array(
+            array(
+                'permission' => 'klusbib.deliveries.view',
+                'label'      => 'View ',
+                'note'       => '',
+                'display'    => true,
+            ),
+            array(
+                'permission' => 'klusbib.deliveries.create',
+                'label'      => 'Create ',
+                'note'       => '',
+                'display'    => true,
+            ),
+            array(
+                'permission' => 'klusbib.deliveries.edit',
+                'label'      => 'Edit ',
+                'note'       => '',
+                'display'    => true,
+            ),
+            array(
+                'permission' => 'klusbib.deliveries.delete',
+                'label'      => 'Delete ',
+                'note'       => '',
+                'display'    => true,
+            ),
+        );
+        $permissions['Klusbib.Deliveries'] = $reservationPermissions;
+
+        // update permissions in config
+        config(['permissions' => $permissions]);
     }
 
     /**
@@ -154,6 +240,15 @@ class KlusbibServiceProvider extends ServiceProvider
     private function registerObservers() {
         Log::debug('Registering Klusbib observers');
         Asset::observe(AssetObserver::class);
+    }
+
+    private function registerPolicies() {
+        Log::debug('Registering Klusbib policies');
+        foreach ($this->policies as $key => $value) {
+            Log::debug('Registering policy ' . $key);
+            Gate::policy($key, $value);
+        }
+
     }
 
     /**

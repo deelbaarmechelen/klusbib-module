@@ -247,7 +247,7 @@ class ReservationsController extends Controller
         $reservation = Reservation::find($id);
 
         if ($reservation) {
-//            $this->authorize('view', $reservation);
+            $this->authorize('view', $reservation);
             $reservation->id = $reservation->reservation_id;
             Log::info(\json_encode(compact('reservation')));
             return view('klusbib::reservations/view', compact('reservation'));
