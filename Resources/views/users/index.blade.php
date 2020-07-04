@@ -14,20 +14,17 @@
 @stop
 
 @section('header_right')
-    @can('create', \App\Models\User::class)
-      @if ($snipeSettings->ldap_enabled == 1)
-      <a href="{{ route('ldap/user') }}" class="btn btn-default pull-right"><span class="fa fa-sitemap"></span> LDAP Sync</a>
-      @endif
-      <a href="{{ route('users.create') }}" class="btn btn-primary pull-right" style="margin-right: 5px;">  {{ trans('general.create') }}</a>
+    @can('create', \Modules\Klusbib\Models\Api\User::class)
+      {{--<a href="{{ route('klusbib.users.create') }}" class="btn btn-primary pull-right" style="margin-right: 5px;">  {{ trans('general.create') }}</a>--}}
     @endcan
 
-    @if (Input::get('status')=='deleted')
-      <a class="btn btn-default pull-right" href="{{ route('users.index') }}" style="margin-right: 5px;">{{ trans('admin/users/table.show_current') }}</a>
-    @else
-      <a class="btn btn-default pull-right" href="{{ route('users.index', ['status' => 'deleted']) }}" style="margin-right: 5px;">{{ trans('admin/users/table.show_deleted') }}</a>
-    @endif
-    @can('view', \App\Models\User::class)
-        <a class="btn btn-default pull-right" href="{{ route('users.export') }}" style="margin-right: 5px;">Export</a>
+    {{--@if (Input::get('status')=='deleted')--}}
+      {{--<a class="btn btn-default pull-right" href="{{ route('klusbib.users.index') }}" style="margin-right: 5px;">{{ trans('admin/users/table.show_current') }}</a>--}}
+    {{--@else--}}
+      {{--<a class="btn btn-default pull-right" href="{{ route('klusbib.users.index', ['status' => 'deleted']) }}" style="margin-right: 5px;">{{ trans('admin/users/table.show_deleted') }}</a>--}}
+    {{--@endif--}}
+    @can('view', \Modules\Klusbib\Models\Api\User::class)
+        {{--<a class="btn btn-default pull-right" href="{{ route('klusbib.users.export') }}" style="margin-right: 5px;">Export</a>--}}
     @endcan
 @stop
 
@@ -38,23 +35,23 @@
   <div class="col-md-12">
     <div class="box box-default">
         <div class="box-body">
-          {{ Form::open([
-               'method' => 'POST',
-               'route' => ['users/bulkedit'],
-               'class' => 'form-inline',
-                'id' => 'bulkForm']) }}
+          {{--{{ Form::open([--}}
+               {{--'method' => 'POST',--}}
+               {{--'route' => ['klusbib/users/bulkedit'],--}}
+               {{--'class' => 'form-inline',--}}
+                {{--'id' => 'bulkForm']) }}--}}
 
-            @if (Input::get('status')!='deleted')
-              @can('delete', \App\Models\User::class)
-                <div id="toolbar">
-                  <select name="bulk_actions" class="form-control select2" style="width: 200px;">
-                    <option value="delete">Bulk Checkin &amp; Delete</option>
-                    <option value="edit">Bulk Edit</option>
-                  </select>
-                  <button class="btn btn-default" id="bulkEdit" disabled>Go</button>
-                </div>
-              @endcan
-            @endif
+            {{--@if (Input::get('status')!='deleted')--}}
+              {{--@can('delete', \App\Models\User::class)--}}
+                {{--<div id="toolbar">--}}
+                  {{--<select name="bulk_actions" class="form-control select2" style="width: 200px;">--}}
+                    {{--<option value="delete">Bulk Checkin &amp; Delete</option>--}}
+                    {{--<option value="edit">Bulk Edit</option>--}}
+                  {{--</select>--}}
+                  {{--<button class="btn btn-default" id="bulkEdit" disabled>Go</button>--}}
+                {{--</div>--}}
+              {{--@endcan--}}
+            {{--@endif--}}
 
 
             <table
@@ -81,7 +78,7 @@
             </table>
 
 
-          {{ Form::close() }}
+          {{--{{ Form::close() }}--}}
         </div><!-- /.box-body -->
       </div><!-- /.box -->
   </div>

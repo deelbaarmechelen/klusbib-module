@@ -65,7 +65,7 @@
                     data-show-columns="true"
                     data-show-export="true"
                     data-show-refresh="true"
-                    data-sort-order="asc"
+                    data-sort-order="desc"
                     data-toolbar="#toolbar"
                     id="reservationsTable"
                     class="table table-striped snipe-table"
@@ -78,7 +78,7 @@
             </table>
 
 
-          {{ Form::close() }}
+{{--          {{ Form::close() }}--}}
         </div><!-- /.box-body -->
       </div><!-- /.box -->
   </div>

@@ -44,6 +44,22 @@
       @endcan
     </div>
   </div><!-- ./col -->
+    <!-- panel -->
+    {{--<div class="col-lg-3 col-xs-6">--}}
+        {{--<!-- small box -->--}}
+        {{--<div class="small-box bg-aqua">--}}
+            {{--<div class="inner">--}}
+                {{--<h3>{{ number_format($counts['user_stroom']) }}</h3>--}}
+                {{--<p>{{ trans('klusbib::general.stroom_users') }}</p>--}}
+            {{--</div>--}}
+            {{--<div class="icon">--}}
+                {{--<i class="fa fa-users"></i>--}}
+            {{--</div>--}}
+            {{--@can('index', \App\Models\Asset::class)--}}
+                {{--<a href="{{ route('klusbib.users.index') }}" class="small-box-footer">{{ trans('general.moreinfo') }} <i class="fa fa-arrow-circle-right"></i></a>--}}
+            {{--@endcan--}}
+        {{--</div>--}}
+    {{--</div><!-- ./col -->--}}
 
   <div class="col-lg-3 col-xs-6">
     <!-- small box -->
@@ -92,6 +108,22 @@
       @endcan
     </div>
   </div><!-- ./col -->
+
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-olive">
+            <div class="inner">
+                <h3> {{ number_format($counts['activity']) }}</h3>
+                <p>{{ trans('klusbib::general.total_activity') }}</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-tasks"></i>
+            </div>
+            {{--@can('index', \App\Models\Consumable::class)--}}
+                {{--<a href="{{ route('consumables.index') }}" class="small-box-footer">{{ trans('general.moreinfo') }} <i class="fa fa-arrow-circle-right"></i></a>--}}
+            {{--@endcan--}}
+        </div>
+    </div><!-- ./col -->
 </div>
 
 {{--@if ($counts['grand_total'] == 0)--}}
@@ -197,77 +229,187 @@
   {{--</div>--}}
 
 {{--</div> <!--/row-->--}}
-{{--<div class="row">--}}
-    {{--<div class="col-md-6">--}}
-        {{--<div class="box box-default">--}}
-            {{--<div class="box-header with-border">--}}
-                {{--<h3 class="box-title">{{ trans('general.assets') }} by Status</h3>--}}
-                {{--<div class="box-tools pull-right">--}}
-                    {{--<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>--}}
-                    {{--</button>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-            {{--<!-- /.box-header -->--}}
-            {{--<div class="box-body" style="min-height: 400px;">--}}
-                {{--<div class="row">--}}
-                    {{--<div class="col-md-12">--}}
-                        {{--<div class="chart-responsive">--}}
-                            {{--<canvas id="statusPieChart" height="120"></canvas>--}}
-                        {{--</div> <!-- ./chart-responsive -->--}}
-                    {{--</div> <!-- /.col -->--}}
-                {{--</div> <!-- /.row -->--}}
-            {{--</div><!-- /.box-body -->--}}
-        {{--</div> <!-- /.box -->--}}
-    {{--</div>--}}
-    {{--<div class="col-md-6">--}}
+<div class="row">
+    <div class="col-md-4">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">{{ trans('general.users') }} per Project</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="min-height: 120px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="chart-responsive">
+                            <canvas id="usersProjectPieChart" height="120"></canvas>
+                        </div> <!-- ./chart-responsive -->
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
+            </div><!-- /.box-body -->
+        </div> <!-- /.box -->
+    </div>
+    <div class="col-md-4">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">{{ trans('general.users') }} per Status</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="min-height: 120px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="chart-responsive">
+                            <canvas id="usersStatusPieChart" height="120"></canvas>
+                        </div> <!-- ./chart-responsive -->
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
+            </div><!-- /.box-body -->
+        </div> <!-- /.box -->
+    </div>
+    <div class="col-md-4">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">{{ trans('klusbib::general.activity') }} per Project</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="min-height: 120px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="chart-responsive">
+                            <canvas id="activityProjectPieChart" height="120"></canvas>
+                        </div> <!-- ./chart-responsive -->
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
+            </div><!-- /.box-body -->
+        </div> <!-- /.box -->
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">{{ trans('klusbib::general.new_users') }}</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="min-height: 120px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="chart-responsive">
+                            <canvas id="newUsersBarChart" height="120"></canvas>
+                        </div> <!-- ./chart-responsive -->
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
+            </div><!-- /.box-body -->
+        </div> <!-- /.box -->
+    </div>
+    <div class="col-md-4">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">{{ trans('klusbib::general.checkout') }}</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="min-height: 120px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="chart-responsive">
+                            <canvas id="checkoutBarChart" height="120"></canvas>
+                        </div> <!-- ./chart-responsive -->
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
+            </div><!-- /.box-body -->
+        </div> <!-- /.box -->
+    </div>
+    <div class="col-md-4">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">{{ trans('klusbib::general.checkin') }}</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="min-height: 120px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="chart-responsive">
+                            <canvas id="checkinBarChart" height="120"></canvas>
+                        </div> <!-- ./chart-responsive -->
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
+            </div><!-- /.box-body -->
+        </div> <!-- /.box -->
+    </div>
+</div>
+<div class="row">
 
-        {{--<!-- Categories -->--}}
-        {{--<div class="box box-default">--}}
-            {{--<div class="box-header with-border">--}}
-                {{--<h3 class="box-title">Asset {{ trans('general.categories') }}</h3>--}}
-                {{--<div class="box-tools pull-right">--}}
-                    {{--<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>--}}
-                    {{--</button>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-            {{--<!-- /.box-header -->--}}
-            {{--<div class="box-body">--}}
-                {{--<div class="row">--}}
-                    {{--<div class="col-md-12">--}}
-                        {{--<div class="table-responsive">--}}
-                        {{--<table--}}
-                                {{--data-cookie-id-table="dashCategorySummary"--}}
-                                {{--data-height="400"--}}
-                                {{--data-side-pagination="server"--}}
-                                {{--data-sort-order="desc"--}}
-                                {{--data-sort-field="assets_count"--}}
-                                {{--id="dashCategorySummary"--}}
-                                {{--class="table table-striped snipe-table"--}}
-                                {{--data-url="{{ route('api.categories.index', ['sort' => 'assets_count', 'order' => 'asc']) }}">--}}
+    <div class="col-md-12">
 
-                            {{--<thead>--}}
-                            {{--<tr>--}}
-                                {{--<th class="col-sm-3" data-visible="true" data-field="name" data-formatter="categoriesLinkFormatter" data-sortable="true">{{ trans('general.name') }}</th>--}}
-                                {{--<th class="col-sm-3" data-visible="true" data-field="category_type" data-sortable="true">{{ trans('general.type') }}</th>--}}
-                                {{--<th class="col-sm-1" data-visible="true" data-field="assets_count" data-sortable="true"><i class="fa fa-barcode"></i></th>--}}
-                                {{--<th class="col-sm-1" data-visible="true" data-field="accessories_count" data-sortable="true"><i class="fa fa-keyboard-o"></i></th>--}}
-                                {{--<th class="col-sm-1" data-visible="true" data-field="consumables_count" data-sortable="true"><i class="fa fa-tint"></i></th>--}}
-                                {{--<th class="col-sm-1" data-visible="true" data-field="components_count" data-sortable="true"><i class="fa fa-hdd-o"></i></th>--}}
-                                {{--<th class="col-sm-1" data-visible="true" data-field="licenses_count" data-sortable="true"><i class="fa fa-floppy-o"></i></th>--}}
-                            {{--</tr>--}}
-                            {{--</thead>--}}
-                        {{--</table>--}}
-                        {{--</div>--}}
-                    {{--</div> <!-- /.col -->--}}
-                    {{--<div class="col-md-12 text-center" style="padding-top: 10px;">--}}
-                        {{--<a href="{{ route('categories.index') }}" class="btn btn-primary btn-sm" style="width: 100%">View All</a>--}}
-                    {{--</div>--}}
-                {{--</div> <!-- /.row -->--}}
+        <!-- Categories -->
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">Asset {{ trans('general.categories') }}</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                        <table
+                                data-cookie-id-table="dashCategorySummary"
+                                data-height="400"
+                                data-side-pagination="server"
+                                data-sort-order="desc"
+                                data-sort-field="assets_count"
+                                id="dashCategorySummary"
+                                class="table table-striped snipe-table"
+                                data-url="{{ route('api.categories.index', ['sort' => 'assets_count', 'order' => 'asc']) }}">
 
-            {{--</div><!-- /.box-body -->--}}
-        {{--</div> <!-- /.box -->--}}
-    {{--</div>--}}
-{{--</div>--}}
+                            <thead>
+                            <tr>
+                                <th class="col-sm-3" data-visible="true" data-field="name" data-formatter="categoriesLinkFormatter" data-sortable="true">{{ trans('general.name') }}</th>
+                                <th class="col-sm-3" data-visible="true" data-field="category_type" data-sortable="true">{{ trans('general.type') }}</th>
+                                <th class="col-sm-1" data-visible="true" data-field="assets_count" data-sortable="true"><i class="fa fa-barcode"></i></th>
+                                <th class="col-sm-1" data-visible="true" data-field="accessories_count" data-sortable="true"><i class="fa fa-keyboard-o"></i></th>
+                                <th class="col-sm-1" data-visible="true" data-field="consumables_count" data-sortable="true"><i class="fa fa-tint"></i></th>
+                                <th class="col-sm-1" data-visible="true" data-field="components_count" data-sortable="true"><i class="fa fa-hdd-o"></i></th>
+                                <th class="col-sm-1" data-visible="true" data-field="licenses_count" data-sortable="true"><i class="fa fa-floppy-o"></i></th>
+                            </tr>
+                            </thead>
+                        </table>
+                        </div>
+                    </div> <!-- /.col -->
+                    <div class="col-md-12 text-center" style="padding-top: 10px;">
+                        <a href="{{ route('categories.index') }}" class="btn btn-primary btn-sm" style="width: 100%">View All</a>
+                    </div>
+                </div> <!-- /.row -->
+
+            </div><!-- /.box-body -->
+        </div> <!-- /.box -->
+    </div>
+</div>
 
 {{--@endif--}}
 
@@ -334,36 +476,249 @@
   // - END MONTHLY SALES CHART -
   // ---------------------------
 
+    var pieChartUserProjectCanvas = $("#usersProjectPieChart").get(0).getContext("2d");
+    var pieChartUserProject = new Chart(pieChartUserProjectCanvas);
+    var ctxUsersProject = document.getElementById("usersProjectPieChart");
 
-    var pieChartCanvas = $("#statusPieChart").get(0).getContext("2d");
-    var pieChart = new Chart(pieChartCanvas);
-    var ctx = document.getElementById("statusPieChart");
+        var myPieChartUserStatus = new Chart(ctxUsersProject,{
+
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [ {{number_format($counts['user_stroom'])}}, {{number_format($counts['user']) - number_format($counts['user_stroom'])}}],
+                    backgroundColor: [
+                        '#f56954',
+                        '#00a65a',
+                        '#f39c12',
+                        '#00c0ef',
+                        '#3c8dbc',
+                        '#d2d6de',
+                        '#0005dc',
+                    ]
+                    // backgroundColor: [
+                    //     window.chartColors.red,
+                    //     window.chartColors.orange,
+                    //     window.chartColors.yellow,
+                    //     window.chartColors.green,
+                    //     window.chartColors.blue,
+                    // ]
+                }],
+
+                // These labels appear in the legend and in the tooltips when hovering different arcs
+                labels: [
+                    'Stroom',
+                    'Anderen'
+                ]
+            },
+            options: pieOptions
+        });
+
+        var pieChartUserStatusCanvas = $("#usersStatusPieChart").get(0).getContext("2d");
+        var pieChartUserStatus = new Chart(pieChartUserStatusCanvas);
+        var ctxUsersStatus = document.getElementById("usersStatusPieChart");
+
+        var myPieChartUserStatus = new Chart(ctxUsersStatus,{
+
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [ {{number_format($counts['user_active'])}},{{number_format($counts['user_expired'])}}, {{number_format($counts['user_deleted'])}}],
+                    backgroundColor: [
+                        '#f56954',
+                        '#00a65a',
+                        '#f39c12',
+                        '#00c0ef',
+                        '#3c8dbc',
+                        '#d2d6de',
+                        '#0005dc',
+                    ]
+                }],
+
+                // These labels appear in the legend and in the tooltips when hovering different arcs
+                labels: [
+                    'Actief',
+                    'Vervallen',
+                    'Verwijderd'
+                ]
+            },
+            options: pieOptions
+        });
+
+        var pieChartActivityProjectCanvas = $("#activityProjectPieChart").get(0).getContext("2d");
+        var pieChartActivityProject = new Chart(pieChartActivityProjectCanvas);
+        var ctxActivityProject = document.getElementById("activityProjectPieChart");
+
+        var myPieChartActivityProject = new Chart(ctxActivityProject,{
+
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [ {{number_format($counts['activity_stroom'])}}, {{number_format($counts['activity']) - number_format($counts['activity_stroom'])}}],
+                    backgroundColor: [
+                        '#f56954',
+                        '#00a65a',
+                        '#f39c12',
+                        '#00c0ef',
+                        '#3c8dbc',
+                        '#d2d6de',
+                        '#0005dc',
+                    ]
+                    // backgroundColor: [
+                    //     window.chartColors.red,
+                    //     window.chartColors.orange,
+                    //     window.chartColors.yellow,
+                    //     window.chartColors.green,
+                    //     window.chartColors.blue,
+                    // ]
+                }],
+
+                // These labels appear in the legend and in the tooltips when hovering different arcs
+                labels: [
+                    'Stroom',
+                    'Anderen'
+                ]
+            },
+            options: pieOptions
+        });
+
+        var barChartNewUsersCanvas = $("#newUsersBarChart").get(0).getContext("2d");
+        var barChartNewUsers = new Chart(barChartNewUsersCanvas);
+        var ctxNewUsers = document.getElementById("newUsersBarChart");
+        barOptions = {
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        offsetGridLines: true
+                    }
+                }]
+            }
+        };
+        var myNewUsersBarChart = new Chart(ctxNewUsers, {
+            type: 'bar',
+            data: {
+                labels: [
+                    'Vorige maand',
+                    'Huidige maand'
+                ],
+                datasets: [{
+                    label: 'Stroom',
+                    backgroundColor: '#00a65a',
+                    barPercentage: 0.5,
+                    barThickness: 6,
+                    maxBarThickness: 8,
+                    minBarLength: 2,
+                    borderWidth: 1,
+                    data: [{{number_format($counts['new_user_prev_month_stroom'])}},{{number_format($counts['new_user_curr_month_stroom'])}}]
+                },{
+                    label: 'Anderen',
+                    backgroundColor: '#f56954',
+                    barPercentage: 0.5,
+                    barThickness: 6,
+                    maxBarThickness: 8,
+                    minBarLength: 2,
+                    borderWidth: 1,
+                    data: [{{number_format($counts['new_user_prev_month']) - number_format($counts['new_user_prev_month_stroom'])}}
+                        ,{{number_format($counts['new_user_curr_month']) - number_format($counts['new_user_curr_month_stroom'])}}]
+                },{
+                    label: 'Totaal',
+                    backgroundColor: '#f39c12',
+                    barPercentage: 0.5,
+                    barThickness: 6,
+                    maxBarThickness: 8,
+                    minBarLength: 2,
+                    borderWidth: 1,
+                    data: [{{number_format($counts['new_user_prev_month'])}},{{number_format($counts['new_user_curr_month'])}}]
+                }],
+                options: barOptions,
+            }
+        });
 
 
+        var barChartCheckoutCanvas = $("#checkoutBarChart").get(0).getContext("2d");
+        var barChartCheckout = new Chart(barChartCheckoutCanvas);
+        var ctxCheckout = document.getElementById("checkoutBarChart");
+        var myCheckoutBarChart = new Chart(ctxCheckout, {
+            type: 'bar',
+            data: {
+                labels: [
+                    'Vorige maand',
+                    'Huidige maand'
+                ],
+                datasets: [{
+                    label: 'Stroom',
+                    backgroundColor: '#00a65a',
+                    barPercentage: 0.5,
+                    barThickness: 6,
+                    maxBarThickness: 8,
+                    minBarLength: 2,
+                    borderWidth: 1,
+                    data: [{{number_format($counts['activity_co_prev_month_stroom'])}},{{number_format($counts['activity_co_curr_month_stroom'])}}]
+                },{
+                    label: 'Anderen',
+                    backgroundColor: '#f56954',
+                    barPercentage: 0.5,
+                    barThickness: 6,
+                    maxBarThickness: 8,
+                    minBarLength: 2,
+                    borderWidth: 1,
+                    data: [{{number_format($counts['activity_co_prev_month']) - number_format($counts['activity_co_prev_month_stroom'])}}
+                        ,{{number_format($counts['activity_co_curr_month']) - number_format($counts['activity_co_curr_month_stroom'])}}]
+                },{
+                    label: 'Totaal',
+                    backgroundColor: '#f39c12',
+                    barPercentage: 0.5,
+                    barThickness: 6,
+                    maxBarThickness: 8,
+                    minBarLength: 2,
+                    borderWidth: 1,
+                    data: [{{number_format($counts['activity_co_prev_month'])}},{{number_format($counts['activity_co_curr_month'])}}]
+                }],
+                options: barOptions,
+            }
+        });
 
-    $.ajax({
-        type: 'GET',
-        url: '{{  route('api.statuslabels.assets.bytype') }}',
-        headers: {
-            "X-Requested-With": 'XMLHttpRequest',
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-        },
-
-        dataType: 'json',
-        success: function (data) {
-            var myPieChart = new Chart(ctx,{
-
-                type: 'doughnut',
-                data: data,
-                options: pieOptions
-            });
-        },
-        error: function (data) {
-           // window.location.reload(true);
-        }
-    });
-
-
+        var barChartCheckinCanvas = $("#checkinBarChart").get(0).getContext("2d");
+        var barChartCheckin = new Chart(barChartCheckinCanvas);
+        var ctxCheckin = document.getElementById("checkinBarChart");
+        var myCheckinBarChart = new Chart(ctxCheckin, {
+            type: 'bar',
+            data: {
+                labels: [
+                    'Vorige maand',
+                    'Huidige maand'
+                ],
+                datasets: [{
+                    label: 'Stroom',
+                    backgroundColor: '#00a65a',
+                    barPercentage: 0.5,
+                    barThickness: 6,
+                    maxBarThickness: 8,
+                    minBarLength: 2,
+                    borderWidth: 1,
+                    data: [{{number_format($counts['activity_co_prev_month_stroom'])}},{{number_format($counts['activity_co_curr_month_stroom'])}}]
+                },{
+                    label: 'Anderen',
+                    backgroundColor: '#f56954',
+                    barPercentage: 0.5,
+                    barThickness: 6,
+                    maxBarThickness: 8,
+                    minBarLength: 2,
+                    borderWidth: 1,
+                    data: [{{number_format($counts['activity_co_prev_month']) - number_format($counts['activity_co_prev_month_stroom'])}}
+                        ,{{number_format($counts['activity_co_curr_month']) - number_format($counts['activity_co_curr_month_stroom'])}}]
+                },{
+                    label: 'Totaal',
+                    backgroundColor: '#f39c12',
+                    barPercentage: 0.5,
+                    barThickness: 6,
+                    maxBarThickness: 8,
+                    minBarLength: 2,
+                    borderWidth: 1,
+                    data: [{{number_format($counts['activity_co_prev_month'])}},{{number_format($counts['activity_co_curr_month'])}}]
+                }],
+                options: barOptions,
+            }
+        });
 </script>
 
 
