@@ -110,10 +110,10 @@ class Reservations
                 $target .= $key . '=' . $value;
             }
         }
-        $usersResult = $this->client->get($target);
-        $result['items'] = $usersResult['items'];
-        $totalCount = intval($usersResult['Total-Count']);
-        $perPage = count($usersResult['items']);
+        $reservationsResult = $this->client->get($target);
+        $result['items'] = $reservationsResult['items'];
+        $totalCount = intval($reservationsResult['Total-Count']);
+        $perPage = count($reservationsResult['items']) < 10 ? 10 : count($reservationsResult['items']);
         $result['pagination'] = array ('total' => $totalCount, 'perPage' => $perPage);
         Log::debug('pagination=' .\json_encode($result['pagination']));
         return $result;

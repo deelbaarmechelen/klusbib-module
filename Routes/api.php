@@ -83,6 +83,36 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'api'], fun
                 'uses' => 'ReservationsController@index'
             ]
         );
+        Route::get('lendings',
+            [
+                'as' => 'api.klusbib.lendings.index',
+                'uses' => 'LendingsController@index'
+            ]
+        );
+        Route::get('lendings/byduedate',
+            [
+                'as' => 'api.klusbib.lendings.byduedate',
+                'uses' => 'LendingsController@getLendingsByDueDate'
+            ]
+        );
+        Route::get('lendings/bycategory',
+            [
+                'as' => 'api.klusbib.lendings.bycategory',
+                'uses' => 'LendingsController@getLendingsByCategory'
+            ]
+        );
+        Route::get('stats/usersbyproject',
+            [
+                'as' => 'api.klusbib.stats.users.byproject',
+                'uses' => 'StatsController@getUsersCountByProject'
+            ]
+        );
+        Route::get('stats/activitybyproject',
+            [
+                'as' => 'api.klusbib.stats.activity.byproject',
+                'uses' => 'StatsController@getActivityCountByProject'
+            ]
+        );
     });
 });
 // extract from snipe api routes:

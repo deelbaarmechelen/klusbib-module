@@ -97,7 +97,7 @@ class Users
         $usersResult = $this->client->get($target);
         $result['items'] = $usersResult['items'];
         $totalCount = intval($usersResult['Total-Count']);
-        $perPage = count($usersResult['items']);
+        $perPage = count($usersResult['items']) < 10 ? 10 : count($usersResult['items']);
         $result['pagination'] = array ('total' => $totalCount, 'perPage' => $perPage);
         Log::debug('pagination=' .\json_encode($result['pagination']));
         return $result;

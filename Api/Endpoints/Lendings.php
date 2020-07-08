@@ -131,7 +131,7 @@ class Lendings
         $lendingsResult = $this->client->get($target);
         $result['items'] = $lendingsResult['items'];
         $totalCount = intval($lendingsResult['Total-Count']);
-        $perPage = count($lendingsResult['items']);
+        $perPage = count($lendingsResult['items']) < 10 ? 10 : count($lendingsResult['items']);
         $result['pagination'] = array ('total' => $totalCount, 'perPage' => $perPage);
         Log::debug('pagination=' .\json_encode($result['pagination']));
         return $result;

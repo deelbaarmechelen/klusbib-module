@@ -5,6 +5,7 @@
         'checkout'              => 'Ontleningen',
         'checkin'               => 'Inleveren',
         'id'                    => 'Id',
+        'lendings'              => 'Ontleningen',
         'name'			        => 'Klusbib',
         'new_users'             => 'Nieuwe leden',
         'total_users'			=> 'totaal aantal personen',

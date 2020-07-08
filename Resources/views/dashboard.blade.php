@@ -275,7 +275,7 @@
     <div class="col-md-4">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title">{{ trans('klusbib::general.activity') }} per Project</h3>
+                <h3 class="box-title">{{ trans('klusbib::general.activity') }} per categorie</h3>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -286,7 +286,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="chart-responsive">
-                            <canvas id="activityProjectPieChart" height="120"></canvas>
+                            <canvas id="lendingsByCatChart" height="120"></canvas>
+                            {{--<canvas id="activityProjectPieChart" height="120"></canvas>--}}
                         </div> <!-- ./chart-responsive -->
                     </div> <!-- /.col -->
                 </div> <!-- /.row -->
@@ -340,7 +341,7 @@
     <div class="col-md-4">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title">{{ trans('klusbib::general.checkin') }}</h3>
+                <h3 class="box-title">{{ trans('klusbib::general.checkin') }} - Verwachte datum</h3>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -351,7 +352,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="chart-responsive">
-                            <canvas id="checkinBarChart" height="120"></canvas>
+                            <canvas id="lendingsChart" height="120"></canvas>
                         </div> <!-- ./chart-responsive -->
                     </div> <!-- /.col -->
                 </div> <!-- /.row -->
@@ -366,7 +367,7 @@
         <!-- Categories -->
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title">Asset {{ trans('general.categories') }}</h3>
+                <h3 class="box-title">{{ trans('klusbib::general.lendings') }}</h3>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -378,36 +379,70 @@
                     <div class="col-md-12">
                         <div class="table-responsive">
                         <table
-                                data-cookie-id-table="dashCategorySummary"
+                                data-cookie-id-table="dashLendingsSummary"
                                 data-height="400"
                                 data-side-pagination="server"
                                 data-sort-order="desc"
-                                data-sort-field="assets_count"
-                                id="dashCategorySummary"
+                                data-sort-field="due_date"
+                                id="dashLendingsSummary"
                                 class="table table-striped snipe-table"
-                                data-url="{{ route('api.categories.index', ['sort' => 'assets_count', 'order' => 'asc']) }}">
+                                data-url="{{ route('api.klusbib.lendings.byduedate', ['sort' => 'due_date', 'order' => 'desc']) }}">
 
                             <thead>
                             <tr>
-                                <th class="col-sm-3" data-visible="true" data-field="name" data-formatter="categoriesLinkFormatter" data-sortable="true">{{ trans('general.name') }}</th>
-                                <th class="col-sm-3" data-visible="true" data-field="category_type" data-sortable="true">{{ trans('general.type') }}</th>
-                                <th class="col-sm-1" data-visible="true" data-field="assets_count" data-sortable="true"><i class="fa fa-barcode"></i></th>
-                                <th class="col-sm-1" data-visible="true" data-field="accessories_count" data-sortable="true"><i class="fa fa-keyboard-o"></i></th>
-                                <th class="col-sm-1" data-visible="true" data-field="consumables_count" data-sortable="true"><i class="fa fa-tint"></i></th>
-                                <th class="col-sm-1" data-visible="true" data-field="components_count" data-sortable="true"><i class="fa fa-hdd-o"></i></th>
-                                <th class="col-sm-1" data-visible="true" data-field="licenses_count" data-sortable="true"><i class="fa fa-floppy-o"></i></th>
+                                <th class="col-sm-3" data-visible="true" data-field="id" data-sortable="false">
+                                    {{ trans('klusbib::admin/dashboard/general.lending_id') }}</th>
+                                <th class="col-sm-3" data-visible="true" data-field="start_date" data-sortable="false">{{ trans('klusbib::admin/dashboard/general.start_date') }}</th>
+                                <th class="col-sm-1" data-visible="true" data-field="due_date" data-sortable="false">{{ trans('klusbib::admin/dashboard/general.due_date') }}</th>
+                                <th class="col-sm-1" data-visible="true" data-field="username" data-sortable="false">{{ trans('klusbib::admin/dashboard/general.user') }}</th>
+                                <th class="col-sm-1" data-visible="true" data-field="tool.code" data-sortable="false">{{ trans('klusbib::admin/dashboard/general.tool_code') }}</th>
                             </tr>
                             </thead>
                         </table>
                         </div>
                     </div> <!-- /.col -->
                     <div class="col-md-12 text-center" style="padding-top: 10px;">
-                        <a href="{{ route('categories.index') }}" class="btn btn-primary btn-sm" style="width: 100%">View All</a>
+                        <a href="{{ route('hardware.index', array("status" => "Deployed") ) }}" class="btn btn-primary btn-sm" style="width: 100%">View All</a>
                     </div>
                 </div> <!-- /.row -->
 
             </div><!-- /.box-body -->
         </div> <!-- /.box -->
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                    <table
+                            data-cookie-id-table="dashCategorySummary"
+                            data-height="400"
+                            data-side-pagination="server"
+                            data-sort-order="desc"
+                            data-sort-field="assets_count"
+                            id="dashCategorySummary"
+                            class="table table-striped snipe-table"
+                            data-url="{{ route('api.categories.index', ['sort' => 'assets_count', 'order' => 'asc']) }}">
+
+                        <thead>
+                        <tr>
+                            <th class="col-sm-3" data-visible="true" data-field="name" data-formatter="categoriesLinkFormatter" data-sortable="true">{{ trans('general.name') }}</th>
+                            <th class="col-sm-3" data-visible="true" data-field="category_type" data-sortable="true">{{ trans('general.type') }}</th>
+                            <th class="col-sm-1" data-visible="true" data-field="assets_count" data-sortable="true"><i class="fa fa-barcode"></i></th>
+                            <th class="col-sm-1" data-visible="true" data-field="accessories_count" data-sortable="true"><i class="fa fa-keyboard-o"></i></th>
+                            <th class="col-sm-1" data-visible="true" data-field="consumables_count" data-sortable="true"><i class="fa fa-tint"></i></th>
+                            <th class="col-sm-1" data-visible="true" data-field="components_count" data-sortable="true"><i class="fa fa-hdd-o"></i></th>
+                            <th class="col-sm-1" data-visible="true" data-field="licenses_count" data-sortable="true"><i class="fa fa-floppy-o"></i></th>
+                        </tr>
+                        </thead>
+                    </table>
+                    </div>
+                </div> <!-- /.col -->
+                <div class="col-md-12 text-center" style="padding-top: 10px;">
+                    <a href="{{ route('categories.index') }}" class="btn btn-primary btn-sm" style="width: 100%">View All</a>
+                </div>
+            </div> <!-- /.row -->
+
+        </div><!-- /.box-body -->
+    </div> <!-- /.box -->
     </div>
 </div>
 
@@ -427,54 +462,6 @@
 
 
 <script nonce="{{ csrf_token() }}">
-
-
-
-
-        /* ChartJS
-         * -------
-         */
-
-        // -----------------------
-        // - LINE CHART -
-        // -----------------------
-
-
-
-        //var ctx = document.getElementById('salesChart').getContext("2d")
-        //var myChart = new Chart(ctx, {
-         //   type: 'line'
-        //});
-
-
-        //$.ajax({
-        //    type: 'GET',
-        //    url: '{{  route('api.statuslabels.assets.bytype') }}',
-        //    headers: {
-        //        "X-Requested-With": 'XMLHttpRequest',
-        //        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-        //    },
-
-        //    dataType: 'json',
-        //   success: function (data) {
-        //       var ctx = new Chart(ctx,{
-        //          type: 'line',
-        //            data: data,
-        //            options: lineOptions
-        //        });
-        //    },
-        //    error: function (data) {
-       //         window.location.reload(true);
-       //     }
-       // });
-
-
-
-
-
-  // ---------------------------
-  // - END MONTHLY SALES CHART -
-  // ---------------------------
 
     var pieChartUserProjectCanvas = $("#usersProjectPieChart").get(0).getContext("2d");
     var pieChartUserProject = new Chart(pieChartUserProjectCanvas);
@@ -544,55 +531,62 @@
             options: pieOptions
         });
 
-        var pieChartActivityProjectCanvas = $("#activityProjectPieChart").get(0).getContext("2d");
-        var pieChartActivityProject = new Chart(pieChartActivityProjectCanvas);
-        var ctxActivityProject = document.getElementById("activityProjectPieChart");
+        // var pieChartActivityProjectCanvas = $("#activityProjectPieChart").get(0).getContext("2d");
+        // var pieChartActivityProject = new Chart(pieChartActivityProjectCanvas);
+        // var ctxActivityProject = document.getElementById("activityProjectPieChart");
 
-        var myPieChartActivityProject = new Chart(ctxActivityProject,{
+        {{--var myPieChartActivityProject = new Chart(ctxActivityProject,{--}}
 
-            type: 'pie',
-            data: {
-                datasets: [{
-                    data: [ {{number_format($counts['activity_stroom'])}}, {{number_format($counts['activity']) - number_format($counts['activity_stroom'])}}],
-                    backgroundColor: [
-                        '#f56954',
-                        '#00a65a',
-                        '#f39c12',
-                        '#00c0ef',
-                        '#3c8dbc',
-                        '#d2d6de',
-                        '#0005dc',
-                    ]
-                    // backgroundColor: [
-                    //     window.chartColors.red,
-                    //     window.chartColors.orange,
-                    //     window.chartColors.yellow,
-                    //     window.chartColors.green,
-                    //     window.chartColors.blue,
-                    // ]
-                }],
+            {{--type: 'pie',--}}
+            {{--data: {--}}
+                {{--datasets: [{--}}
+                    {{--data: [ {{number_format($counts['activity_stroom'])}}, {{number_format($counts['activity']) - number_format($counts['activity_stroom'])}}],--}}
+                    {{--backgroundColor: [--}}
+                        {{--'#f56954',--}}
+                        {{--'#00a65a',--}}
+                        {{--'#f39c12',--}}
+                        {{--'#00c0ef',--}}
+                        {{--'#3c8dbc',--}}
+                        {{--'#d2d6de',--}}
+                        {{--'#0005dc',--}}
+                    {{--]--}}
+                    {{--// backgroundColor: [--}}
+                    {{--//     window.chartColors.red,--}}
+                    {{--//     window.chartColors.orange,--}}
+                    {{--//     window.chartColors.yellow,--}}
+                    {{--//     window.chartColors.green,--}}
+                    {{--//     window.chartColors.blue,--}}
+                    {{--// ]--}}
+                {{--}],--}}
 
-                // These labels appear in the legend and in the tooltips when hovering different arcs
-                labels: [
-                    'Stroom',
-                    'Anderen'
-                ]
-            },
-            options: pieOptions
-        });
+                {{--// These labels appear in the legend and in the tooltips when hovering different arcs--}}
+                {{--labels: [--}}
+                    {{--'Stroom',--}}
+                    {{--'Anderen'--}}
+                {{--]--}}
+            {{--},--}}
+            {{--options: pieOptions--}}
+        {{--});--}}
 
-        var barChartNewUsersCanvas = $("#newUsersBarChart").get(0).getContext("2d");
-        var barChartNewUsers = new Chart(barChartNewUsersCanvas);
-        var ctxNewUsers = document.getElementById("newUsersBarChart");
-        barOptions = {
+        let barOptions = {
             scales: {
                 xAxes: [{
                     gridLines: {
-                        offsetGridLines: true
+                        offsetGridLines: true,
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 1
                     }
                 }]
             }
         };
+
+        var barChartNewUsersCanvas = $("#newUsersBarChart").get(0).getContext("2d");
+        var barChartNewUsers = new Chart(barChartNewUsersCanvas);
+        var ctxNewUsers = document.getElementById("newUsersBarChart");
         var myNewUsersBarChart = new Chart(ctxNewUsers, {
             type: 'bar',
             data: {
@@ -677,7 +671,65 @@
             }
         });
 
-        var barChartCheckinCanvas = $("#checkinBarChart").get(0).getContext("2d");
+
+        var ctxLendings = document.getElementById('lendingsChart').getContext("2d")
+        var myChart = new Chart(ctxLendings, {
+            type: 'bar',
+            options: barOptions
+        });
+
+
+        $.ajax({
+            type: 'GET',
+            url: '{{  route('api.klusbib.lendings.byduedate') }}',
+            headers: {
+                "X-Requested-With": 'XMLHttpRequest',
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+            },
+
+            dataType: 'json',
+            success: function (data) {
+               var ctx = new Chart(ctxLendings,{
+                  type: 'bar',
+                  data: data.chart,
+                  options: barOptions
+                });
+            },
+            error: function (error) {
+                console.log('error in lendings.byduedate: ' + error);
+             }
+         });
+
+    var ctxLendingsByCat = document.getElementById('lendingsByCatChart').getContext("2d")
+    var myChart = new Chart(ctxLendingsByCat, {
+        type: 'bar',
+        options: barOptions
+    });
+
+
+    $.ajax({
+        type: 'GET',
+        url: '{{  route('api.klusbib.lendings.bycategory') }}',
+        headers: {
+            "X-Requested-With": 'XMLHttpRequest',
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+        },
+
+        dataType: 'json',
+        success: function (data) {
+            var ctx = new Chart(ctxLendingsByCat,{
+                type: 'bar',
+                data: data.chart,
+                options: barOptions
+            });
+        },
+        error: function (error) {
+            console.log('error in lendings.bycategory: ' + error);
+        }
+    });
+
+
+    var barChartCheckinCanvas = $("#checkinBarChart").get(0).getContext("2d");
         var barChartCheckin = new Chart(barChartCheckinCanvas);
         var ctxCheckin = document.getElementById("checkinBarChart");
         var myCheckinBarChart = new Chart(ctxCheckin, {
