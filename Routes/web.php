@@ -19,9 +19,21 @@ Route::prefix('klusbib')->group(function() {
     Route::get('/users', [
         'as' => 'klusbib.users.index',
         'uses' => 'UsersController@index' ]);
+    Route::get('/users/create', [
+        'as' => 'klusbib.users.create',
+        'uses' => 'UsersController@create' ]);
+    Route::post('/users', [
+        'as' => 'klusbib.users.store',
+        'uses' => 'UsersController@store' ]);
     Route::get('/users/{user}/edit', [
         'as' => 'klusbib.users.edit',
         'uses' => 'UsersController@edit' ]);
+    Route::put('/users/{user}', [
+        'as' => 'klusbib.users.update',
+        'uses' => 'UsersController@update' ]);
+    Route::get('/users/{user}', [
+        'as' => 'klusbib.users.show',
+        'uses' => 'UsersController@show' ]);
     Route::get('/reservations', [
         'as' => 'klusbib.reservations.index',
         'uses' => 'ReservationsController@index' ]);

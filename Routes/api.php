@@ -24,6 +24,30 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'api'], fun
 
 //    Route::middleware(['apicontext'])->group(['prefix' => 'klusbib'], function () {
     Route::group(['prefix' => 'klusbib', 'middleware' => 'apicontext'], function () {
+
+        Route::group(['prefix' => 'sync', 'middleware' => 'apicontext'], function () {
+            // reserved for syncing requests from Klusbib API
+            Route::post('users',
+                [
+                    'as' => 'api.klusbib.sync.users.new',
+                    'uses' => 'UsersController@syncNew'
+                ]
+            );
+            Route::put('users/{user_id}',
+                [
+                    'as' => 'api.klusbib.sync.users.updt',
+                    'uses' => 'UsersController@syncUpdate'
+                ]
+            );
+            Route::delete('users/{user_id}',
+                [
+                    'as' => 'api.klusbib.sync.users.del',
+                    'uses' => 'UsersController@syncDelete'
+                ]
+            );
+
+        });
+
         Route::get('users',
             [
                 'as' => 'api.klusbib.users.index',

@@ -59,7 +59,22 @@ class UsersTransformer
 
         return $array;
     }
-
+    public function transformSyncedUser ($user) {
+        if ($user->avatar == \Modules\Klusbib\Models\Api\User::STATE_ACTIVE_AVATAR) {
+            $state = 'ACTIVE';
+        } else {
+            $state = 'INACTIVE';
+        }
+        $array = [
+            'id' => (int) $user->id,
+            'employee_num' => (int) $user->employee_num,
+            'state' => $state,
+            'first_name' => e( $user->first_name),
+            'last_name' => e( $user->last_name),
+            'username' => e($user->username),
+            ];
+        return $array;
+    }
     public function transformUsersDatatable($users) {
         return (new DatatablesTransformer)->transformDatatables($users);
     }

@@ -15,6 +15,105 @@ use App\Http\Controllers\Controller;
 class UsersController extends Controller
 {
     /**
+     * Sync user data from Klusbib API to this inventory
+     */
+    public function syncNew(Request $request) {
+        $state = $request->input('state');
+        $first_name = $request->input('first_name');
+        $last_name = $request->input('last_name');
+        $username = $request->input('username');
+        $employee_num = $request->input('employee_num');
+        if (!$request->has('employee_num')) {
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'User employee_num is missing (user_id)'), 400);
+        }
+        if (!$request->has('username')) {
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'User username is missing (email)'), 400);
+        }
+        if (!$request->has('state')) {
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'User state is missing'), 400);
+        }
+        $existingUser = User::where('employee_num', $employee_num)->first();
+        if ($existingUser === null) {
+            $user = new User();
+            // generate random password
+            $tmp_pass = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 20);
+            $user->password = bcrypt($request->get('password', $tmp_pass));
+            // force company to Klusbib
+            $user->company_id = 1;
+            $user->employee_num = $employee_num;
+        } else {
+            $user = $existingUser;
+        }
+
+        $user->first_name = $first_name;
+        $user->last_name = $last_name;
+        $user->username = $username;
+        if ($state == 'ACTIVE') {
+            // avatar should be placed in public/uploads/avatar directory
+            $user->avatar = \Modules\Klusbib\Models\Api\User::STATE_ACTIVE_AVATAR;
+        } else {
+            $user->avatar = \Modules\Klusbib\Models\Api\User::STATE_INACTIVE_AVATAR;
+        }
+
+        if ($user->save()) {
+            return response()->json(Helper::formatStandardApiResponse('success', (new UsersTransformer)->transformSyncedUser($user), trans('admin/users/message.success.update')));
+        }
+        return response()->json(Helper::formatStandardApiResponse('error', null, 'Unable to save user'), 500);
+
+    }
+    /**
+     * Sync user data from Klusbib API to this inventory
+     */
+    public function syncDelete(Request $request, $id) {
+        if (is_null($user = User::find($id))) {
+            // Redirect to the models management page
+            return response()->json(Helper::formatStandardApiResponse('success', null, 'User not longer exists'), 200);
+        }
+        if ($user->delete()) {
+            return response()->json(Helper::formatStandardApiResponse('success', (new UsersTransformer)->transformSyncedUser($user), trans('admin/users/message.success.delete')));
+        }
+        return response()->json(Helper::formatStandardApiResponse('error', null, 'Unable to save user'), 500);
+    }
+    /**
+     * Sync user data from Klusbib API to this inventory
+     */
+    public function syncUpdate(Request $request, $id) {
+        if (is_null($user = User::find($id))) {
+            // Redirect to the models management page
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'User not found'), 200);
+        }
+        $state = $request->input('state');
+        $first_name = $request->input('first_name');
+        $last_name = $request->input('last_name');
+        $username = $request->input('username');
+        $employee_num = $request->input('employee_num');
+        if (!$request->has('employee_num')) {
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'User employee_num is missing (user_id)'), 400);
+        }
+        if (!$request->has('username')) {
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'User username is missing (email)'), 400);
+        }
+        if (!$request->has('state')) {
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'User state is missing'), 400);
+        }
+        $user->first_name = $first_name;
+        $user->last_name = $last_name;
+        $user->username = $username;
+        $user->employee_num = $employee_num;
+        if ($state == 'ACTIVE') {
+            // avatar should be placed in public/uploads/avatar directory
+            $user->avatar = \Modules\Klusbib\Models\Api\User::STATE_ACTIVE_AVATAR;
+        } else {
+            $user->avatar = \Modules\Klusbib\Models\Api\User::STATE_INACTIVE_AVATAR;
+        }
+
+        if ($user->save()) {
+            return response()->json(Helper::formatStandardApiResponse('success', (new UsersTransformer)->transformSyncedUser($user), trans('admin/users/message.success.update')));
+        }
+        return response()->json(Helper::formatStandardApiResponse('error', null, 'Unable to save user'), 500);
+    }
+
+    /**
      * Display a listing of the resource.
      * @return Response
      */

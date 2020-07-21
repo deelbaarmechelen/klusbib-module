@@ -14,9 +14,9 @@
 @stop
 
 @section('header_right')
-    @can('create', \Modules\Klusbib\Models\Api\User::class)
-      {{--<a href="{{ route('klusbib.users.create') }}" class="btn btn-primary pull-right" style="margin-right: 5px;">  {{ trans('general.create') }}</a>--}}
-    @endcan
+{{--    @can('create', \Modules\Klusbib\Models\Api\User::class)--}}
+      <a href="{{ route('klusbib.users.create') }}" class="btn btn-primary pull-right" style="margin-right: 5px;">  {{ trans('general.create') }}</a>
+    {{--@endcan--}}
 
     {{--@if (Input::get('status')=='deleted')--}}
       {{--<a class="btn btn-default pull-right" href="{{ route('klusbib.users.index') }}" style="margin-right: 5px;">{{ trans('admin/users/table.show_current') }}</a>--}}
