@@ -46,6 +46,27 @@
             </tr>
             @endif
 
+            @if ($user->firstname)
+              <tr>
+                <td>{{ trans('klusbib::admin/users/table.firstname') }}:</td>
+                <td>{{ $user->firstname }}</td>
+              </tr>
+            @endif
+
+            @if ($user->lastname)
+              <tr>
+                <td>{{ trans('klusbib::admin/users/table.lastname') }}:</td>
+                <td>{{ $user->lastname }}</td>
+              </tr>
+            @endif
+
+            @if ($user->role)
+              <tr>
+                <td>{{ trans('klusbib::admin/users/table.role') }}:</td>
+                <td>{{ $user->role }}</td>
+              </tr>
+            @endif
+
             @if (isset($user->state))
             <tr>
               <td>{{ trans('klusbib::admin/users/general.state') }}:</td>
@@ -67,14 +88,84 @@
               </tr>
             @endif
 
-            @if ($user->comment)
-            <tr>
-              <td>{{ trans('klusbib::admin/users/general.notes') }}:</td>
-              <td>
-                {!! nl2br(e($user->comment)) !!}
-              </td>
-            </tr>
+            @if ($user->email)
+              <tr>
+                <td>{{ trans('klusbib::admin/users/table.email') }}:</td>
+                <td>{{ $user->email }}</td>
+              </tr>
             @endif
+
+            @if ($user->email_state)
+              <tr>
+                <td>{{ trans('klusbib::admin/users/table.email_state') }}:</td>
+                <td>{{ $user->email_state }}</td>
+              </tr>
+            @endif
+
+            @if ($user->phone)
+              <tr>
+                <td>{{ trans('klusbib::admin/users/table.phone') }}:</td>
+                <td>{{ $user->phone }}</td>
+              </tr>
+            @endif
+
+            @if ($user->mobile)
+              <tr>
+                <td>{{ trans('klusbib::admin/users/table.mobile') }}:</td>
+                <td>{{ $user->mobile }}</td>
+              </tr>
+            @endif
+
+            @if ($user->address)
+              <tr>
+                <td>{{ trans('klusbib::admin/users/table.address') }}:</td>
+                <td>{{ $user->address }}</td>
+              </tr>
+            @endif
+
+            @if ($user->city)
+              <tr>
+                <td>{{ trans('klusbib::admin/users/table.city') }}:</td>
+                <td>{{ $user->city }}</td>
+              </tr>
+            @endif
+
+            @if ($user->postal_code)
+              <tr>
+                <td>{{ trans('klusbib::admin/users/table.postal_code') }}:</td>
+                <td>{{ $user->postal_code }}</td>
+              </tr>
+            @endif
+
+            @if ($user->registration_number)
+              <tr>
+                <td>{{ trans('klusbib::admin/users/table.registration_number') }}:</td>
+                <td>{{ $user->registration_number }}</td>
+              </tr>
+            @endif
+
+            @if ($user->payment_mode)
+              <tr>
+                <td>{{ trans('klusbib::admin/users/table.payment_mode') }}:</td>
+                <td>{{ $user->payment_mode }}</td>
+              </tr>
+            @endif
+
+            @if ($user->accept_terms_date)
+              <tr>
+                <td>{{ trans('klusbib::admin/users/table.accept_terms_date') }}:</td>
+                <td>{{ $user->accept_terms_date }}</td>
+              </tr>
+            @endif
+
+            {{--@if ($user->comment)--}}
+            {{--<tr>--}}
+              {{--<td>{{ trans('klusbib::admin/users/general.notes') }}:</td>--}}
+              {{--<td>--}}
+                {{--{!! nl2br(e($user->comment)) !!}--}}
+              {{--</td>--}}
+            {{--</tr>--}}
+            {{--@endif--}}
           </tbody>
         </table>
       </div> <!-- .table-->

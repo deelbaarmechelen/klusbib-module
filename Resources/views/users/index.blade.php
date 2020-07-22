@@ -88,6 +88,7 @@
 
 @section('moar_scripts')
 @include ('partials.bootstrap-table')
+@include ('klusbib::partials.custom-bootstrap-table')
 
 
 @stop

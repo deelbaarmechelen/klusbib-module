@@ -20,6 +20,7 @@ use Mail;
 use Modules\Klusbib\Http\KlusbibApi;
 use Modules\Klusbib\Models\Api\User;
 use Str;
+use Torann\RemoteModel\Model;
 use URL;
 use View;
 
@@ -45,6 +46,73 @@ class UsersController extends Controller
     {
 //        $this->authorize('index', User::class);
         return view('klusbib::users/index');
+    }
+
+    public function create()
+    {
+        Log::debug("Klusbib - Creating new user");
+
+//        $this->authorize('create', User::class);
+        $user = new User();
+
+        return view('klusbib::users/edit')->with('item', $user);
+        //return redirect()->route('klusbib::users/index')->with('error', $error);
+    }
+
+    /**
+     * Validates and stores the user form data submitted from the new
+     * user form.
+     *
+     * @see UsersController::create() method that provides the form view
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request)
+    {
+        Log::debug("Klusbib - Store new user");
+        Model::getClient()->updateToken($request->session());
+//        $this->authorize('create', User::class);
+
+        // create a new model instance
+        $user = new User();
+        // Save the user data
+        $user->firstname             = $request->input('firstname');
+        $user->lastname              = $request->input('lastname');
+        $user->role                  = $request->input('role');
+        $user->state                 = $request->input('state');
+        $user->membership_start_date = $request->input('membership_start_date');
+        $user->membership_end_date   = $request->input('membership_end_date');
+        $user->email                 = $request->input('email');
+        $user->email_state           = $request->input('email_state');
+        $user->phone                 = $request->input('phone');
+        $user->mobile                = $request->input('mobile');
+        $user->address               = $request->input('address');
+        $user->city                  = $request->input('city');
+        $user->postal_code           = $request->input('postal_code');
+        $user->registration_number   = $request->input('registration_number');
+        $user->payment_mode          = $request->input('payment_mode');
+        $user->accept_terms_date     = $request->input('accept_terms_date');
+//        $user->comment               = $request->input('notes');
+        Log::info('User: ' . \json_encode($user));
+
+        if ($user->save()) {
+            return redirect()->route("klusbib.users.index")->with('success', trans('klusbib::admin/users/message.create.success'));
+        }
+        $errorMessage = trans('klusbib::admin/users/message.create.error');
+        $errors = Arr::get($user->getClientError(), 'errors');
+        if (is_array($errors)) {
+            $errorMessage .= " (API fout: ";
+            foreach($errors as $key => $value) {
+                if (\is_string($key)) {
+                    $errorMessage .= $key . ": ";
+                }
+                $errorMessage .= $value;
+            }
+            $errorMessage .= ")";
+        }
+        // Show generic failure message
+        return redirect()->back()->withInput()
+            ->with('error', $errorMessage);
     }
 
     /**
@@ -83,6 +151,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, $userId = null)
     {
+        Model::getClient()->updateToken($request->session());
         Log::debug("Klusbib - Update user");
         if (is_null($user = User::find($userId))) {
             return redirect()->route('klusbib.users.index')->with('error', trans('klusbib::admin/users/message.does_not_exist'));
@@ -90,70 +159,29 @@ class UsersController extends Controller
         Log::info('User exists: ' . $user->exists);
 //        $this->authorize('update', $user);
 
-        $user->membership_start_date = $request->input('membership_start_date');
-        $user->membership_end_date   = $request->input('membership_end_date');
-        $user->comment           = $request->input('notes');
+        $user->firstname = $request->input('firstname');
+        $user->lastname = $request->input('lastname');
+        $user->role = $request->input('role');
         $user->state             = $request->input('state');
+        $user->membership_start_date   = $request->input('membership_start_date');
+        $user->membership_end_date   = $request->input('membership_end_date');
+        $user->email = $request->input('email');
+        $user->email_state = $request->input('email_state');
+        $user->phone = $request->input('phone');
+        $user->mobile = $request->input('mobile');
+        $user->address = $request->input('address');
+        $user->city = $request->input('city');
+        $user->postal_code = $request->input('postal_code');
+        $user->registration_number = $request->input('registration_number');
+        $user->payment_mode = $request->input('payment_mode');
+        $user->accept_terms_date = $request->input('accept_terms_date');
+//        $user->comment           = $request->input('notes');
         Log::info('User: ' . \json_encode($user));
 
         if ($user->save()) {
             return redirect()->route('klusbib.users.show', ['user' => $userId])
                 ->with('success', trans('klusbib::admin/users/message.update.success'));
         }
-    }
-
-    public function create()
-    {
-        Log::debug("Klusbib - Creating new user");
-
-//        $this->authorize('create', User::class);
-        $user = new User();
-
-        return view('klusbib::users/edit')->with('item', $user);
-        //return redirect()->route('klusbib::users/index')->with('error', $error);
-    }
-
-    /**
-     * Validates and stores the user form data submitted from the new
-     * user form.
-     *
-     * @see UsersController::create() method that provides the form view
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request)
-    {
-        Log::debug("Klusbib - Store new user");
-        $this->authorize('create', User::class);
-
-        // create a new model instance
-        $user = new User();
-        // Save the reservation data
-        $user->membership_start_date   = $request->input('membership_start_date');
-        $user->membership_end_date          = $request->input('membership_end_date');
-        $user->comment           = $request->input('notes');
-        $user->state             = $request->input('state');
-        $user->user_id           = $request->input('user_id');
-        Log::info('User: ' . \json_encode($user));
-
-        if ($user->save()) {
-            return redirect()->route("klusbib.users.index")->with('success', trans('klusbib::admin/users/message.create.success'));
-        }
-        $errorMessage = trans('klusbib::admin/users/message.create.error');
-        $errors = Arr::get($user->getClientError(), 'errors');
-        if (is_array($errors)) {
-            $errorMessage .= " (API fout: ";
-            foreach($errors as $key => $value) {
-                if (\is_string($key)) {
-                    $errorMessage .= $key . ": ";
-                }
-                $errorMessage .= $value;
-            }
-            $errorMessage .= ")";
-        }
-        // Show generic failure message
-        return redirect()->back()->withInput()
-            ->with('error', $errorMessage);
     }
 
     /**

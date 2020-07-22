@@ -32,8 +32,9 @@ class Users
      *
      * @return array
      */
-    public function add(array $params)
+    public function create(array $params)
     {
+        Log::debug("Klusbib\Api\Endpoints\Users - create a user with params: " . \json_encode($params));
         return $this->client->post('users', $params);
     }
 

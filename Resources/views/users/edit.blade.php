@@ -84,6 +84,32 @@
           <div class="tab-pane active" id="tab_1">
             <div class="row">
               <div class="col-md-12">
+                  <!-- User id -->
+                  {{--TODO: show as greyed out to visibily indicate value cannot be changed--}}
+                  <div class="form-group">
+                      <label class="col-md-3 control-label" for="user_id">{{ trans('klusbib::admin/users/table.user_id') }}</label>
+                      <div class="col-md-8 {{  (\App\Helpers\Helper::checkIfRequired($item, 'user_id')) ? ' required' : '' }}">
+                          <input class="form-control" type="text" name="user_id" id="user_id" value="{{ Input::old('user_id', $item->user_id) }}" disabled/>
+                      </div>
+                  </div>
+
+                  <!-- Employee Number -->
+                  {{--TODO: show as greyed out to visibily indicate value cannot be changed--}}
+                  <div class="form-group {{ $errors->has('employee_num') ? 'has-error' : '' }}">
+                      <label class="col-md-3 control-label" for="employee_num">{{ trans('klusbib::admin/users/table.employee_num') }}</label>
+                      <div class="col-md-8">
+                          <input
+                                  class="form-control"
+                                  type="text"
+                                  name="employee_num"
+                                  id="employee_num"
+                                  value="{{ Input::old('user_ext_id', $item->user_ext_id) }}"
+                                  disabled
+                          />
+                          {!! $errors->first('employee_num', '<span class="alert-msg">:message</span>') !!}
+                      </div>
+                  </div>
+
                 <!-- First Name -->
                 <div class="form-group {{ $errors->has('firstname') ? 'has-error' : '' }}">
                   <label class="col-md-3 control-label" for="firstname">{{ trans('klusbib::admin/users/table.firstname') }}</label>
@@ -106,7 +132,11 @@
                   <div class="form-group {{ $errors->has('role') ? 'has-error' : '' }}">
                       <label class="col-md-3 control-label" for="role">{{ trans('klusbib::admin/users/table.role') }} </label>
                       <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'role')) ? ' required' : '' }}">
-                          <input class="form-control" type="text" name="role" id="role" value="{{ Input::old('role', $item->role) }}" />
+                          <select class="form-control"  name="role" id="role_select">{{ Input::old('role', $item->role) }}
+                              <option value="admin" {{ (Input::old("role", $item->role) == "admin" ? "selected":"") }}>Admin</option>
+                              <option value="member" {{ (Input::old("role", $item->role) == "member" ? "selected":"") }}>Lid</option>
+                              <option value="supporter" {{ (Input::old("role", $item->role) == "supporter" ? "selected":"") }}>Steunlid</option>
+                          </select>
                           {!! $errors->first('role', '<span class="alert-msg">:message</span>') !!}
                       </div>
                   </div>
@@ -115,7 +145,13 @@
                   <div class="form-group {{ $errors->has('state') ? 'has-error' : '' }}">
                       <label class="col-md-3 control-label" for="state">{{ trans('general.state') }} </label>
                       <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'state')) ? ' required' : '' }}">
-                          <input class="form-control" type="text" name="state" id="state" value="{{ Input::old('state', $item->state) }}" />
+                          <select class="form-control"  name="state" id="state_select">{{ Input::old('state', $item->state) }}
+                              <option value="CHECK_PAYMENT" {{ (Input::old("state", $item->state) == "CHECK_PAYMENT" ? "selected":"") }}>Betaling nakijken</option>
+                              <option value="ACTIVE" {{ (Input::old("state", $item->state) == "ACTIVE" ? "selected":"") }}>Actief</option>
+                              <option value="EXPIRED" {{ (Input::old("state", $item->state) == "EXPIRED" ? "selected":"") }}>Vervallen</option>
+                              <option value="DISABLED" {{ (Input::old("state", $item->state) == "DISABLED" ? "selected":"") }}>Inactief</option>
+                              <option value="DELETED" {{ (Input::old("state", $item->state) == "DELETED" ? "selected":"") }}>Verwijderd</option>
+                          </select>
                           {!! $errors->first('state', '<span class="alert-msg">:message</span>') !!}
                       </div>
                   </div>
@@ -247,31 +283,12 @@
                 <div class="form-group {{ $errors->has('email_state') ? 'has-error' : '' }}">
                   <label class="col-md-3 control-label" for="email_state">{{ trans('klusbib::admin/users/table.email_state') }} </label>
                   <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'email_state')) ? ' required' : '' }}">
-                    <input
-                      class="form-control"
-                      type="text"
-                      name="email_state"
-                      id="email_state"
-                      value="{{ Input::old('email_state', $item->email_state) }}"
-                      autocomplete="off"
-                      readonly
-                      onfocus="this.removeAttribute('readonly');">
+                    <select class="form-control"  name="email_state" id="email_state_select">{{ Input::old('email_state', $item->email_state) }}
+                      <option value="CONFIRM_EMAIL" {{ (Input::old("email_state", $item->email_state) == "CONFIRM_EMAIL" ? "selected":"") }}>Email verificatie</option>
+                      <option value="CONFIRMED" {{ (Input::old("email_state", $item->email_state) == "CONFIRMED" ? "selected":"") }}>Email bevestigd</option>
+                      <option value="BOUNCED" {{ (Input::old("email_state", $item->email_state) == "BOUNCED" ? "selected":"") }}>Email geweigerd (bounce)</option>
+                    </select>
                     {!! $errors->first('email_state', '<span class="alert-msg">:message</span>') !!}
-                  </div>
-                </div>
-
-                <!-- Employee Number -->
-                <div class="form-group {{ $errors->has('employee_num') ? 'has-error' : '' }}">
-                  <label class="col-md-3 control-label" for="employee_num">{{ trans('klusbib::admin/users/table.employee_num') }}</label>
-                  <div class="col-md-8">
-                    <input
-                      class="form-control"
-                      type="text"
-                      name="employee_num"
-                      id="employee_num"
-                      value="{{ Input::old('user_ext_id', $item->user_ext_id) }}"
-                    />
-                    {!! $errors->first('employee_num', '<span class="alert-msg">:message</span>') !!}
                   </div>
                 </div>
 
@@ -334,7 +351,19 @@
                   <div class="form-group{{ $errors->has('payment_mode') ? ' has-error' : '' }}">
                       <label class="col-md-3 control-label" for="payment_mode">{{ trans('klusbib::admin/users/table.payment_mode') }}</label>
                       <div class="col-md-4">
-                          <input class="form-control" type="text" name="payment_mode" id="payment_mode" value="{{ Input::old('payment_mode', $item->payment_mode) }}" maxlength="10" />
+                          <select class="form-control"  name="payment_mode" id="payment_mode_select">{{ Input::old('payment_mode', $item->payment_mode) }}
+                              <option value="MOLLIE" {{ (Input::old("payment_mode", $item->payment_mode) == "MOLLIE" ? "selected":"") }}>Mollie (online betaling)</option>
+                              <option value="TRANSFER" {{ (Input::old("payment_mode", $item->payment_mode) == "TRANSFER" ? "selected":"") }}>Overschrijving</option>
+                              <option value="CASH" {{ (Input::old("payment_mode", $item->payment_mode) == "CASH" ? "selected":"") }}>Cash</option>
+                              <option value="PAYCONIQ" {{ (Input::old("payment_mode", $item->payment_mode) == "PAYCONIQ" ? "selected":"") }}>Payconiq</option>
+                              <option value="STROOM" {{ (Input::old("payment_mode", $item->payment_mode) == "STROOM" ? "selected":"") }}>Stroom</option>
+                              <option value="OVAM" {{ (Input::old("payment_mode", $item->payment_mode) == "OVAM" ? "selected":"") }}>OVAM personeelslid</option>
+                              <option value="LETS" {{ (Input::old("payment_mode", $item->payment_mode) == "LETS" ? "selected":"") }}>LETS</option>
+                              <option value="MBON" {{ (Input::old("payment_mode", $item->payment_mode) == "MBON" ? "selected":"") }}>Mechelen Bon</option>
+                              <option value="SPONSORING" {{ (Input::old("payment_mode", $item->payment_mode) == "SPONSORING" ? "selected":"") }}>Sponsoring</option>
+                              <option value="OTHER" {{ (Input::old("payment_mode", $item->payment_mode) == "OTHER" ? "selected":"") }}>Andere</option>
+                              <option value="UNKNOWN" {{ (Input::old("payment_mode", $item->payment_mode) == "UNKNOWN" ? "selected":"") }}>Onbekend</option>
+                          </select>
                           {!! $errors->first('payment_mode', '<span class="alert-msg">:message</span>') !!}
                       </div>
                   </div>
@@ -348,14 +377,14 @@
                   </div>
                 </div>
 
-                <!-- Notes -->
-                <div class="form-group{!! $errors->has('notes') ? ' has-error' : '' !!}">
-                  <label for="notes" class="col-md-3 control-label">{{ trans('klusbib::admin/users/table.notes') }}</label>
-                  <div class="col-md-8">
-                    <textarea class="form-control" id="notes" name="notes">{{ Input::old('notes', $item->notes) }}</textarea>
-                    {!! $errors->first('notes', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
-                  </div>
-                </div>
+                {{--<!-- Notes -->--}}
+                {{--<div class="form-group{!! $errors->has('notes') ? ' has-error' : '' !!}">--}}
+                  {{--<label for="notes" class="col-md-3 control-label">{{ trans('klusbib::admin/users/table.notes') }}</label>--}}
+                  {{--<div class="col-md-8">--}}
+                    {{--<textarea class="form-control" id="notes" name="notes">{{ Input::old('notes', $item->notes) }}</textarea>--}}
+                    {{--{!! $errors->first('notes', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}--}}
+                  {{--</div>--}}
+                {{--</div>--}}
 
 
 

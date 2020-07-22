@@ -39,7 +39,7 @@ class Client
 
     /**
      * API Client constructor.
-     * @param $client ClientInterface to call inventory
+     * @param $httpClient ClientInterface to call inventory
      * @param $apikey api key used for authentication at inventory
      * @param $user user for authentication at inventory (only to be provided to generate a new apikey)
      * @param $password password used for authentication at inventory (only to be provided to generate a new apikey)
@@ -57,6 +57,9 @@ class Client
         $this->user = $user;
         $this->password = $password;
         $this->messageBag = array();
+//        $this->apiKey = session('klusbib.apiKey');
+//        $this->apiKeyExpiration = session('klusbib.apiKeyExpiration');
+//        Log::debug('klusbib.apiKey from session:' . $this->apiKey . ' - expiration: ' . $this->apiKeyExpiration);
 //            $this->updateToken();
     }
 

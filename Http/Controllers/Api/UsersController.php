@@ -11,6 +11,7 @@ use Modules\Klusbib\Http\Transformers\UsersTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use Torann\RemoteModel\Model;
 
 class UsersController extends Controller
 {
@@ -18,6 +19,7 @@ class UsersController extends Controller
      * Sync user data from Klusbib API to this inventory
      */
     public function syncNew(Request $request) {
+        Model::getClient()->updateToken($request->session());
         $state = $request->input('state');
         $first_name = $request->input('first_name');
         $last_name = $request->input('last_name');
@@ -65,6 +67,7 @@ class UsersController extends Controller
      * Sync user data from Klusbib API to this inventory
      */
     public function syncDelete(Request $request, $id) {
+        Model::getClient()->updateToken($request->session());
         if (is_null($user = User::find($id))) {
             // Redirect to the models management page
             return response()->json(Helper::formatStandardApiResponse('success', null, 'User not longer exists'), 200);
@@ -78,6 +81,7 @@ class UsersController extends Controller
      * Sync user data from Klusbib API to this inventory
      */
     public function syncUpdate(Request $request, $id) {
+        Model::getClient()->updateToken($request->session());
         if (is_null($user = User::find($id))) {
             // Redirect to the models management page
             return response()->json(Helper::formatStandardApiResponse('error', null, 'User not found'), 200);
@@ -119,6 +123,7 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
+        Model::getClient()->updateToken($request->session());
 //        $this->authorize('view', \Modules\Klusbib\Models\Api\User::class);
 
         //        $users = KlusbibApi::instance()->getUsers();
@@ -222,6 +227,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
+        Model::getClient()->updateToken($request->session());
         // TODO: get body to update received data
         Log::debug('Api/UsersController update for id ' . $id);
         $this->authorize('update', User::class);

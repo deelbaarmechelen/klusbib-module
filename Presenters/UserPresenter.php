@@ -246,7 +246,7 @@ class UserPresenter extends Presenter
                 "switchable" => false,
                 "title" => trans('table.actions'),
                 "visible" => true,
-                "formatter" => "usersActionsFormatter",
+                "formatter" => "apiUsersActionsFormatter",
             ]
         ];
 
