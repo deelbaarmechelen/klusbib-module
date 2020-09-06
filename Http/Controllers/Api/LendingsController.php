@@ -91,9 +91,9 @@ class LendingsController extends Controller
         $this->authorize('view', Lending::class);
         $lending = Lending::findOrFail($id);
         if ($lending == null || $lending->employee_num == null) {
-            return response()->json(Helper::formatStandardApiResponse('error', null, 'Lending unknown or no Klusbib id (employee_num)'), 404);
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'Lending unknown'), 404);
         }
-        $klusbibLending = \Modules\Klusbib\Models\Api\Lending::find($lending->employee_num);
+        $klusbibLending = \Modules\Klusbib\Models\Api\Lending::find($lending->lending_id);
 
         return (new LendingsTransformer)->transformLending($klusbibLending);
     }

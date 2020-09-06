@@ -9,14 +9,24 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Modules\Klusbib\Api\Client;
+use Modules\Klusbib\Models\Api\Delivery;
+use Modules\Klusbib\Models\Api\Lending;
+use Modules\Klusbib\Models\Api\Membership;
+use Modules\Klusbib\Models\Api\Payment;
 use Modules\Klusbib\Models\Api\Reservation;
+use Modules\Klusbib\Models\Api\User;
 use Modules\Klusbib\Models\AssetTagPattern;
 use Modules\Klusbib\Observers\AssetObserver;
 use Modules\Klusbib\Notifications\NotifyAccessoryCheckin;
 use Modules\Klusbib\Notifications\NotifyAccessoryCheckout;
 use Modules\Klusbib\Notifications\NotifyAssetCheckin;
 use Modules\Klusbib\Notifications\NotifyAssetCheckout;
+use Modules\Klusbib\Policies\DeliveryPolicy;
+use Modules\Klusbib\Policies\LendingPolicy;
+use Modules\Klusbib\Policies\MembershipPolicy;
+use Modules\Klusbib\Policies\PaymentPolicy;
 use Modules\Klusbib\Policies\ReservationPolicy;
+use Modules\Klusbib\Policies\UserPolicy;
 use Torann\RemoteModel\Model;
 use Gate;
 
@@ -36,6 +46,11 @@ class KlusbibServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Reservation::class => ReservationPolicy::class,
+        Delivery::class => DeliveryPolicy::class,
+        Payment::class => PaymentPolicy::class,
+        Membership::class => MembershipPolicy::class,
+        User::class => UserPolicy::class,
+        Lending::class => LendingPolicy::class
     ];
 
     /**
@@ -130,7 +145,7 @@ class KlusbibServiceProvider extends ServiceProvider
         $permissions['Klusbib.Reservations'] = $reservationPermissions;
 
         // Add deliveries permissions
-        $reservationPermissions =     array(
+        $deliveryPermissions =     array(
             array(
                 'permission' => 'klusbib.deliveries.view',
                 'label'      => 'View ',
@@ -156,8 +171,124 @@ class KlusbibServiceProvider extends ServiceProvider
                 'display'    => true,
             ),
         );
-        $permissions['Klusbib.Deliveries'] = $reservationPermissions;
+        $permissions['Klusbib.Deliveries'] = $deliveryPermissions;
 
+        // add enrolment permissions
+        $enrolmentPermissions =     array(
+            array(
+                'permission' => 'klusbib.enrolment.view',
+                'label'      => 'View ',
+                'note'       => '',
+                'display'    => true,
+            ),
+            array(
+                'permission' => 'klusbib.enrolment.create',
+                'label'      => 'Create ',
+                'note'       => '',
+                'display'    => true,
+            ),
+            array(
+                'permission' => 'klusbib.enrolment.edit',
+                'label'      => 'Edit ',
+                'note'       => '',
+                'display'    => true,
+            ),
+            array(
+                'permission' => 'klusbib.enrolment.delete',
+                'label'      => 'Delete ',
+                'note'       => '',
+                'display'    => true,
+            ),
+        );
+        $permissions['Klusbib.Enrolments'] = $enrolmentPermissions;
+
+        // add user permissions
+        $userPermissions =     array(
+            array(
+                'permission' => 'klusbib.user.view',
+                'label'      => 'View ',
+                'note'       => '',
+                'display'    => true,
+            ),
+            array(
+                'permission' => 'klusbib.user.create',
+                'label'      => 'Create ',
+                'note'       => '',
+                'display'    => true,
+            ),
+            array(
+                'permission' => 'klusbib.user.edit',
+                'label'      => 'Edit ',
+                'note'       => '',
+                'display'    => true,
+            ),
+            array(
+                'permission' => 'klusbib.user.delete',
+                'label'      => 'Delete ',
+                'note'       => '',
+                'display'    => true,
+            ),
+        );
+        $permissions['Klusbib.Users'] = $userPermissions;
+
+
+        // add payment permissions
+        $paymentPermissions =     array(
+            array(
+                'permission' => 'klusbib.payment.view',
+                'label'      => 'View ',
+                'note'       => '',
+                'display'    => true,
+            ),
+//            array(
+//                'permission' => 'klusbib.payment.create',
+//                'label'      => 'Create ',
+//                'note'       => '',
+//                'display'    => true,
+//            ),
+//            array(
+//                'permission' => 'klusbib.payment.edit',
+//                'label'      => 'Edit ',
+//                'note'       => '',
+//                'display'    => true,
+//            ),
+//            array(
+//                'permission' => 'klusbib.payment.delete',
+//                'label'      => 'Delete ',
+//                'note'       => '',
+//                'display'    => true,
+//            ),
+        );
+        $permissions['Klusbib.Payments'] = $paymentPermissions;
+
+        // add user permissions
+        $lendingPermissions =     array(
+            array(
+                'permission' => 'klusbib.lending.view',
+                'label'      => 'View ',
+                'note'       => '',
+                'display'    => true,
+            ),
+//            array(
+//                'permission' => 'klusbib.lending.create',
+//                'label'      => 'Create ',
+//                'note'       => '',
+//                'display'    => true,
+//            ),
+//            array(
+//                'permission' => 'klusbib.lending.edit',
+//                'label'      => 'Edit ',
+//                'note'       => '',
+//                'display'    => true,
+//            ),
+//            array(
+//                'permission' => 'klusbib.lending.delete',
+//                'label'      => 'Delete ',
+//                'note'       => '',
+//                'display'    => true,
+//            ),
+        );
+        $permissions['Klusbib.Lendings'] = $lendingPermissions;
         // update permissions in config
         config(['permissions' => $permissions]);
     }

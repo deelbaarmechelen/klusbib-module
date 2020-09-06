@@ -3,7 +3,9 @@
 <script>
     var extraFormatters = [
         'reservations',
-        'deliveries'
+        'deliveries',
+        'membership',
+        'payments'
     ];
     for (var i in extraFormatters) {
         window[extraFormatters[i] + 'LinkFormatter'] = genericRowLinkFormatter(extraFormatters[i]);
@@ -97,4 +99,18 @@
         };
     }
     window['reservationsActionsFormatter'] = customReservationsActionsFormatter('reservations');
+
+    function subscriptionNameObjFormatter() {
+        return function (value,row) {
+            var info = '';
+            if ((value) && (value.name) && (value.price) && (value.duration)) {
+                return '<span>' + value.name + ' (' + value.price + ' eur - ' + value.duration + 'd)</span>';
+            }
+            if ((value) && (value.name)) {
+                return '<span>' + value.name +'</span>';
+            }
+            return '';
+        }
+    }
+    window['subscriptionNameObjFormatter'] = subscriptionNameObjFormatter();
 </script>

@@ -86,6 +86,14 @@ class Client
                 $api = new Endpoints\Reservations($this);
                 break;
 
+            case 'payments':
+                $api = new Endpoints\Payments($this);
+                break;
+
+            case 'memberships':
+                $api = new Endpoints\Memberships($this);
+                break;
+
             case 'token':
                 $api = new Endpoints\Token($this);
                 break;

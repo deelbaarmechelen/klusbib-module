@@ -49,6 +49,15 @@ Route::prefix('klusbib')->group(function() {
     Route::get('/deliveries', [
         'as' => 'klusbib.deliveries.index',
         'uses' => 'DeliveriesController@index' ]);
+    Route::get('/memberships', [
+        'as' => 'klusbib.memberships.index',
+        'uses' => 'MembershipsController@index' ]);
+    Route::get('/payments', [
+        'as' => 'klusbib.payments.index',
+        'uses' => 'PaymentsController@index' ]);
+    Route::get('/lendings', [
+        'as' => 'klusbib.lendings.index',
+        'uses' => 'LendingsController@index' ]);
 });
 Route::resource('klusbib/reservations', 'ReservationsController', [
     'middleware' => ['auth'],
