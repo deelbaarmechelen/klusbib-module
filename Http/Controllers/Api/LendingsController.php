@@ -158,8 +158,9 @@ class LendingsController extends Controller
         $params = array();
         $params["_perPage"] = $limit;
         $params["_page"] = 1;
-        $params["_sortDir"] = 'asc';
+        $params["_sortDir"] = 'desc';
         $params["_sortField"] = 'due_date';
+        $params["active"] = 'true';
         $lendingsPaginator = \Modules\Klusbib\Models\Api\Lending::all($params);
 
         $labels=[];
@@ -182,11 +183,11 @@ class LendingsController extends Controller
                 "due_date" => $lending->due_date,
                 "returned_date" => $lending->returned_date,
                 "user_id" => $lending->user_id,
-                "user" => \json_decode($lending->user),
-                "username" => $user->firstname . ' ' . $user->lastname,
+                "user" => (isset($lending->user) ? \json_decode($lending->user) : null),
+                "username" => (isset($lending->user) ? $user->firstname . ' ' . $user->lastname : ""),
                 "tool_id" => $lending->tool_id,
                 "tool_type" => $lending->tool_type,
-                "tool" => \json_decode($lending->tool) );
+                "tool" => (isset($lending->tool) ? \json_decode($lending->tool) : null) );
             array_push($rows, $row);
         }
         $colors_array = Helper::chartColors();
@@ -233,7 +234,7 @@ class LendingsController extends Controller
             if (isset($lending->tool_id) && $lending->tool_type == "TOOL" ) {
                 $asset = Asset::find($lending->tool_id);
 //                echo \json_encode($asset->model->category);
-                $category = $asset->model->category->name;
+                $category = (isset($asset->model) ? $asset->model->category->name : "unknown");
                 if (isset($catCount[$category])) {
                     $catCount[$category] += 1;
                 } else {
