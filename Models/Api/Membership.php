@@ -7,5 +7,6 @@ use Torann\RemoteModel\Model as BaseModel;
 
 class Membership extends BaseModel
 {
+    protected $endpoint = 'membership';
 
 }

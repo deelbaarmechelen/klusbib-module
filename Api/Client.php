@@ -37,6 +37,9 @@ class Client
      */
     protected $messageBag;
 
+    private $user;
+    private $password;
+
     /**
      * API Client constructor.
      * @param $httpClient ClientInterface to call inventory
@@ -78,6 +81,10 @@ class Client
                 $api = new Endpoints\Users($this);
                 break;
 
+            case 'enrolment':
+                $api = new Endpoints\Enrolment($this);
+                break;
+
             case 'lendings':
                 $api = new Endpoints\Lendings($this);
                 break;
@@ -90,8 +97,8 @@ class Client
                 $api = new Endpoints\Payments($this);
                 break;
 
-            case 'memberships':
-                $api = new Endpoints\Memberships($this);
+            case 'membership':
+                $api = new Endpoints\Membership($this);
                 break;
 
             case 'token':
@@ -277,6 +284,13 @@ class Client
             else if (isset($statusCode) && ($statusCode == 400)) {
                 $body = $response->getBody()->getContents();
                 $msg = "Bad request" . " - " . $body;
+                Arr::set($this->messageBag, 'errors', array($msg));
+                Log::error($msg);
+                return;
+            }
+            else if (isset($statusCode) && ($statusCode == 409)) {
+                $body = $response->getBody()->getContents();
+                $msg = "Conflict" . " - " . $body;
                 Arr::set($this->messageBag, 'errors', array($msg));
                 Log::error($msg);
                 return;

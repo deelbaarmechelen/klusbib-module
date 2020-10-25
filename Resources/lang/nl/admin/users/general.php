@@ -11,6 +11,7 @@ return array(
     'lastname' 					=> 'Familienaam',
     'membership_end_date' 		=> 'Einddatum lidmaatschap',
     'membership_start_date' 	=> 'Startdatum lidmaatschap',
+    'membership_type'           => 'Type lidmaatschap',
     'notes'  					=> 'Opmerkingen',
     'role'   				    => 'Rol',
     'state' 				    => 'Status',

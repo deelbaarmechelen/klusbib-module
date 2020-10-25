@@ -8,6 +8,8 @@ class User extends BaseModel
 {
     const STATE_ACTIVE_AVATAR = "DBM_avatar_ok.png";
     const STATE_INACTIVE_AVATAR = "DBM_avatar_nok.png";
+    const STATE_DISABLED = "DISABLED";
+    const STATE_NEW_ENROLEMENT = "CHECK_PAYMENT";
 
     protected $endpoint = 'users';
     protected $primaryKey = 'user_id';

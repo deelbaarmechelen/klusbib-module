@@ -131,9 +131,9 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'api'], fun
                 'uses' => 'PaymentsController@index'
             ]
         );
-        Route::get('memberships',
+        Route::get('membership',
             [
-                'as' => 'api.klusbib.memberships.index',
+                'as' => 'api.klusbib.membership.index',
                 'uses' => 'MembershipsController@index'
             ]
         );

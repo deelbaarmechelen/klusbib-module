@@ -57,7 +57,7 @@
                     data-toolbar="#toolbar"
                     id="membershipsTable"
                     class="table table-striped snipe-table"
-                    data-url="{{ route('api.klusbib.memberships.index',
+                    data-url="{{ route('api.klusbib.membership.index',
               array('deleted'=> (Input::get('status')=='deleted') ? 'true' : 'false','company_id'=>e(Input::get('company_id')))) }}"
                     data-export-options='{
                 "fileName": "export-memberships-{{ date('Y-m-d') }}",

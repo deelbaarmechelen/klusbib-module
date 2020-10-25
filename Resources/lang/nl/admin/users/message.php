@@ -10,6 +10,11 @@ return array(
         'success' => 'Gebruiker is met succes aangemaakt.'
     ),
 
+    'enrolment' => array(
+        'error'   => 'Lidmaatschap is niet aangemaakt, probeer het opnieuw.',
+        'success' => 'Lidmaatschap is met succes aangemaakt.'
+    ),
+
     'update' => array(
         'error'   => 'Gebruiker is niet gewijzigd, probeer het opnieuw',
         'success' => 'Gebruiker is met succes gewijzigd.'

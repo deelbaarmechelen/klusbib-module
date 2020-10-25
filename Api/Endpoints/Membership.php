@@ -7,7 +7,7 @@ use Modules\Klusbib\Api\Client;
 use Modules\Klusbib\Api\Exception\NotFoundException;
 
 
-class Memberships
+class Membership
 {
     /**
      * The client.
