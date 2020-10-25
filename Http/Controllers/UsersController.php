@@ -13,10 +13,13 @@ use HTML;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Input;
 use Lang;
 use Mail;
+use Modules\Klusbib\Api\Client;
 use Modules\Klusbib\Http\KlusbibApi;
 use Modules\Klusbib\Models\Api\User;
 use Str;
@@ -35,6 +38,20 @@ class UsersController extends Controller
 {
 
     use AuthorizesRequests;
+
+    private $apiClient;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @param  UserRepository  $users
+     * @return void
+     */
+    public function __construct(Client $apiClient)
+    {
+        Log::debug( "API client injected in UsersController - hash: " . \spl_object_hash($apiClient) );
+        $this->apiClient = $apiClient;
+    }
 
     /**
     * Returns a view that invokes the ajax tables which actually contains
@@ -55,8 +72,7 @@ class UsersController extends Controller
 //        $this->authorize('create', User::class);
         $user = new User();
 
-        return view('klusbib::users/edit')->with('item', $user);
-        //return redirect()->route('klusbib::users/index')->with('error', $error);
+        return view('klusbib::users/new')->with('item', $user);
     }
 
     /**
@@ -72,6 +88,7 @@ class UsersController extends Controller
         Log::debug("Klusbib - Store new user");
         Model::getClient()->updateToken($request->session());
 //        $this->authorize('create', User::class);
+        $enrolmentType = $request->input('membership_type');
 
         // create a new model instance
         $user = new User();
@@ -79,9 +96,7 @@ class UsersController extends Controller
         $user->firstname             = $request->input('firstname');
         $user->lastname              = $request->input('lastname');
         $user->role                  = $request->input('role');
-        $user->state                 = $request->input('state');
-        $user->membership_start_date = $request->input('membership_start_date');
-        $user->membership_end_date   = $request->input('membership_end_date');
+        $user->state                 = User::STATE_DISABLED;
         $user->email                 = $request->input('email');
         $user->email_state           = $request->input('email_state');
         $user->phone                 = $request->input('phone');
@@ -90,13 +105,37 @@ class UsersController extends Controller
         $user->city                  = $request->input('city');
         $user->postal_code           = $request->input('postal_code');
         $user->registration_number   = $request->input('registration_number');
-        $user->payment_mode          = $request->input('payment_mode');
-        $user->accept_terms_date     = $request->input('accept_terms_date');
-//        $user->comment               = $request->input('notes');
+        $user->comment               = $request->input('comment');
         Log::info('User: ' . \json_encode($user));
 
+        // TODO: block possibility to create enrolment with payment mode MOLLIE
         if ($user->save()) {
-            return redirect()->route("klusbib.users.index")->with('success', trans('klusbib::admin/users/message.create.success'));
+            if ($enrolmentType === "NONE") {
+                // no enrolment -> simply save user
+                return redirect()->route("klusbib.users.index")->with('success', trans('klusbib::admin/users/message.create.success'));
+            } else {
+                $now = new \DateTime();
+                $orderId = $user->employee_num . '-' . $now->format('YmdHis');
+
+                // Send enrolment request to create membership
+                $params = array(
+                    'membership_start_date' => $request->input('membership_start_date'),
+                    'membership_end_date'   => $request->input('membership_end_date'),
+                    'paymentMode'           => $request->input('payment_mode'),
+                    //paymentMean -> only used for Mollie payment mode, which is not available from Snipe
+                    'accept_terms_date'     => $request->input('accept_terms_date'),
+                    'enrolment_type'        => $enrolmentType,
+                    'orderId'               => $orderId,
+                    'userId'                => $user->employee_num
+                );
+
+                if ($this->apiClient->api('enrolment')->request($params)) {
+                    return redirect()->route("klusbib.users.index")->with('success', trans('klusbib::admin/users/message.create.success'));
+                } else {
+                    $errorMessage = trans('klusbib::admin/users/message.enrolment.error');
+                    return redirect()->back()->withInput()->with('error', $errorMessage);
+                }
+            }
         }
         $errorMessage = trans('klusbib::admin/users/message.create.error');
         $errors = Arr::get($user->getClientError(), 'errors');
@@ -136,6 +175,9 @@ class UsersController extends Controller
         //"accept_terms_date":"2020-06-25","created_at":"{\"date\":\"2020-06-25 00:25:19.000000\",\"timezone_type\":3,\"timezone\":\"Europe\\\/Berlin\"}"
         //,"updated_at":"{\"date\":\"2020-06-25 00:33:44.000000\",\"timezone_type\":3,\"timezone\":\"Europe\\\/Berlin\"}","reservations":"[]"}
         $item->id = $item->user_id; // view expects id to be set to distinguish between create (POST) and update (PUT)
+
+        // TODO: set correct membership type
+        $item->membership_type = "NONE";
         return view('klusbib::users/edit', compact('item'));
 
     }
@@ -153,6 +195,7 @@ class UsersController extends Controller
     {
         Model::getClient()->updateToken($request->session());
         Log::debug("Klusbib - Update user");
+
         if (is_null($user = User::find($userId))) {
             return redirect()->route('klusbib.users.index')->with('error', trans('klusbib::admin/users/message.does_not_exist'));
         }
@@ -163,8 +206,6 @@ class UsersController extends Controller
         $user->lastname = $request->input('lastname');
         $user->role = $request->input('role');
         $user->state             = $request->input('state');
-        $user->membership_start_date   = $request->input('membership_start_date');
-        $user->membership_end_date   = $request->input('membership_end_date');
         $user->email = $request->input('email');
         $user->email_state = $request->input('email_state');
         $user->phone = $request->input('phone');
@@ -173,14 +214,59 @@ class UsersController extends Controller
         $user->city = $request->input('city');
         $user->postal_code = $request->input('postal_code');
         $user->registration_number = $request->input('registration_number');
+
+        $membershipType = $request->input('membership_type');
+        $user->membership_start_date   = $request->input('membership_start_date');
+        $user->membership_end_date   = $request->input('membership_end_date');
         $user->payment_mode = $request->input('payment_mode');
         $user->accept_terms_date = $request->input('accept_terms_date');
 //        $user->comment           = $request->input('notes');
         Log::info('User: ' . \json_encode($user));
 
         if ($user->save()) {
-            return redirect()->route('klusbib.users.show', ['user' => $userId])
-                ->with('success', trans('klusbib::admin/users/message.update.success'));
+            $origMembershipType = "NONE";
+            // FIXME: implement possible changes of membership type or completely disable possibility to modify membership
+            //        would require a separate page for enrolment...
+            // allowed transitions:
+            // NONE -> REGULAR (regular enrolment), NONE -> STROOM (Stroom enrolment), NONE -> TEMPORARY (trial enrolment),
+            // TEMPORARY -> REGULAR (regular enrolment), TEMPORARY -> STROOM (Stroom enrolment), TEMPORARY -> NONE (expiration)
+            // REGULAR -> NONE (expiration >1 jaar), REGULAR -> RENEWAL (Renewal), REGULAR -> STROOM (Stroom enrolment)
+            // STROOM -> NONE (expiration >1 jaar), STROOM -> RENEWAL (Renewal), STROOM -> REGULAR (regular enrolment, expired > approx 6 months)
+            // RENEWAL -> NONE (expiration >1 jaar), RENEWAL -> STROOM (Stroom enrolment), RENEWAL -> RENEWAL (Renewal)
+
+            if ($origMembershipType == $membershipType) {
+                return redirect()->route('klusbib.users.show', ['user' => $userId])
+                    ->with('success', trans('klusbib::admin/users/message.update.success'));
+            }
+
+
+
+            if ($membershipType === "NONE") {
+                // no enrolment -> simply save user
+                return redirect()->route("klusbib.users.index")->with('success', trans('klusbib::admin/users/message.create.success'));
+            } else {
+                $now = new \DateTime();
+                $orderId = $user->employee_num . '-' . $now->format('YmdHis');
+
+                // Send enrolment request to create membership
+                $params = array(
+                    'membership_start_date' => $request->input('membership_start_date'),
+                    'membership_end_date'   => $request->input('membership_end_date'),
+                    'paymentMode'           => $request->input('payment_mode'),
+                    //paymentMean -> only used for Mollie payment mode, which is not available from Snipe
+                    'accept_terms_date'     => $request->input('accept_terms_date'),
+                    'enrolment_type'        => $membershipType,
+                    'orderId'               => $orderId,
+                    'userId'                => $user->employee_num
+                );
+
+                if ($this->apiClient->api('enrolment')->request($params)) {
+                    return redirect()->route("klusbib.users.index")->with('success', trans('klusbib::admin/users/message.create.success'));
+                } else {
+                    $errorMessage = trans('klusbib::admin/users/message.enrolment.error');
+                    return redirect()->back()->withInput()->with('error', $errorMessage);
+                }
+            }
         }
     }
 

@@ -18,7 +18,7 @@ class ApiContextMiddleware
     public function handle(Request $request, Closure $next)
     {
         Log::debug("API Context: update token");
-        app('apiclient')->updateToken($request->session());
+        app('Modules\Klusbib\Api\Client')->updateToken($request->session());
         return $next($request);
     }
 }
