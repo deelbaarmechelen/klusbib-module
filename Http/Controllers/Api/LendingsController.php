@@ -244,7 +244,7 @@ class LendingsController extends Controller
                 }
             }
         }
-        // FIXME: max size of 10 data points, others should be grouped in 'Others' category
+        // Limit results to top 10 categories, others should be grouped in 'Others' category
         arsort($catCount); // sort by value
         $catTop = array_slice($catCount, 0, self::CAT_MAX_VALUES);
         $catOthers = array_slice($catCount, self::CAT_MAX_VALUES);
@@ -256,6 +256,7 @@ class LendingsController extends Controller
         foreach ($catOthers as $count) {
             $otherCount += $count;
         }
+        // FIXME: Others is much to big to be shown next to other results and makes the chart unreadable
         if ($otherCount > 0) {
             $labels[] = "Others";
             $points[] = $otherCount;

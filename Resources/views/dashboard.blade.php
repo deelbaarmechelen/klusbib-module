@@ -701,9 +701,23 @@
          });
 
     var ctxLendingsByCat = document.getElementById('lendingsByCatChart').getContext("2d")
+    let barOptionsLendingsByCat = {
+        scales: {
+            xAxes: [{
+                gridLines: {
+                    offsetGridLines: true,
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                }
+            }]
+        }
+    };
     var myChart = new Chart(ctxLendingsByCat, {
         type: 'bar',
-        options: barOptions
+        options: barOptionsLendingsByCat
     });
 
 
