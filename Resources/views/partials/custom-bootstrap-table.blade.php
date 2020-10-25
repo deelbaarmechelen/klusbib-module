@@ -54,7 +54,7 @@
     window['apiUsersActionsFormatter'] = customApiUsersActionsFormatter('users');
 
     // Make the edit/delete buttons
-    function customReservationsActionsFormatter(destination) {
+    function customKlusbibActionsFormatter(destination) {
         return function (value,row) {
 
             var actions = '<nobr>';
@@ -98,7 +98,8 @@
 
         };
     }
-    window['reservationsActionsFormatter'] = customReservationsActionsFormatter('reservations');
+    window['reservationsActionsFormatter'] = customKlusbibActionsFormatter('reservations');
+    window['deliveriesActionsFormatter'] = customKlusbibActionsFormatter('deliveries');
 
     function subscriptionNameObjFormatter() {
         return function (value,row) {

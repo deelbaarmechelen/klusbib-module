@@ -49,6 +49,15 @@ Route::prefix('klusbib')->group(function() {
     Route::get('/deliveries', [
         'as' => 'klusbib.deliveries.index',
         'uses' => 'DeliveriesController@index' ]);
+    Route::get('/deliveries/{delivery}/cancel', [
+        'as' => 'klusbib.deliveries.cancel',
+        'uses' => 'DeliveriesController@cancel' ]);
+    Route::get('/deliveries/{delivery}/confirm', [
+        'as' => 'klusbib.deliveries.confirm',
+        'uses' => 'DeliveriesController@confirm' ]);
+    Route::get('/deliveries/export', [
+        'as' => 'klusbib.deliveries.export',
+        'uses' => 'DeiveriesController@export' ]);
     Route::get('/memberships', [
         'as' => 'klusbib.memberships.index',
         'uses' => 'MembershipsController@index' ]);
@@ -72,6 +81,18 @@ Route::resource('klusbib/reservations', 'ReservationsController', [
     'destroy' => 'klusbib.reservations.destroy',
 ]);
 
+Route::resource('klusbib/deliveries', 'DeliveriesController', [
+    'middleware' => ['auth'],
+    'parameters' => ['delivery' => 'delivery_id'],
+])->names([
+    'index' => 'klusbib.deliveries.index',
+    'create' => 'klusbib.deliveries.create',
+    'store' => 'klusbib.deliveries.store',
+    'show' => 'klusbib.deliveries.show',
+    'edit' => 'klusbib.deliveries.edit',
+    'update' => 'klusbib.deliveries.update',
+    'destroy' => 'klusbib.deliveries.destroy',
+]);
 /*
  * Resource actions (see https://laravel.com/docs/7.x/controllers#resource-controllers)
  * Verb 	URI 	        Action 	    Route Name

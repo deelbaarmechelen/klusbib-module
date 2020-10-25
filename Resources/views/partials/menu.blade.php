@@ -36,14 +36,14 @@
                 </a>
             </li>
         @endif
-        {{--@if (\Illuminate\Support\Facades\Route::has('klusbib.deliveries.index'))--}}
-        {{--<li>--}}
-        {{--<a href="{{ route('klusbib.deliveries.index') }}">--}}
-        {{--<i class="fa fa-bicycle"></i>--}}
-        {{--<span>Deliveries</span>--}}
-        {{--</a>--}}
-        {{--</li>--}}
-        {{--@endif--}}
+        @if (\Illuminate\Support\Facades\Route::has('klusbib.deliveries.index'))
+            <li>
+                <a href="{{ route('klusbib.deliveries.index') }}">
+                    <i class="fa fa-bicycle"></i>
+                    <span>Deliveries</span>
+                </a>
+            </li>
+        @endif
         @if (\Illuminate\Support\Facades\Route::has('klusbib.memberships.index'))
             <li>
                 <a href="{{ route('klusbib.memberships.index') }}">

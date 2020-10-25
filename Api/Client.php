@@ -93,6 +93,10 @@ class Client
                 $api = new Endpoints\Reservations($this);
                 break;
 
+             case 'deliveries':
+                $api = new Endpoints\Deliveries($this);
+                break;
+
             case 'payments':
                 $api = new Endpoints\Payments($this);
                 break;
