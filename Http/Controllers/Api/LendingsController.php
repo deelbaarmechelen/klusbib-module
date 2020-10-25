@@ -15,6 +15,8 @@ use Modules\Klusbib\Models\Api\Lending;
 
 class LendingsController extends Controller
 {
+    const CAT_MAX_VALUES = 10;
+
     /**
      * Display a listing of the resource.
      * @return Response
@@ -242,10 +244,23 @@ class LendingsController extends Controller
                 }
             }
         }
-        foreach($catCount as $cat => $count) {
+        // FIXME: max size of 10 data points, others should be grouped in 'Others' category
+        arsort($catCount); // sort by value
+        $catTop = array_slice($catCount, 0, self::CAT_MAX_VALUES);
+        $catOthers = array_slice($catCount, self::CAT_MAX_VALUES);
+        foreach($catTop as $cat => $count) {
             $labels[] = $cat;
             $points[] = $count;
         }
+        $otherCount = 0;
+        foreach ($catOthers as $count) {
+            $otherCount += $count;
+        }
+        if ($otherCount > 0) {
+            $labels[] = "Others";
+            $points[] = $otherCount;
+        }
+
         $colors_array = Helper::chartColors();
         $chart= [
             "labels" => $labels,
