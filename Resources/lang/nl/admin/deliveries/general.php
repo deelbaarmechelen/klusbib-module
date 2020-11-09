@@ -3,6 +3,9 @@
 return array(
     'about_deliveries_title'  => 'Over leveringen',
     'about_deliveries'        => 'nog aan te vullen...',
+    'about_delivery_items_title'  => 'Over leveringen items',
+    'about_delivery_items'        => 'nog aan te vullen...',
+    'add_item'                  => 'Item toevoegen',
     'edit'  					=> 'Wijzig levering',
     'drop_off_address' 			=> 'Leveringsadres',
     'drop_off_date' 			=> 'Leverdatum',

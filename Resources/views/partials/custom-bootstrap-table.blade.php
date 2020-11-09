@@ -100,6 +100,9 @@
     }
     window['reservationsActionsFormatter'] = customKlusbibActionsFormatter('reservations');
     window['deliveriesActionsFormatter'] = customKlusbibActionsFormatter('deliveries');
+    @isset($deliveryId)
+        window['deliveryItemsActionsFormatter'] = customKlusbibActionsFormatter('deliveries/{{$deliveryId}}/items');
+    @endisset
 
     function subscriptionNameObjFormatter() {
         return function (value,row) {
@@ -114,4 +117,6 @@
         }
     }
     window['subscriptionNameObjFormatter'] = subscriptionNameObjFormatter();
+
+
 </script>

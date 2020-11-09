@@ -263,7 +263,7 @@ class Client
             Log::debug("Klusbib API request: $method; $target; duration=$execution_time secs; response=" . json_encode($res));
 
         } catch (ClientException $clientException) {
-            Log::error( $clientException->getMessage());
+            Log::error( "Client exception - " . $clientException->getMessage());
             if ($clientException->hasResponse()) {
 
                 $response = $clientException->getResponse();
@@ -279,7 +279,6 @@ class Client
                     $this->updateToken();
                 }
             }
-
             if (isset($statusCode) && ($statusCode == 404 || $statusCode == 403)) {
                 Arr::set($this->messageBag, 'errors', array("Not found"));
                 // access forbidden is considered as not found (can be an asset or user from another company)

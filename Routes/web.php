@@ -58,6 +58,24 @@ Route::prefix('klusbib')->group(function() {
     Route::get('/deliveries/export', [
         'as' => 'klusbib.deliveries.export',
         'uses' => 'DeiveriesController@export' ]);
+    Route::get('/deliveries/{delivery}/items/new', [
+        'as' => 'klusbib.deliveries.items.new',
+        'uses' => 'DeliveriesController@newItem' ]);
+    Route::get('/deliveries/{delivery}/items/{item}', [
+        'as' => 'klusbib.deliveries.items.show',
+        'uses' => 'DeliveriesController@showItem' ]);
+    Route::post('/deliveries/{delivery}/items', [
+        'as' => 'klusbib.deliveries.items.add',
+        'uses' => 'DeliveriesController@addItem' ]);
+    Route::get('/deliveries/{delivery}/items/{item}/edit', [
+        'as' => 'klusbib.deliveries.items.edit',
+        'uses' => 'DeliveriesController@editItem' ]);
+    Route::put('/deliveries/{delivery}/items/{item}', [
+        'as' => 'klusbib.deliveries.items.update',
+        'uses' => 'DeliveriesController@updateItem' ]);
+    Route::delete('/deliveries/{delivery}/items/{item}', [
+        'as' => 'klusbib.deliveries.items.remove',
+        'uses' => 'DeliveriesController@removeItem' ]);
     Route::get('/memberships', [
         'as' => 'klusbib.memberships.index',
         'uses' => 'MembershipsController@index' ]);

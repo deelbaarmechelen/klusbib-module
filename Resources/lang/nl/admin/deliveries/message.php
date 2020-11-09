@@ -22,4 +22,14 @@ return array(
         'success' => 'De levering is met succes verwijderd.'
     ),
 
+    'add_item' => array(
+        'error'   => 'Er was een probleem bij het toevoegen van item aan deze levering, probeer het opnieuw.',
+        'success' => 'Item is met succes toegevoegd.'
+    ),
+
+    'remove_item' => array(
+        'error'   => 'Er was een probleem tijdens het verwijderen van item van deze levering, probeer het opnieuw.',
+        'success' => 'Item is met succes verwijderd.'
+    ),
+
 );

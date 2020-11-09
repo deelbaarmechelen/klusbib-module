@@ -3,10 +3,12 @@
 namespace Modules\Klusbib\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Asset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Modules\Klusbib\Http\KlusbibApi;
+use Modules\Klusbib\Http\Transformers\InventoryItemsTransformer;
 use Modules\Klusbib\Models\Api\Delivery;
 
 class DeliveriesController extends Controller
@@ -245,10 +247,94 @@ class DeliveriesController extends Controller
         if ($delivery) {
             $this->authorize('view', $delivery);
             Log::info(\json_encode(compact('delivery')));
+            $items = \json_decode($delivery->items);
+
+            $transformedItems = (new InventoryItemsTransformer)->transformInventoryItems($items, count($items));
+            $delivery->items = $transformedItems;
+            Log::info(\json_encode(compact('delivery')));
             return view('klusbib::deliveries/view', compact('delivery'));
         }
         return redirect()->route('klusbib.deliveries.index')
             ->with('error', trans('klusbib::admin/deliveries/message.does_not_exist', compact('id')));
+    }
+
+    /**
+     * Add an inventory item to delivery
+     * @param int $deliveryId
+     */
+    public function newItem($deliveryId) {
+        if (is_null($delivery = Delivery::find($deliveryId))) {
+            // Redirect to the delivery management page
+            return redirect()->route('klusbib.deliveries.index')
+                ->with('error', trans('klusbib::admin/deliveries/message.not_found'));
+        }
+        $this->authorize('update', Delivery::class);
+
+        return view('klusbib::deliveries/edititem')
+            //->with('delivery_options',$delivery_options)
+            ->with('delivery', $delivery)
+            ->with('item', new Asset());
+
+    }
+
+    /**
+     * Add an inventory item to delivery
+     * @param Request $request
+     * @param int $deliveryId
+     */
+    public function addItem(Request $request, $deliveryId) {
+        if (is_null($delivery = Delivery::find($deliveryId))) {
+            // Redirect to the delivery management page
+            return redirect()->route('klusbib.deliveries.index')
+                ->with('error', trans('klusbib::admin/deliveries/message.not_found'));
+        }
+        $this->authorize('update', Delivery::class);
+        $itemId = $request->input('tool_id');
+        if (Delivery::addInventoryItem($deliveryId, $itemId)) {
+
+            // Redirect to the deliveries show page
+            return redirect()->route('klusbib.deliveries.show', ['delivery' => $deliveryId])
+                ->with('success', trans('klusbib::admin/deliveries/message.add_item.success', compact('id')));
+
+        }
+        // There are still deliveries in use.
+        return redirect()->route('klusbib.deliveries.index')
+            ->with('error', trans('klusbib::admin/deliveries/message.add_item.error'));
+    }
+    /**
+     * Edit inventory item in delivery
+     * @param int $deliveryId
+     * @param int $itemId
+     */
+    public function editItem($deliveryId, $itemId) {
+        throw new \RuntimeException("Not yet implemented!");
+    }
+    /**
+     * Remove inventory item from delivery
+     * @param int $deliveryId
+     * @param int $itemId
+     */
+    public function removeItem($deliveryId, $itemId) {
+        // Check if the delivery exists
+        if (is_null($delivery = Delivery::find($deliveryId))) {
+            // Redirect to the delivery management page
+            return redirect()->route('klusbib.deliveries.index')
+                ->with('error', trans('klusbib::admin/deliveries/message.not_found'));
+        }
+
+        $this->authorize('delete', $delivery);
+
+        if (Delivery::removeInventoryItem($deliveryId, $itemId)) {
+
+            // Redirect to the deliveries show page
+            return redirect()->route('klusbib.deliveries.show', ['delivery' => $deliveryId])
+                ->with('success', trans('klusbib::admin/deliveries/message.remove_item.success', compact('id')));
+
+        }
+        // There are still deliveries in use.
+        return redirect()->route('klusbib.deliveries.index')
+            ->with('error', trans('klusbib::admin/deliveries/message.remove_item.error'));
+
     }
 
 }

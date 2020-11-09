@@ -119,4 +119,17 @@ class Deliveries
         return $result;
     }
 
+    public function addItem($delivery_id, $item_id) {
+        $data = array("item_id" => $item_id);
+        return $this->client->post('deliveries/'.rawurlencode($delivery_id).'/items', $data);
+    }
+
+    public function removeItem($delivery_id, $item_id) {
+        try {
+            return $this->client->delete('deliveries/'.rawurlencode($delivery_id).'/items/'.rawurlencode($item_id));
+        } catch (NotFoundException $nfe) {
+            return null;
+        }
+
+    }
 }

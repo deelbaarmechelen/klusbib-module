@@ -100,6 +100,9 @@ class UsersController extends Controller
         if (!$request->has('state')) {
             return response()->json(Helper::formatStandardApiResponse('error', null, 'User state is missing'), 400);
         }
+        if ($username != $user->username && User::getNotDeleted()->where('username', '=', $username)->exists()) {
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'Username not unique (' . $username . ')'), 400);
+        }
         $user->first_name = $first_name;
         $user->last_name = $last_name;
         $user->username = $username;
@@ -114,6 +117,9 @@ class UsersController extends Controller
         if ($user->save()) {
             return response()->json(Helper::formatStandardApiResponse('success', (new UsersTransformer)->transformSyncedUser($user), trans('admin/users/message.success.update')));
         }
+        $query = $user->newModelQuery();
+
+        Log::error('Unable to save user ' . \json_encode($query) . ' - user: ' . \json_encode($user));
         return response()->json(Helper::formatStandardApiResponse('error', null, 'Unable to save user'), 500);
     }
 
