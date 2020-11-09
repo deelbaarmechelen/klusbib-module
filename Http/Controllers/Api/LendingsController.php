@@ -32,8 +32,23 @@ class LendingsController extends Controller
             [
                 'lending_id', 'tool_id', 'user_id', 'username', 'startsAt', 'dueAt', 'returnedAt', 'type', 'comment'
             ];
-
         $sort = in_array($requestedSort, $allowed_columns) ? $requestedSort : 'lending_id'; // default sort on lending id (chronological order)
+        // translate snipe column names to API column names
+        if ($sort == 'startsAt') {
+            $sort = 'start_date';
+        }
+        if ($sort == 'dueAt') {
+            $sort = 'due_date';
+        }
+        if ($sort == 'returnedAt') {
+            $sort = 'returned_date';
+        }
+        if ($sort == 'type') {
+            $sort = 'tool_type';
+        }
+        if ($sort == 'comment') {
+            $sort = 'comments';
+        }
         Log::debug("Real sort order = " . $sort);
         $offset = request('offset', 0);
 
