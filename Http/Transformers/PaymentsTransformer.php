@@ -27,7 +27,7 @@ class PaymentsTransformer
 //        Log::debug('payment = ' . \json_encode($payment));
         $array = [
             'id' => (int) $payment->payment_id,
-            'user' => ($payment->user_id) ? [
+            'user' => ($payment->user) ? [
                 'id' => (int) $payment->user_id,
                 'name'=> e($payment->user->first_name) .' '.e($payment->user->last_name),
             ] : null,

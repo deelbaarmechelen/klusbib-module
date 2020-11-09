@@ -34,7 +34,7 @@ class LendingsTransformer
                 'name'=> e($lending->tool->asset_tag),
                 'type' => e($lending->tool_type)
             ] : null,
-            'user' => ($lending->user_id) ? [
+            'user' => ($lending->user) ? [
                 'id' => (int) $lending->user_id,
                 'name'=> e($lending->user->first_name) .' '.e($lending->user->last_name),
 //                'full_name'=> e($reservation->firstname).' '.e($reservation->lastname)
