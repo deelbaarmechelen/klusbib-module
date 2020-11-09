@@ -40,7 +40,7 @@
             <li>
                 <a href="{{ route('klusbib.deliveries.index') }}">
                     <i class="fa fa-bicycle"></i>
-                    <span>Deliveries</span>
+                    <span>Leveringen</span>
                 </a>
             </li>
         @endif
