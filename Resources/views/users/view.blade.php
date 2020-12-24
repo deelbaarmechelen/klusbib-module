@@ -11,7 +11,7 @@
 {{-- Right header --}}
 @section('header_right')
 <div class="btn-group pull-right">
-  @can('update', $user)
+  {{--@can('update', $user)--}}
     <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">{{ trans('button.actions') }}
         <span class="caret"></span>
     </button>
@@ -19,7 +19,7 @@
         <li><a href="{{ route('klusbib.users.edit', ['user' => $user->user_id]) }}">{{ trans('klusbib::admin/users/general.edit') }}</a></li>
 {{--        <li><a href="{{ route('clone/user', $user->user_id) }}">{{ trans('admin/users/general.clone') }}</a></li>--}}
     </ul>
-   @endcan
+   {{--@endcan--}}
 </div>
 @stop
 
