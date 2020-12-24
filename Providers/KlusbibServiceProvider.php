@@ -77,6 +77,7 @@ class KlusbibServiceProvider extends ServiceProvider
         $this->registerObservers();
         $this->registerPolicies();
 
+        Log::debug("Boot Klusbib Service Provider completed");
     }
 
     /**
@@ -321,6 +322,7 @@ class KlusbibServiceProvider extends ServiceProvider
      */
     public function registerTranslations()
     {
+        Log::debug('Klusbib translations');
         $langPath = resource_path('lang/modules/klusbib');
 
         if (is_dir($langPath)) {

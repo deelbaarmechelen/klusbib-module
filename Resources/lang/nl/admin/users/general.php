@@ -12,6 +12,7 @@ return array(
     'membership_end_date' 		=> 'Einddatum lidmaatschap',
     'membership_start_date' 	=> 'Startdatum lidmaatschap',
     'membership_type'           => 'Type lidmaatschap',
+    'new_membership_type'       => 'Nieuw lidmaatschapstype',
     'notes'  					=> 'Opmerkingen',
     'role'   				    => 'Rol',
     'state' 				    => 'Status',

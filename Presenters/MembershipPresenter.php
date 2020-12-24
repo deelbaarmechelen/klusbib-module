@@ -16,16 +16,13 @@ class MembershipPresenter extends Presenter
 {
 
 /*
- * {"total":3,"rows":[
- * {"id":3,"tool_id":"2","tool":{"id":2,"name":"KB-000-20-002","type":"TOOL"},"user":{"id":1,"name":"admin admin"},"user_id":"1","title":"",
- * "startsAt":{"date":"2020-07-05","formatted":"2020-07-05"},"dueAt":{"date":"2020-07-12","formatted":"2020-07-12"},"returnedAt":null,
- * "comment":null,"createdBy":null,"created_at":null,"updated_at":null,"available_actions":[]},
- * {"id":2,"tool_id":"2","tool":{"id":2,"name":"KB-000-20-002","type":"TOOL"},"user":{"id":1,"name":"admin admin"},"user_id":"1","title":"",
- * "startsAt":{"date":"2020-07-06","formatted":"2020-07-06"},"dueAt":{"date":"2020-07-07","formatted":"2020-07-07"},"returnedAt":{"date":"2020-07-06","formatted":"2020-07-06"},
- * "comment":null,"createdBy":null,"created_at":null,"updated_at":null,"available_actions":[]},
- * {"id":1,"tool_id":"1","tool":{"id":1,"name":"KB-000-20-001","type":"TOOL"},"user":{"id":3,"name":"Dummy Dummy"},"user_id":"3","title":"",
- * "startsAt":{"date":"2020-07-01","formatted":"2020-07-01"},"dueAt":{"date":"2020-07-07","formatted":"2020-07-07"},"returnedAt":null,
- * "comment":null,"createdBy":null,"created_at":null,"updated_at":null,"available_actions":[]}]}
+ * {"total":2,"rows":[{"id":70,
+ * "user":{"id":10,"name":"Test Lidmaatschap"},"user_id":"8","state":"ACTIVE","subscription_id":70,
+ * "subscription":{"id":1,"name":"Regular","price":"30.00","duration":"365"},"start_at":{"date":"2020-12-11","formatted":"2020-12-11"},"expires_at":{"date":"2021-12-30","formatted":"2021-12-30"},
+ * "last_payment_mode":"CASH","comment":null,"available_actions":[]},
+ * {"id":72,"user":{"id":10,"name":"Test Lidmaatschap"},"user_id":"8","state":"PENDING","subscription_id":72,
+ * "subscription":{"id":3,"name":"Renewal","price":"20.00","duration":"365"},"start_at":{"date":"2020-12-11","formatted":"2020-12-11"},"expires_at":{"date":"2022-12-30","formatted":"2022-12-30"},
+ * "last_payment_mode":"TRANSFER","comment":null,"available_actions":[]}]}
  */
     /**
      * Json Column Layout for bootstrap table

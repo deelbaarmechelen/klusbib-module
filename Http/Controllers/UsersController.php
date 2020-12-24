@@ -72,7 +72,10 @@ class UsersController extends Controller
 //        $this->authorize('create', User::class);
         $user = new User();
 
-        return view('klusbib::users/new')->with('item', $user);
+        return view('klusbib::users/new')
+            ->with('item', $user)
+            ->with('allowed_new_memberships', $this->getAllowedNewMembershipTypes("NONE", "DISABLED"))
+            ->with('allowed_payment_modes', $this->getAllowedPaymentModes());
     }
 
     /**
@@ -108,47 +111,56 @@ class UsersController extends Controller
         $user->comment               = $request->input('comment');
         Log::info('User: ' . \json_encode($user));
 
-        // TODO: block possibility to create enrolment with payment mode MOLLIE
         if ($user->save()) {
+            $paymentMode = $request->input('payment_mode');
+            $paymentCompleted = false;
+            if ($paymentMode == "TRANSFER_DONE") {
+                $paymentMode = "TRANSFER";
+                $paymentCompleted = true;
+            }
+            if ($paymentMode == "TRANSFER_STARTED") {
+                $paymentMode = "TRANSFER";
+                $paymentCompleted = false;
+            }
             if ($enrolmentType === "NONE") {
                 // no enrolment -> simply save user
                 return redirect()->route("klusbib.users.index")->with('success', trans('klusbib::admin/users/message.create.success'));
+            } else if ($enrolmentType === "RENEWAL") {
+                $errorMessage = trans('klusbib::admin/users/message.renewal_new_user.error');
+                return redirect()->back()->withInput()->with('error', $errorMessage);
+            } else if ($request->input("payment_mode") === "MOLLIE") {
+                // block possibility to create enrolment with payment mode MOLLIE
+                $errorMessage = trans('klusbib::admin/users/message.unsupported.payment_mode');
+                return redirect()->back()->withInput()->with('error', $errorMessage);
             } else {
                 $now = new \DateTime();
-                $orderId = $user->employee_num . '-' . $now->format('YmdHis');
+                $orderId = $user->user_id . '-' . $now->format('YmdHis');
 
                 // Send enrolment request to create membership
                 $params = array(
-                    'membership_start_date' => $request->input('membership_start_date'),
-                    'membership_end_date'   => $request->input('membership_end_date'),
-                    'paymentMode'           => $request->input('payment_mode'),
+                    'startMembershipDate' => $request->input('membership_start_date'),
+//                    'membership_end_date'   => $request->input('membership_end_date'),
+                    'paymentMode'           => $paymentMode,
+                    'paymentCompleted'      => $paymentCompleted,
                     //paymentMean -> only used for Mollie payment mode, which is not available from Snipe
-                    'accept_terms_date'     => $request->input('accept_terms_date'),
-                    'enrolment_type'        => $enrolmentType,
+                    'acceptTermsDate'       => $request->input('accept_terms_date'),
+                    'membershipType'        => $enrolmentType,
                     'orderId'               => $orderId,
-                    'userId'                => $user->employee_num
+                    'userId'                => $user->user_id
                 );
 
                 if ($this->apiClient->api('enrolment')->request($params)) {
                     return redirect()->route("klusbib.users.index")->with('success', trans('klusbib::admin/users/message.create.success'));
                 } else {
                     $errorMessage = trans('klusbib::admin/users/message.enrolment.error');
+                    $errorMessage .= $this->formatApiErrorMessage($this->apiClient->errors());
                     return redirect()->back()->withInput()->with('error', $errorMessage);
                 }
             }
         }
         $errorMessage = trans('klusbib::admin/users/message.create.error');
-        $errors = Arr::get($user->getClientError(), 'errors');
-        if (is_array($errors)) {
-            $errorMessage .= " (API fout: ";
-            foreach($errors as $key => $value) {
-                if (\is_string($key)) {
-                    $errorMessage .= $key . ": ";
-                }
-                $errorMessage .= $value;
-            }
-            $errorMessage .= ")";
-        }
+        $errorMessage .= $this->formatApiErrorMessage($user->getClientError());
+
         // Show generic failure message
         return redirect()->back()->withInput()
             ->with('error', $errorMessage);
@@ -157,9 +169,6 @@ class UsersController extends Controller
     /**
      * Returns a view that displays the edit user form
      *
-     * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v1.0]
-     * @param $permissions
      * @return View
      * @internal param int $id
      */
@@ -169,17 +178,94 @@ class UsersController extends Controller
             return redirect()->route('klusbib.users.index')->with('error', trans('klusbib::admin/users/message.does_not_exist'));
         }
         Log::debug("User found: " . \json_encode($item));
-        // {"user_id":2,"user_ext_id":"2","state":"DELETED","firstname":"Dummy","lastname":"Dummy","email":"bernard@klusbib.be",
-        //"email_state":"CONFIRM_EMAIL","role":"member","membership_start_date":"2020-06-25","membership_end_date":"2021-06-25","birth_date":null,
-        //"address":null,"postal_code":null,"city":null,"phone":null,"mobile":null,"registration_number":null,"payment_mode":"STROOM",
-        //"accept_terms_date":"2020-06-25","created_at":"{\"date\":\"2020-06-25 00:25:19.000000\",\"timezone_type\":3,\"timezone\":\"Europe\\\/Berlin\"}"
-        //,"updated_at":"{\"date\":\"2020-06-25 00:33:44.000000\",\"timezone_type\":3,\"timezone\":\"Europe\\\/Berlin\"}","reservations":"[]"}
         $item->id = $item->user_id; // view expects id to be set to distinguish between create (POST) and update (PUT)
 
-        // TODO: set correct membership type
-        $item->membership_type = "NONE";
-        return view('klusbib::users/edit', compact('item'));
+        // set membership type
+        if (empty($item->active_membership) || empty(\json_decode($item->active_membership))) {
+            $item->membership_type = "NONE";
+            $item->membership_start_date = null;
+            $item->membership_end_date = null;
+            $item->new_membership_start_date = null;
+            $item->payment_mode = "UNKNOWN";
+        } else {
+            Log::debug(json_encode($item->active_membership) );
+            $membership = \json_decode($item->active_membership);
+            // {"id":2,"status":"ACTIVE","start_at":"2020-06-25T22:00:00.000000Z","expires_at":"2021-06-25T22:00:00.000000Z","subscription_id":1,"contact_id":2,"last_payment_mode":"PAYCONIQ","comment":null,"created_at":"2020-06-24T22:25:19.000000Z","updated_at":"2020-07-21T21:59:54.000000Z","deleted_at":null}
+            $item->membership_type = $this->convertToMembershipType($membership->subscription_id);
+            $item->membership_start_date = $membership->start_at;
+            $item->membership_end_date = $membership->expires_at;
+            $newMembershipStartDate = new \DateTime($membership->expires_at);
+            $newMembershipStartDate = $newMembershipStartDate->add(new \DateInterval('P1D'));
+            $item->new_membership_start_date = $newMembershipStartDate->format('Y-m-d');
+            $item->payment_mode = $membership->last_payment_mode;
+        }
+        $data = compact('item');
+//        $data["allowed_new_memberships"] = $this->getAllowedNewMembershipTypes($item->membership_type, $item->state);
+//        $data["allowed_payment_modes"] = $this->getAllowedPaymentModes();
+        Log::debug("data: " . \json_encode($data));
+        return view('klusbib::users/edit', $data)
+            ->with('allowed_new_memberships', $this->getAllowedNewMembershipTypes($item->membership_type, $item->state))
+            ->with('allowed_payment_modes', $this->getAllowedPaymentModes());
+    }
 
+    private function convertToMembershipType($subscriptionId) {
+        if ($subscriptionId == 1) {
+            return "REGULAR";
+        } elseif ($subscriptionId == 2) {
+            return "TEMPORARY";
+        } elseif ($subscriptionId == 3) {
+            return "RENEWAL";
+        } elseif ($subscriptionId == 4) {
+            return "STROOM";
+        } else {
+            return "NONE"; // or throw exception??
+        }
+    }
+    /**
+     * @param $currentMembershipType current user membership type
+     * @param $currentState current user state
+     * @return array
+     */
+    private function getAllowedNewMembershipTypes($currentMembershipType, $currentState): array
+    {
+        $allowed_new_memberships = array();
+        array_push($allowed_new_memberships, "NONE"); // geen aanpassing aan lidmaatschap
+        if ($currentMembershipType == "NONE" || $currentMembershipType == "TEMPORARY"
+            || ($currentMembershipType == "STROOM" && $currentState == "EXPIRED")) {
+            array_push($allowed_new_memberships, "REGULAR");
+        }
+        if ($currentMembershipType == "NONE") {
+            array_push($allowed_new_memberships, "TEMPORARY");
+        }
+        if ($currentMembershipType != "NONE" && $currentMembershipType != "TEMPORARY") {
+            array_push($allowed_new_memberships, "RENEWAL");
+        }
+        array_push($allowed_new_memberships, "STROOM");
+        return $allowed_new_memberships;
+    }
+
+    /**
+     * @return array of allowed payment modes
+     */
+    private function getAllowedPaymentModes(): array
+    {
+        $allowed_payment_modes = array(
+//            "MOLLIE", -> not allowed on inventory, only to be used for online payment from public website
+            "PAYCONIQ",
+            "TRANSFER_STARTED",
+            "TRANSFER_DONE",
+            "CASH",
+            "STROOM",
+            "MBON",
+            "KDOBON",
+            "LETS",
+            "OVAM",
+            "SPONSORING",
+            "OTHER",
+//            "UNKNOWN",
+//            "NONE" -> TODO: to check if NONE should be a valid payment mode for free subscriptions
+        );
+        return $allowed_payment_modes;
     }
 
     /**
@@ -201,11 +287,11 @@ class UsersController extends Controller
         }
         Log::info('User exists: ' . $user->exists);
 //        $this->authorize('update', $user);
-
+        Log::debug('Request data: ' . \json_encode($request->all()));
         $user->firstname = $request->input('firstname');
         $user->lastname = $request->input('lastname');
         $user->role = $request->input('role');
-        $user->state             = $request->input('state');
+        $user->state = $request->input('state');
         $user->email = $request->input('email');
         $user->email_state = $request->input('email_state');
         $user->phone = $request->input('phone');
@@ -215,16 +301,14 @@ class UsersController extends Controller
         $user->postal_code = $request->input('postal_code');
         $user->registration_number = $request->input('registration_number');
 
-        $membershipType = $request->input('membership_type');
-        $user->membership_start_date   = $request->input('membership_start_date');
-        $user->membership_end_date   = $request->input('membership_end_date');
+        $origMembershipType = $request->input('membership_type');
+        $newMembershipType = $request->input('new_membership_type');
         $user->payment_mode = $request->input('payment_mode');
         $user->accept_terms_date = $request->input('accept_terms_date');
 //        $user->comment           = $request->input('notes');
         Log::info('User: ' . \json_encode($user));
 
         if ($user->save()) {
-            $origMembershipType = "NONE";
             // FIXME: implement possible changes of membership type or completely disable possibility to modify membership
             //        would require a separate page for enrolment...
             // allowed transitions:
@@ -234,38 +318,124 @@ class UsersController extends Controller
             // STROOM -> NONE (expiration >1 jaar), STROOM -> RENEWAL (Renewal), STROOM -> REGULAR (regular enrolment, expired > approx 6 months)
             // RENEWAL -> NONE (expiration >1 jaar), RENEWAL -> STROOM (Stroom enrolment), RENEWAL -> RENEWAL (Renewal)
 
-            if ($origMembershipType == $membershipType) {
+            if ($newMembershipType == "NONE") {
                 return redirect()->route('klusbib.users.show', ['user' => $userId])
                     ->with('success', trans('klusbib::admin/users/message.update.success'));
             }
+            Log::info('Membership type to be updated from ' . $origMembershipType . ' to ' . $newMembershipType);
+            $paymentMode = $request->input('payment_mode');
+            $paymentCompleted = false;
+            if ($paymentMode == "TRANSFER_DONE") {
+                $paymentMode = "TRANSFER";
+                $paymentCompleted = true;
+            }
+            if ($paymentMode == "TRANSFER_STARTED") {
+                $paymentMode = "TRANSFER";
+                $paymentCompleted = false;
+            }
+            if ($paymentMode == "PAYCONIQ"
+                || $paymentMode == "CASH"
+                || $paymentMode == "STROOM"
+                || $paymentMode == "MBON"
+                || $paymentMode == "KDOBON"
+                || $paymentMode == "LETS"
+                || $paymentMode == "OVAM"
+                || $paymentMode == "SPONSORING"
+                || $paymentMode == "OTHER"
+            ) {
+                $paymentCompleted = true;
+            }
 
-
-
-            if ($membershipType === "NONE") {
+            if ($newMembershipType === "NONE") {
                 // no enrolment -> simply save user
-                return redirect()->route("klusbib.users.index")->with('success', trans('klusbib::admin/users/message.create.success'));
-            } else {
+                return redirect()->route("klusbib.users.show", ['user' => $userId])
+                    ->with('success', trans('klusbib::admin/users/message.update.success'));
+            } elseif ( ($origMembershipType === "NONE"
+                        && ($newMembershipType === "REGULAR" || $newMembershipType === "TEMPORARY") )
+                // FIXME: should be considered as a special case of renewal? -> currently fails with "Enrolment not supported for user state ACTIVE"
+                    || ($origMembershipType === "TEMPORARY"
+                        && ($newMembershipType === "REGULAR")
+                    || $newMembershipType === "STROOM" )
+            ){
                 $now = new \DateTime();
-                $orderId = $user->employee_num . '-' . $now->format('YmdHis');
+                $orderId = $user->user_id . '-' . $now->format('YmdHis');
 
                 // Send enrolment request to create membership
                 $params = array(
-                    'membership_start_date' => $request->input('membership_start_date'),
-                    'membership_end_date'   => $request->input('membership_end_date'),
-                    'paymentMode'           => $request->input('payment_mode'),
+                    'membershipStart'       => $request->input('new_membership_start_date'),
+//                    'membershipExpiration'  => $request->input('membership_end_date'),
+                    'paymentMode'           => $paymentMode,
+                    'paymentCompleted'      => $paymentCompleted,
                     //paymentMean -> only used for Mollie payment mode, which is not available from Snipe
-                    'accept_terms_date'     => $request->input('accept_terms_date'),
-                    'enrolment_type'        => $membershipType,
+                    'acceptTermsDate'       => $request->input('accept_terms_date'),
+                    'membershipType'        => $newMembershipType,
                     'orderId'               => $orderId,
-                    'userId'                => $user->employee_num
+                    'userId'                => $user->user_id
                 );
 
-                if ($this->apiClient->api('enrolment')->request($params)) {
-                    return redirect()->route("klusbib.users.index")->with('success', trans('klusbib::admin/users/message.create.success'));
+                $response = $this->apiClient->api('enrolment')->request($params);
+                if ($response) {
+                    // In case of response 208 (already enrolled), new membership is not created -> considered as error
+                    // -> check if response contains the created enrolment <-> contains warning/error message
+                    if (is_array($response) && isset($response["message"]) ) {
+                        Log::info("API enrolment response: " . \json_encode($response) . " - " . $response["message"] );
+                        return redirect()->back()->withInput()->with('error', $response["message"]);
+                    } else {
+                        return redirect()->route("klusbib.users.show", ['user' => $userId])
+                            ->with('success', trans('klusbib::admin/users/message.update.success'));
+                    }
                 } else {
                     $errorMessage = trans('klusbib::admin/users/message.enrolment.error');
+                    $errorMessage .= $this->formatApiErrorMessage($this->apiClient->errors());
                     return redirect()->back()->withInput()->with('error', $errorMessage);
                 }
+            } elseif ($origMembershipType != "NONE" && $origMembershipType != "TEMPORARY" && $newMembershipType === "RENEWAL"){
+                $now = new \DateTime();
+                $orderId = $user->user_id . '-' . $now->format('YmdHis');
+
+                // Send enrolment request to renew membership
+                $params = array(
+                    'paymentMode'           => $paymentMode,
+                    'paymentCompleted'      => $paymentCompleted,
+                    //paymentMean -> only used for Mollie payment mode, which is not available from Snipe
+                    'acceptTermsDate'       => $request->input('accept_terms_date'),
+                    'membershipType'        => $newMembershipType,
+                    'orderId'               => $orderId,
+                    'userId'                => $user->user_id
+                );
+                if ($this->apiClient->api('enrolment')->request($params)) {
+                    return redirect()->route("klusbib.users.show", ['user' => $userId])
+                        ->with('success', trans('klusbib::admin/users/message.update.success'));
+                } else {
+                    $errorMessage = trans('klusbib::admin/users/message.enrolment.error');
+                    $errorMessage .= $this->formatApiErrorMessage($this->apiClient->errors());
+                    return redirect()->back()->withInput()->with('error', $errorMessage);
+                }
+            } elseif ($newMembershipType === "STROOM"){
+                $now = new \DateTime();
+                $orderId = $user->user_id . '-' . $now->format('YmdHis');
+
+                // Send enrolment request to renew membership
+                $params = array(
+                    'paymentMode'           => $paymentMode,
+                    'paymentCompleted'      => $paymentCompleted,
+                    //paymentMean -> only used for Mollie payment mode, which is not available from Snipe
+                    'acceptTermsDate'       => $request->input('accept_terms_date'),
+                    'membershipType'        => $newMembershipType,
+                    'orderId'               => $orderId,
+                    'userId'                => $user->user_id
+                );
+                if ($this->apiClient->api('enrolment')->request($params)) {
+                    return redirect()->route("klusbib.users.show", ['user' => $userId])
+                        ->with('success', trans('klusbib::admin/users/message.update.success'));
+                } else {
+                    $errorMessage = trans('klusbib::admin/users/message.enrolment.error');
+                    $errorMessage .= $this->formatApiErrorMessage($this->apiClient->errors());
+                    return redirect()->back()->withInput()->with('error', $errorMessage);
+                }
+            } else {
+                return redirect()->back()->withInput()
+                    ->with('error', trans('klusbib::admin/users/message.update.error') . " (Not supported)");
             }
         }
     }
@@ -285,6 +455,17 @@ class UsersController extends Controller
 //            $this->authorize('view', $user);
             $user->id = $user->user_id;
             Log::info(\json_encode(compact('user')));
+            // set membership type
+            if (!$user->active_membership || empty(\json_decode($user->active_membership))) {
+                $user->membership_type = "NONE";
+            } else {
+//            Log::debug($item->active_membership);
+                $membership = \json_decode($user->active_membership);
+                $user->active_membership = $membership;
+                $user->membership_type = $this->convertToMembershipType($membership->subscription_id);
+            }
+            // TODO: also return an array of memberships
+
             return view('klusbib::users/view', compact('user'));
         }
         return redirect()->route('klusbib.users.index')
@@ -301,5 +482,24 @@ class UsersController extends Controller
         }
         return $output;
     }
-
+    /**
+     * @param $clientError MessageBag containing API client error(s)
+     * @return string formatted error message to be appended to a general error message
+     */
+    private function formatApiErrorMessage($clientError): string
+    {
+        $errorMessage = "";
+        $errors = Arr::get($clientError, 'errors');
+        if (is_array($errors)) {
+            $errorMessage .= " (API fout: ";
+            foreach ($errors as $key => $value) {
+                if (\is_string($key)) {
+                    $errorMessage .= $key . ": ";
+                }
+                $errorMessage .= $value;
+            }
+            $errorMessage .= ")";
+        }
+        return $errorMessage;
+    }
 }

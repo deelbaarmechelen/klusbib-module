@@ -26,4 +26,10 @@ return array(
         'success' => 'De gebruiker is met succes verwijderd.'
     ),
 
+    'renewal_new_user' => array(
+        'error'   => 'Lidmaatschap hernieuwing niet mogelijk voor nieuwe leden',
+    ),
+    'unsupported' => array(
+        'payment_mode'   => 'Betalingswijze niet ondersteund',
+    ),
 );

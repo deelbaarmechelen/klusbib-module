@@ -45,7 +45,13 @@ class MembershipsController extends Controller
         $params["_page"] = intdiv($offset, $limit) +1;
         $params["_sortDir"] = $order;
         $params["_sortField"] = $sort;
-        if ($request->filled('search')) {
+        if ($request->filled('user_id') ) {
+            $params["user_id"] = $request->input('user_id');
+        }
+        if ($request->filled('status') ) {
+            $params["status"] = $request->input('status');
+        }
+        if ($request->filled('search') ) {
             $params["_query"] = $request->input('search');
         }
         $membershipsPaginator = \Modules\Klusbib\Models\Api\Membership::all($params);

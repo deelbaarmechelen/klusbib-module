@@ -27,6 +27,10 @@
                 actions += '<a href="{{ url('/') }}/' + dest + '/' + row.user_id + '/clone" class="btn btn-sm btn-info" data-tooltip="true" title="Clone"><i class="fa fa-copy"></i></a>&nbsp;';
             }
 
+            if ((row.available_actions) && (row.available_actions.show === true)) {
+                actions += '<a href="{{ url('/') }}/' + dest + '/' + row.user_id + '" class="btn btn-sm btn-primary" data-tooltip="true" title="Show"><i class="fa fa-eye"></i></a>&nbsp;';
+            }
+
             if ((row.available_actions) && (row.available_actions.update === true)) {
                 actions += '<a href="{{ url('/') }}/' + dest + '/' + row.user_id + '/edit" class="btn btn-sm btn-warning" data-tooltip="true" title="Update"><i class="fa fa-pencil"></i></a>&nbsp;';
             }
@@ -106,12 +110,14 @@
 
     function subscriptionNameObjFormatter() {
         return function (value,row) {
-            var info = '';
-            if ((value) && (value.name) && (value.price) && (value.duration)) {
-                return '<span>' + value.name + ' (' + value.price + ' eur - ' + value.duration + 'd)</span>';
-            }
+
             if ((value) && (value.name)) {
-                return '<span>' + value.name +'</span>';
+                var name = value.name;
+                // var name = trans('klusbib::types/membershiptypes.' . value.name );
+                if ((value.price) && (value.duration)) {
+                    return '<span>' + name + ' (' + value.price + ' eur - ' + value.duration + 'd)</span>';
+                }
+                return '<span>' + name +'</span>';
             }
             return '';
         }

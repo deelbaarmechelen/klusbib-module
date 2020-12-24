@@ -32,7 +32,7 @@ class UsersTransformer
             'firstname' => e( $user->firstname),
             'lastname' => e( $user->lastname),
             'email' => e($user->email),
-            'email_state' => e($user->email_state),
+            'email_state' => __('klusbib::types/emailstates.' . strtoupper(e($user->email_state)), array(), 'nl'),
             'role' => e($user->role),
             'membership_start_date' => Helper::getFormattedDateObject($user->membership_start_date, 'date'),
             'membership_end_date' => Helper::getFormattedDateObject($user->membership_end_date, 'date'),
@@ -42,13 +42,16 @@ class UsersTransformer
             'phone' => ($user->phone) ? e($user->phone) : null,
             'mobile' => ($user->mobile) ? e($user->mobile) : null,
             'registration_number' => (int) $user->registration_number,
-            'payment_mode' => ($user->payment_mode) ? e($user->payment_mode) : null,
+            'payment_mode' => ($user->payment_mode) ?
+                __('klusbib::types/paymentmodes.' . strtoupper(e($user->payment_mode)), array(), 'nl')
+                : null,
             'accept_terms_date' => Helper::getFormattedDateObject($user->accept_terms_date, 'date'),
             'created_at' => (isset($user->created_at) && isset($user->created_at->date)) ? Helper::getFormattedDateObject($user->created_at->date, 'datetime') : null,
             'updated_at' => (isset($user->updated_at) && isset($user->updated_at->date)) ? Helper::getFormattedDateObject($user->updated_at->date, 'datetime') : null,
             ];
 
         $permissions_array['available_actions'] = [
+            'show' => (Gate::allows('show', User::class) && ($user->deleted_at==''))  ? true : false,
             'update' => (Gate::allows('update', User::class) && ($user->deleted_at==''))  ? true : false,
 //            'delete' => (Gate::allows('delete', User::class) && ($user->deleted_at=='') && ($user->assets_count == 0) && ($user->licenses_count == 0)  && ($user->accessories_count == 0)  && ($user->consumables_count == 0)) ? true : false,
 //            'clone' => (Gate::allows('create', User::class) && ($user->deleted_at=='')) ,

@@ -72,17 +72,7 @@ class DeliveriesController extends Controller
         }
 //        return redirect()->back()->withInput()->withErrors($delivery->getErrors());
         $errorMessage = trans('klusbib::admin/deliveries/message.create.error');
-        $errors = Arr::get($delivery->getClientError(), 'errors');
-        if (is_array($errors)) {
-            $errorMessage .= " (API fout: ";
-            foreach($errors as $key => $value) {
-                if (\is_string($key)) {
-                    $errorMessage .= $key . ": ";
-                }
-                $errorMessage .= $value;
-            }
-            $errorMessage .= ")";
-        }
+        $errorMessage .= $this->formatApiErrorMessage($delivery->getClientError());
         // Show generic failure message
         return redirect()->back()->withInput()
             ->with('error', $errorMessage);
@@ -188,17 +178,7 @@ class DeliveriesController extends Controller
 //        return redirect()->back()->withInput()->withErrors($delivery->getErrors());
 
         $errorMessage = trans('klusbib::admin/deliveries/message.update.error');
-        $errors = Arr::get($delivery->getClientError(), 'errors');
-        if (is_array($errors)) {
-            $errorMessage .= " (API fout: ";
-            foreach($errors as $key => $value) {
-                if (\is_string($key)) {
-                    $errorMessage .= $key . ": ";
-                }
-                $errorMessage .= $value;
-            }
-            $errorMessage .= ")";
-        }
+        $errorMessage .= $this->formatApiErrorMessage($delivery->getClientError());
         // Show generic failure message
         return redirect()->route('klusbib.deliveries.edit', ['delivery' => $deliveryId])
             ->with('error', $errorMessage);
@@ -294,7 +274,7 @@ class DeliveriesController extends Controller
 
             // Redirect to the deliveries show page
             return redirect()->route('klusbib.deliveries.show', ['delivery' => $deliveryId])
-                ->with('success', trans('klusbib::admin/deliveries/message.add_item.success', compact('id')));
+                ->with('success', trans('klusbib::admin/deliveries/message.add_item.success'));
 
         }
         // There are still deliveries in use.
@@ -328,13 +308,34 @@ class DeliveriesController extends Controller
 
             // Redirect to the deliveries show page
             return redirect()->route('klusbib.deliveries.show', ['delivery' => $deliveryId])
-                ->with('success', trans('klusbib::admin/deliveries/message.remove_item.success', compact('id')));
+                ->with('success', trans('klusbib::admin/deliveries/message.remove_item.success'));
 
         }
         // There are still deliveries in use.
         return redirect()->route('klusbib.deliveries.index')
             ->with('error', trans('klusbib::admin/deliveries/message.remove_item.error'));
 
+    }
+
+    /**
+     * @param $clientError MessageBag containing API client error(s)
+     * @return string formatted error message to be appended to a general error message
+     */
+    private function formatApiErrorMessage($clientError): string
+    {
+        $errorMessage = "";
+        $errors = Arr::get($clientError, 'errors');
+        if (is_array($errors)) {
+            $errorMessage .= " (API fout: ";
+            foreach ($errors as $key => $value) {
+                if (\is_string($key)) {
+                    $errorMessage .= $key . ": ";
+                }
+                $errorMessage .= $value;
+            }
+            $errorMessage .= ")";
+        }
+        return $errorMessage;
     }
 
 }

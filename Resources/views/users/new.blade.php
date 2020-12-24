@@ -257,18 +257,17 @@
                       <label class="col-md-3 control-label" for="membership_type">{{ trans('klusbib::admin/users/general.membership_type') }} </label>
                       <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'membership_type')) ? ' required' : '' }}">
                           <select x-model="membershiptype" class="form-control"  name="membership_type" id="membership_type_select">{{ Input::old('membership_type', $item->membership_type) }}
-                              <option value="NONE" >Geen</option>
-                              <option value="REGULAR" >Standaard</option>
-                              <option value="RENEWAL" >Hernieuwing</option>
-                              <option value="STROOM" >Stroom</option>
-                              <option value="TEMPORARY" >Proeflidmaatschap</option>
+                              @foreach ( $allowed_new_memberships as $value )
+                                  <option value="{{$value}}" {{ (Input::old("membership_type", $item->membership_type) == $value ? "selected":"") }}>
+                                      {{trans( 'klusbib::types/membershiptypes.'.$value)}}</option>
+                              @endforeach
                           </select>
                           {!! $errors->first('membership_type', '<span class="alert-msg">:message</span>') !!}
                       </div>
                   </div>
 
                   <!-- Membership start date -->
-                  <div x-show="membershiptype !== 'NONE'" class="form-group {{ $errors->has('membership_start_date') ? 'has-error' : '' }}">
+                  <div x-show="membershiptype !== 'NONE' && membershiptype !== 'STROOM'" class="form-group {{ $errors->has('membership_start_date') ? 'has-error' : '' }}">
                       <label class="col-md-3 control-label" for="membership_start_date">{{ trans('klusbib::admin/users/table.membership_start_date') }} </label>
                       <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'membership_start_date')) ? ' required' : '' }}">
                           <input class="form-control" type="date" name="membership_start_date" id="membership_start_date" value="{{ Input::old('membership_start_date', $item->membership_start_date) }}" />
@@ -277,31 +276,23 @@
                   </div>
 
                   <!-- Membership end date -->
-                  <div x-show="membershiptype !== 'NONE'" class="form-group {{ $errors->has('membership_end_date') ? 'has-error' : '' }}">
-                      <label class="col-md-3 control-label" for="membership_end_date">{{ trans('klusbib::admin/users/table.membership_end_date') }} </label>
-                      <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'membership_end_date')) ? ' required' : '' }}">
-                          <input class="form-control" type="date" name="membership_end_date" id="membership_end_date" value="{{ Input::old('membership_end_date', $item->membership_end_date) }}" />
-                          {!! $errors->first('membership_end_date', '<span class="alert-msg">:message</span>') !!}
-                      </div>
-                  </div>
+                  {{--<div x-show="membershiptype !== 'NONE'" class="form-group {{ $errors->has('membership_end_date') ? 'has-error' : '' }}">--}}
+                      {{--<label class="col-md-3 control-label" for="membership_end_date">{{ trans('klusbib::admin/users/table.membership_end_date') }} </label>--}}
+                      {{--<div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'membership_end_date')) ? ' required' : '' }}">--}}
+                          {{--<input class="form-control" type="date" name="membership_end_date" id="membership_end_date" value="{{ Input::old('membership_end_date', $item->membership_end_date) }}" />--}}
+                          {{--{!! $errors->first('membership_end_date', '<span class="alert-msg">:message</span>') !!}--}}
+                      {{--</div>--}}
+                  {{--</div>--}}
 
                   <!-- Payment mode -->
                   <div x-show="membershiptype !== 'NONE'" class="form-group{{ $errors->has('payment_mode') ? ' has-error' : '' }}">
                       <label class="col-md-3 control-label" for="payment_mode">{{ trans('klusbib::admin/users/table.payment_mode') }}</label>
                       <div class="col-md-4">
                           <select class="form-control"  name="payment_mode" id="payment_mode_select">{{ Input::old('payment_mode', $item->payment_mode) }}
-                              {{--Mollie not supported on Snipe IT--}}
-                              {{--<option value="MOLLIE" {{ (Input::old("payment_mode", $item->payment_mode) == "MOLLIE" ? "selected":"") }}>Mollie (online betaling)</option>--}}
-                              <option value="TRANSFER" {{ (Input::old("payment_mode", $item->payment_mode) == "TRANSFER" ? "selected":"") }}>Overschrijving</option>
-                              <option value="CASH" {{ (Input::old("payment_mode", $item->payment_mode) == "CASH" ? "selected":"") }}>Cash</option>
-                              <option value="PAYCONIQ" {{ (Input::old("payment_mode", $item->payment_mode) == "PAYCONIQ" ? "selected":"") }}>Payconiq</option>
-                              <option value="STROOM" {{ (Input::old("payment_mode", $item->payment_mode) == "STROOM" ? "selected":"") }}>Stroom</option>
-                              <option value="OVAM" {{ (Input::old("payment_mode", $item->payment_mode) == "OVAM" ? "selected":"") }}>OVAM personeelslid</option>
-                              <option value="LETS" {{ (Input::old("payment_mode", $item->payment_mode) == "LETS" ? "selected":"") }}>LETS</option>
-                              <option value="MBON" {{ (Input::old("payment_mode", $item->payment_mode) == "MBON" ? "selected":"") }}>Mechelen Bon</option>
-                              <option value="SPONSORING" {{ (Input::old("payment_mode", $item->payment_mode) == "SPONSORING" ? "selected":"") }}>Sponsoring</option>
-                              <option value="OTHER" {{ (Input::old("payment_mode", $item->payment_mode) == "OTHER" ? "selected":"") }}>Andere</option>
-                              <option value="UNKNOWN" {{ (Input::old("payment_mode", $item->payment_mode) == "UNKNOWN" ? "selected":"") }}>Onbekend</option>
+                              @foreach ( $allowed_payment_modes as $value )
+                                  <option value="{{$value}}" {{ (Input::old("payment_mode", $item->payment_mode) == $value ? "selected":"") }}>
+                                      {{trans( 'klusbib::types/paymentmodes.'.$value)}}</option>
+                              @endforeach
                           </select>
                           {!! $errors->first('payment_mode', '<span class="alert-msg">:message</span>') !!}
                       </div>

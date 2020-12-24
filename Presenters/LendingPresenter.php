@@ -74,7 +74,7 @@ class LendingPresenter extends Presenter
             [
                 "field" => "user",
                 "searchable" => true,
-                "sortable" => true,
+                "sortable" => false,
                 "switchable" => true,
                 "title" => trans('klusbib::admin/lendings/table.name'),
                 "visible" => true,

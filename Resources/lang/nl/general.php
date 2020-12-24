@@ -6,6 +6,7 @@
         'checkin'               => 'Inleveren',
         'deliveries'            => 'Leveringen',
         'id'                    => 'Id',
+        'inventory'             => 'Inventaris',
         'lendings'              => 'Ontleningen',
         'memberships'           => 'Lidmaatschappen',
         'name'			        => 'Klusbib',
