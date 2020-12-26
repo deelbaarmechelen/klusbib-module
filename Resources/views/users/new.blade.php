@@ -285,7 +285,7 @@
                   {{--</div>--}}
 
                   <!-- Payment mode -->
-                  <div x-show="membershiptype !== 'NONE'" class="form-group{{ $errors->has('payment_mode') ? ' has-error' : '' }}">
+                  <div x-show="membershiptype === 'REGULAR'" class="form-group{{ $errors->has('payment_mode') ? ' has-error' : '' }}">
                       <label class="col-md-3 control-label" for="payment_mode">{{ trans('klusbib::admin/users/table.payment_mode') }}</label>
                       <div class="col-md-4">
                           <select class="form-control"  name="payment_mode" id="payment_mode_select">{{ Input::old('payment_mode', $item->payment_mode) }}

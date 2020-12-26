@@ -133,6 +133,11 @@ class UsersController extends Controller
                 $errorMessage = trans('klusbib::admin/users/message.unsupported.payment_mode');
                 return redirect()->back()->withInput()->with('error', $errorMessage);
             } else {
+                if ($enrolmentType === "STROOM") {
+                    $paymentMode = "STROOM";
+                } elseif ($enrolmentType === "TEMPORARY") {
+                    $paymentMode = "OTHER";
+                }
                 $now = new \DateTime();
                 $orderId = $user->user_id . '-' . $now->format('YmdHis');
 
@@ -324,6 +329,11 @@ class UsersController extends Controller
             }
             Log::info('Membership type to be updated from ' . $origMembershipType . ' to ' . $newMembershipType);
             $paymentMode = $request->input('payment_mode');
+            if ($newMembershipType === "STROOM") {
+                $paymentMode = "STROOM";
+            } elseif ($newMembershipType === "TEMPORARY") {
+                $paymentMode = "OTHER";
+            }
             $paymentCompleted = false;
             if ($paymentMode == "TRANSFER_DONE") {
                 $paymentMode = "TRANSFER";
