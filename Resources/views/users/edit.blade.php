@@ -135,28 +135,28 @@
                       <label class="col-md-3 control-label" for="role">{{ trans('klusbib::admin/users/table.role') }} </label>
                       <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'role')) ? ' required' : '' }}">
                           <select class="form-control"  name="role" id="role_select">{{ Input::old('role', $item->role) }}
-                              <option value="admin" {{ (Input::old("role", $item->role) == "admin" ? "selected":"") }}>Admin</option>
-                              <option value="member" {{ (Input::old("role", $item->role) == "member" ? "selected":"") }}>Lid</option>
+                              <option value="member" {{ ((Input::old("role", $item->role) == "member" || Input::old("role", $item->role) == "") ? "selected":"") }}>Lid</option>
                               <option value="supporter" {{ (Input::old("role", $item->role) == "supporter" ? "selected":"") }}>Steunlid</option>
+                              <option value="admin" {{ (Input::old("role", $item->role) == "admin" ? "selected":"") }}>Admin</option>
                           </select>
                           {!! $errors->first('role', '<span class="alert-msg">:message</span>') !!}
                       </div>
                   </div>
 
                   <!-- State -->
-                  <div class="form-group {{ $errors->has('state') ? 'has-error' : '' }}">
-                      <label class="col-md-3 control-label" for="state">{{ trans('general.state') }} </label>
-                      <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'state')) ? ' required' : '' }}">
-                          <select class="form-control"  name="state" id="state_select">{{ Input::old('state', $item->state) }}
-                              <option value="CHECK_PAYMENT" {{ (Input::old("state", $item->state) == "CHECK_PAYMENT" ? "selected":"") }}>Betaling nakijken</option>
-                              <option value="ACTIVE" {{ (Input::old("state", $item->state) == "ACTIVE" ? "selected":"") }}>Actief</option>
-                              <option value="EXPIRED" {{ (Input::old("state", $item->state) == "EXPIRED" ? "selected":"") }}>Vervallen</option>
-                              <option value="DISABLED" {{ (Input::old("state", $item->state) == "DISABLED" ? "selected":"") }}>Inactief</option>
-                              <option value="DELETED" {{ (Input::old("state", $item->state) == "DELETED" ? "selected":"") }}>Verwijderd</option>
-                          </select>
-                          {!! $errors->first('state', '<span class="alert-msg">:message</span>') !!}
-                      </div>
-                  </div>
+                  {{--<div class="form-group {{ $errors->has('state') ? 'has-error' : '' }}">--}}
+                      {{--<label class="col-md-3 control-label" for="state">{{ trans('general.state') }} </label>--}}
+                      {{--<div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'state')) ? ' required' : '' }}">--}}
+                          {{--<select class="form-control"  name="state" id="state_select">{{ Input::old('state', $item->state) }}--}}
+                              {{--<option value="CHECK_PAYMENT" {{ (Input::old("state", $item->state) == "CHECK_PAYMENT" ? "selected":"") }}>Betaling nakijken</option>--}}
+                              {{--<option value="ACTIVE" {{ (Input::old("state", $item->state) == "ACTIVE" ? "selected":"") }}>Actief</option>--}}
+                              {{--<option value="EXPIRED" {{ (Input::old("state", $item->state) == "EXPIRED" ? "selected":"") }}>Vervallen</option>--}}
+                              {{--<option value="DISABLED" {{ (Input::old("state", $item->state) == "DISABLED" ? "selected":"") }}>Inactief</option>--}}
+                              {{--<option value="DELETED" {{ (Input::old("state", $item->state) == "DELETED" ? "selected":"") }}>Verwijderd</option>--}}
+                          {{--</select>--}}
+                          {{--{!! $errors->first('state', '<span class="alert-msg">:message</span>') !!}--}}
+                      {{--</div>--}}
+                  {{--</div>--}}
 
                 {{--<!-- Username -->--}}
                 {{--<div class="form-group {{ $errors->has('username') ? 'has-error' : '' }}">--}}

@@ -109,9 +109,9 @@
                       <label class="col-md-3 control-label" for="role">{{ trans('klusbib::admin/users/table.role') }} </label>
                       <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'role')) ? ' required' : '' }}">
                           <select class="form-control"  name="role" id="role_select">{{ Input::old('role', $item->role) }}
-                              <option value="admin" {{ (Input::old("role", $item->role) == "admin" ? "selected":"") }}>Admin</option>
-                              <option value="member" {{ (Input::old("role", $item->role) == "member" ? "selected":"") }}>Lid</option>
+                              <option value="member" {{ ((Input::old("role", $item->role) == "member" || Input::old("role", $item->role) == "") ? "selected":"") }}>Lid</option>
                               <option value="supporter" {{ (Input::old("role", $item->role) == "supporter" ? "selected":"") }}>Steunlid</option>
+                              <option value="admin" {{ (Input::old("role", $item->role) == "admin" ? "selected":"") }}>Admin</option>
                           </select>
                           {!! $errors->first('role', '<span class="alert-msg">:message</span>') !!}
                       </div>

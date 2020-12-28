@@ -296,7 +296,7 @@ class UsersController extends Controller
         $user->firstname = $request->input('firstname');
         $user->lastname = $request->input('lastname');
         $user->role = $request->input('role');
-        $user->state = $request->input('state');
+//        $user->state = $request->input('state'); // no longer allow update of state, as it is dependent of membership status
         $user->email = $request->input('email');
         $user->email_state = $request->input('email_state');
         $user->phone = $request->input('phone');
