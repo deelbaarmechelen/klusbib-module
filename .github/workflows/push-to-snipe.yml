@@ -1,0 +1,16 @@
+name: Alert parent repository on push
+on: push
+
+jobs:
+  build:
+    name: Dispatch to snipe-it
+    runs-on: ubuntu-latest
+    steps:
+      - name: Emit repository_dispatch
+        uses: mvasigh/dispatch-action@main
+        with:
+          # You should create a personal access token and store it in your repository
+          token: ${{ secrets.SNIPE_ACCESS_TOKEN }}
+          repo: snipe-it
+          owner: deelbaarmechelen
+          event_type: update_klusbib_module
