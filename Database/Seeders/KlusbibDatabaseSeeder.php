@@ -2,9 +2,19 @@
 
 namespace Modules\Klusbib\Database\Seeders;
 
+use App\Models\Setting;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
+/**
+ * Populates test data in inventory for use with Klusbib module
+ *
+ * Run with 'php artisan module:seed Klusbib'
+ * @package Modules\Klusbib\Database\Seeders
+ */
 class KlusbibDatabaseSeeder extends Seeder
 {
     /**
@@ -14,8 +24,20 @@ class KlusbibDatabaseSeeder extends Seeder
      */
     public function run()
     {
+        Log::info('Running Klusbib Database Seeder');
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $this->call(\Modules\Klusbib\Database\Seeders\UserSeeder::class);
+
+        // Only create default settings if they do not exist in the db.
+        if(!Setting::first()) {
+            factory(Setting::class)->create();
+        }
+
+        $output = Artisan::output();
+        Log::info($output);
+
+        Model::reguard();
+        Log::info('Klusbib Database Seeder completed');
     }
 }
