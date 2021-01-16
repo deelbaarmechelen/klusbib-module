@@ -104,18 +104,27 @@
                   </div>
                 </div>
 
-                  <!-- Role -->
-                  <div class="form-group {{ $errors->has('role') ? 'has-error' : '' }}">
-                      <label class="col-md-3 control-label" for="role">{{ trans('klusbib::admin/users/table.role') }} </label>
-                      <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'role')) ? ' required' : '' }}">
-                          <select class="form-control"  name="role" id="role_select">{{ Input::old('role', $item->role) }}
-                              <option value="member" {{ ((Input::old("role", $item->role) == "member" || Input::old("role", $item->role) == "") ? "selected":"") }}>Lid</option>
-                              <option value="supporter" {{ (Input::old("role", $item->role) == "supporter" ? "selected":"") }}>Steunlid</option>
-                              <option value="admin" {{ (Input::old("role", $item->role) == "admin" ? "selected":"") }}>Admin</option>
-                          </select>
-                          {!! $errors->first('role', '<span class="alert-msg">:message</span>') !!}
-                      </div>
-                  </div>
+                <!-- Company -->
+                <div class="form-group {{ $errors->has('company') ? 'has-error' : '' }}">
+                    <label class="col-md-3 control-label" for="company">{{ trans('klusbib::admin/users/table.company') }} </label>
+                    <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'company')) ? ' required' : '' }}">
+                        <input class="form-control" type="text" name="company" id="company" value="{{ Input::old('company', $item->company) }}" />
+                        {!! $errors->first('company', '<span class="alert-msg">:message</span>') !!}
+                    </div>
+                </div>
+
+                <!-- Role -->
+                <div class="form-group {{ $errors->has('role') ? 'has-error' : '' }}">
+                    <label class="col-md-3 control-label" for="role">{{ trans('klusbib::admin/users/table.role') }} </label>
+                    <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'role')) ? ' required' : '' }}">
+                        <select class="form-control"  name="role" id="role_select">{{ Input::old('role', $item->role) }}
+                            <option value="member" {{ ((Input::old("role", $item->role) == "member" || Input::old("role", $item->role) == "") ? "selected":"") }}>Lid</option>
+                            <option value="supporter" {{ (Input::old("role", $item->role) == "supporter" ? "selected":"") }}>Steunlid</option>
+                            <option value="admin" {{ (Input::old("role", $item->role) == "admin" ? "selected":"") }}>Admin</option>
+                        </select>
+                        {!! $errors->first('role', '<span class="alert-msg">:message</span>') !!}
+                    </div>
+                </div>
 
 
                 {{--<!-- Password -->--}}
