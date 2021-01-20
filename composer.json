@@ -27,7 +27,7 @@
         "guzzlehttp/guzzle": "^6.3",
         "cloudcreativity/laravel-json-api": "^1.5",
 	"deelbaarmechelen/remote-model": "dev-master",
-        "joshbrw/laravel-module-installer": "^0.1.4"
+        "joshbrw/laravel-module-installer": "^2.0"
     },
     "require-dev": {
         "cloudcreativity/json-api-testing": "^1.2|^2.0"
