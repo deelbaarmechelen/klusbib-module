@@ -26,7 +26,8 @@
     "require": {
         "guzzlehttp/guzzle": "^6.3",
         "cloudcreativity/laravel-json-api": "^1.5",
-	"deelbaarmechelen/remote-model": "dev-master",
+	    "deelbaarmechelen/remote-model": "dev-master",
+        "fzaninotto/faker": "~1.4",
         "joshbrw/laravel-module-installer": "^2.0"
     },
     "require-dev": {
