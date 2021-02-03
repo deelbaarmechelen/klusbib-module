@@ -26,8 +26,13 @@ class KlusbibDatabaseSeeder extends Seeder
     {
         Log::info('Running Klusbib Database Seeder');
         Model::unguard();
+        try {
+            $this->call(\Modules\Klusbib\Database\Seeders\CompanySeeder::class);
+            $this->call(\Modules\Klusbib\Database\Seeders\UserSeeder::class);
 
-        $this->call(\Modules\Klusbib\Database\Seeders\UserSeeder::class);
+        } catch (\Error $err) {
+            throw new \Exception($err->getMessage());
+        }
 
         // Only create default settings if they do not exist in the db.
         if(!Setting::first()) {
