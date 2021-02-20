@@ -50,6 +50,8 @@ class MembershipsController extends Controller
         }
         if ($request->filled('status') ) {
             $params["status"] = $request->input('status');
+        } else {
+            $params["status"] = 'ALL';
         }
         if ($request->filled('search') ) {
             $params["_query"] = $request->input('search');
