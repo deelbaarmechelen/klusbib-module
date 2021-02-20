@@ -24,7 +24,7 @@ class PaymentsTransformer
 
     public function transformPayment ($payment)
     {
-//        Log::debug('payment = ' . \json_encode($payment));
+        Log::debug('payment = ' . \json_encode($payment));
         $array = [
             'id' => (int) $payment->payment_id,
             'user' => ($payment->user) ? [
@@ -36,10 +36,15 @@ class PaymentsTransformer
             'mode' => e($payment->mode),
             'paymentDate' => Helper::getFormattedDateObject($payment->payment_date, 'date'),
             'order_id' => ($payment->order_id) ? e($payment->order_id) : null,
-            'amount' => ($payment->amount),
-            'currency' => ($payment->currency),
-//            'created_at' => (isset($payment->created_at) && isset($payment->created_at->date)) ? Helper::getFormattedDateObject($payment->created_at->date, 'datetime') : null,
-//            'updated_at' => (isset($payment->updated_at) && isset($payment->updated_at->date)) ? Helper::getFormattedDateObject($payment->updated_at->date, 'datetime') : null,
+            'amount' => $payment->amount,
+            'currency' => $payment->currency,
+            'comment' => $payment->comment,
+            'payment_ext_id' => $payment->payment_ext_id,
+            'expiration_date' => Helper::getFormattedDateObject($payment->expiration_date, 'date'),
+            // membership_id
+            // loan_id
+            'created_at' => (isset($payment->created_at) && isset($payment->created_at->date)) ? Helper::getFormattedDateObject($payment->created_at->date, 'datetime') : null,
+            'updated_at' => (isset($payment->updated_at) && isset($payment->updated_at->date)) ? Helper::getFormattedDateObject($payment->updated_at->date, 'datetime') : null,
             ];
 
         $permissions_array['available_actions'] = [

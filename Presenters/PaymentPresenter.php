@@ -105,31 +105,48 @@ class PaymentPresenter extends Presenter
                 "visible" => true,
             ],
             [
-                "field" => "comments",
+                "field" => "payment_ext_id",
                 "searchable" => false,
                 "sortable" => true,
                 "switchable" => true,
-                "title" => trans('general.notes'),
+                "title" => trans('klusbib::admin/payments/general.payment_ext_id'),
                 "visible" => true,
             ],
-//            [
-//                "field" => "created_at",
-//                "searchable" => false,
-//                "sortable" => true,
-//                "switchable" => true,
-//                "title" => trans('general.created_at'),
-//                "visible" => false,
-//                'formatter' => 'dateDisplayFormatter'
-//            ],
-//            [
-//                "field" => "updated_at",
-//                "searchable" => false,
-//                "sortable" => true,
-//                "switchable" => true,
-//                "title" => trans('general.updated_at'),
-//                "visible" => false,
-//                'formatter' => 'dateDisplayFormatter'
-//            ],
+            [
+                "field" => "expiration_date",
+                "searchable" => false,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('klusbib::admin/payments/general.expiration_date'),
+                "visible" => true,
+                'formatter' => 'dateDisplayFormatter'
+            ],
+            [
+                "field" => "comment",
+                "searchable" => false,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('klusbib::admin/payments/general.notes'),
+                "visible" => true,
+            ],
+            [
+                "field" => "created_at",
+                "searchable" => false,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('general.created_at'),
+                "visible" => false,
+                'formatter' => 'dateDisplayFormatter'
+            ],
+            [
+                "field" => "updated_at",
+                "searchable" => false,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('general.updated_at'),
+                "visible" => false,
+                'formatter' => 'dateDisplayFormatter'
+            ],
 //            [
 //                "field" => "actions",
 //                "searchable" => false,
