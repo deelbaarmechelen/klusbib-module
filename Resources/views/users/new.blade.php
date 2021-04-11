@@ -276,7 +276,8 @@
                   </div>
 
                   <!-- Membership start date -->
-                  <div x-show="membershiptype !== 'NONE' && membershiptype !== 'STROOM'" class="form-group {{ $errors->has('membership_start_date') ? 'has-error' : '' }}">
+                  <div x-show="membershiptype === 'TEMPORARY' || membershiptype === 'REGULAR' || membershiptype === 'REGULARORG'"
+                       class="form-group {{ $errors->has('membership_start_date') ? 'has-error' : '' }}">
                       <label class="col-md-3 control-label" for="membership_start_date">{{ trans('klusbib::admin/users/table.membership_start_date') }} </label>
                       <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'membership_start_date')) ? ' required' : '' }}">
                           <input class="form-control" type="date" name="membership_start_date" id="membership_start_date" value="{{ Input::old('membership_start_date', $item->membership_start_date) }}" />
@@ -294,7 +295,7 @@
                   {{--</div>--}}
 
                   <!-- Payment mode -->
-                  <div x-show="membershiptype === 'REGULAR'" class="form-group{{ $errors->has('payment_mode') ? ' has-error' : '' }}">
+                  <div x-show="membershiptype === 'REGULAR' || membershiptype === 'REGULARORG'" class="form-group{{ $errors->has('payment_mode') ? ' has-error' : '' }}">
                       <label class="col-md-3 control-label" for="payment_mode">{{ trans('klusbib::admin/users/table.payment_mode') }}</label>
                       <div class="col-md-4">
                           <select class="form-control"  name="payment_mode" id="payment_mode_select">{{ Input::old('payment_mode', $item->payment_mode) }}

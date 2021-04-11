@@ -165,6 +165,13 @@
               </tr>
             @endif
 
+            @if ($user->comment)
+              <tr>
+                <td>{{ trans('klusbib::admin/users/table.comment') }}:</td>
+                <td>{{ $user->comment }}</td>
+              </tr>
+            @endif
+
             @if (isset($user->membership_type) )
               <tr>
                 <td>{{ trans('klusbib::admin/users/table.membership_type') }}:</td>
