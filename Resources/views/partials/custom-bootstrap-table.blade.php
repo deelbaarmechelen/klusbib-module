@@ -1,20 +1,9 @@
 @include ('partials.bootstrap-table')
 
 <script>
-    var extraFormatters = [
-        'reservations',
-        'deliveries',
-        'membership',
-        'payments'
-    ];
-    for (var i in extraFormatters) {
-        window[extraFormatters[i] + 'LinkFormatter'] = genericRowLinkFormatter(extraFormatters[i]);
-        window[extraFormatters[i] + 'LinkObjFormatter'] = genericColumnObjLinkFormatter(extraFormatters[i]);
-        window[extraFormatters[i] + 'ActionsFormatter'] = genericActionsFormatter(extraFormatters[i]);
-        window[extraFormatters[i] + 'InOutFormatter'] = genericCheckinCheckoutFormatter(extraFormatters[i]);
-    }
 
-    // Make the edit/delete buttons
+
+    // Make the show/edit/delete buttons
     function customApiUsersActionsFormatter(destination) {
         return function (value,row) {
 
@@ -70,6 +59,10 @@
                 actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/clone" class="btn btn-sm btn-info" data-tooltip="true" title="Clone"><i class="fa fa-copy"></i></a>&nbsp;';
             }
 
+            if ((row.available_actions) && (row.available_actions.show === true)) {
+                actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '" class="btn btn-sm btn-primary" data-tooltip="true" title="Show"><i class="fa fa-eye"></i></a>&nbsp;';
+            }
+
             if ((row.available_actions) && (row.available_actions.update === true)) {
                 actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/edit" class="btn btn-sm btn-warning" data-tooltip="true" title="Update"><i class="fa fa-pencil"></i></a>&nbsp;';
             }
@@ -102,6 +95,19 @@
 
         };
     }
+    var extraFormatters = [
+        'reservations',
+        'deliveries',
+        'membership',
+        'payments'
+    ];
+    for (var i in extraFormatters) {
+        window[extraFormatters[i] + 'LinkFormatter'] = genericRowLinkFormatter(extraFormatters[i]);
+        window[extraFormatters[i] + 'LinkObjFormatter'] = genericColumnObjLinkFormatter(extraFormatters[i]);
+        window[extraFormatters[i] + 'ActionsFormatter'] = genericActionsFormatter(extraFormatters[i]);
+        window[extraFormatters[i] + 'InOutFormatter'] = genericCheckinCheckoutFormatter(extraFormatters[i]);
+    }
+
     window['reservationsActionsFormatter'] = customKlusbibActionsFormatter('reservations');
     window['deliveriesActionsFormatter'] = customKlusbibActionsFormatter('deliveries');
     @isset($deliveryId)

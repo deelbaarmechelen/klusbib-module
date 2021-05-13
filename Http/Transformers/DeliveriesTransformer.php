@@ -49,10 +49,11 @@ class DeliveriesTransformer
             ];
 
         $permissions_array['available_actions'] = [
-            'update' => (($delivery->deleted_at==''))  ? true : false,
-            'cancel' => (($delivery->deleted_at=='')) && ($delivery->state != 'CANCELLED') ? true : false,
-            'confirm' => (($delivery->deleted_at=='')) && ($delivery->state == 'REQUESTED') ? true : false,
-            'delete' => (($delivery->deleted_at=='')) ? true : false,
+            'show' => ($delivery->deleted_at=='') ? true : false,
+            'update' => ($delivery->deleted_at=='')  ? true : false,
+            'cancel' => (($delivery->deleted_at=='') && ($delivery->state != 'CANCELLED')) ? true : false,
+            'confirm' => (($delivery->deleted_at=='') && ($delivery->state == 'REQUESTED')) ? true : false,
+            'delete' => ($delivery->deleted_at=='') ? true : false,
 //            'update' => (Gate::allows('update', Delivery::class) && ($delivery->deleted_at==''))  ? true : false,
 //            'cancel' => (Gate::allows('update', Delivery::class) && ($delivery->deleted_at=='')) && ($delivery->state != 'CANCELLED') ? true : false,
 //            'confirm' => (Gate::allows('update', Delivery::class) && ($delivery->deleted_at=='')) && ($delivery->state == 'REQUESTED') ? true : false,
