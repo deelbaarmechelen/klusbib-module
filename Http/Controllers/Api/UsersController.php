@@ -100,7 +100,8 @@ class UsersController extends Controller
         if (!$request->has('state')) {
             return response()->json(Helper::formatStandardApiResponse('error', null, 'User state is missing'), 400);
         }
-        if ($username != $user->username && User::getNotDeleted()->where('username', '=', $username)->exists()) {
+        if ( (strcasecmp($username, $user->username) == 0)
+            && User::getNotDeleted()->where('username', '=', $username)->exists() ) {
             return response()->json(Helper::formatStandardApiResponse('error', null, 'Username not unique (' . $username . ')'), 400);
         }
         $user->first_name = $first_name;
