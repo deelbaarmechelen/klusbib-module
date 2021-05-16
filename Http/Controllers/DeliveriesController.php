@@ -105,9 +105,9 @@ class DeliveriesController extends Controller
     }
     public function confirm($deliveryId = null)
     {
-        $this->authorize('update', Delivery::class);
 
         $delivery = Delivery::find($deliveryId);
+        $this->authorize('update', $delivery);
         if (is_null($delivery)) {
             return redirect()->route('klusbib.deliveries.index')->with('error', trans('klusbib::admin/deliveries/message.does_not_exist'));
         }

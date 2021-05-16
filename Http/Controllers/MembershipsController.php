@@ -4,6 +4,7 @@ namespace Modules\Klusbib\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Modules\Klusbib\Http\KlusbibApi;
+use Modules\Klusbib\Models\Api\Membership;
 
 class MembershipsController extends Controller
 {
@@ -15,6 +16,7 @@ class MembershipsController extends Controller
      */
     public function index()
     {
+        $this->authorize('index', Membership::class);
 //        $users = \Modules\Klusbib\Models\Api\User::all();
         return view('klusbib::memberships/index');
     }

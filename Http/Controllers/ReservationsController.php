@@ -22,6 +22,7 @@ class ReservationsController extends Controller
      */
     public function index()
     {
+        $this->authorize('index', Reservation::class);
         return view('klusbib::reservations/index');
     }
     public function export()

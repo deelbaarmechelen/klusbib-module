@@ -4,6 +4,7 @@ namespace Modules\Klusbib\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Modules\Klusbib\Http\KlusbibApi;
+use Modules\Klusbib\Models\Api\Lending;
 
 class LendingsController extends Controller
 {
@@ -15,6 +16,7 @@ class LendingsController extends Controller
      */
     public function index()
     {
+        $this->authorize('index', Lending::class);
         return view('klusbib::lendings/index');
     }
 

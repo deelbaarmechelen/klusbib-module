@@ -61,7 +61,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-//        $this->authorize('index', User::class);
+        $this->authorize('index', User::class);
         return view('klusbib::users/index');
     }
 
@@ -69,7 +69,7 @@ class UsersController extends Controller
     {
         Log::debug("Klusbib - Creating new user");
 
-//        $this->authorize('create', User::class);
+        $this->authorize('create', User::class);
         $user = new User();
 
         return view('klusbib::users/new')
@@ -90,7 +90,7 @@ class UsersController extends Controller
     {
         Log::debug("Klusbib - Store new user");
         Model::getClient()->updateToken($request->session());
-//        $this->authorize('create', User::class);
+        $this->authorize('create', User::class);
         $enrolmentType = $request->input('membership_type');
 
         // create a new model instance
@@ -183,6 +183,7 @@ class UsersController extends Controller
         if (is_null($item = User::find($id))) {
             return redirect()->route('klusbib.users.index')->with('error', trans('klusbib::admin/users/message.does_not_exist'));
         }
+        $this->authorize('update', $item);
         Log::debug("User found: " . \json_encode($item));
         $item->id = $item->user_id; // view expects id to be set to distinguish between create (POST) and update (PUT)
 
@@ -311,7 +312,7 @@ class UsersController extends Controller
             return redirect()->route('klusbib.users.index')->with('error', trans('klusbib::admin/users/message.does_not_exist'));
         }
         Log::info('User exists: ' . $user->exists);
-//        $this->authorize('update', $user);
+        $this->authorize('update', $user);
         Log::debug('Request data: ' . \json_encode($request->all()));
         $user->firstname = $request->input('firstname');
         $user->lastname = $request->input('lastname');
@@ -485,7 +486,7 @@ class UsersController extends Controller
         $user = User::find($id);
 
         if ($user) {
-//            $this->authorize('view', $user);
+            $this->authorize('view', $user);
             $user->id = $user->user_id;
             Log::info(\json_encode(compact('user')));
             // set membership type

@@ -4,6 +4,7 @@ namespace Modules\Klusbib\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Modules\Klusbib\Http\KlusbibApi;
+use Modules\Klusbib\Models\Api\Payment;
 
 class PaymentsController extends Controller
 {
@@ -15,6 +16,7 @@ class PaymentsController extends Controller
      */
     public function index()
     {
+        $this->authorize('index', Payment::class);
         return view('klusbib::payments/index');
     }
 
