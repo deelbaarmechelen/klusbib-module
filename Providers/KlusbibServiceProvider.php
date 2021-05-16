@@ -178,25 +178,25 @@ class KlusbibServiceProvider extends ServiceProvider
         // add enrolment permissions
         $enrolmentPermissions =     array(
             array(
-                'permission' => 'klusbib.enrolment.view',
+                'permission' => 'klusbib.enrolments.view',
                 'label'      => 'View ',
                 'note'       => '',
                 'display'    => true,
             ),
             array(
-                'permission' => 'klusbib.enrolment.create',
+                'permission' => 'klusbib.enrolments.create',
                 'label'      => 'Create ',
                 'note'       => '',
                 'display'    => true,
             ),
             array(
-                'permission' => 'klusbib.enrolment.edit',
+                'permission' => 'klusbib.enrolments.edit',
                 'label'      => 'Edit ',
                 'note'       => '',
                 'display'    => true,
             ),
             array(
-                'permission' => 'klusbib.enrolment.delete',
+                'permission' => 'klusbib.enrolments.delete',
                 'label'      => 'Delete ',
                 'note'       => '',
                 'display'    => true,
@@ -207,25 +207,25 @@ class KlusbibServiceProvider extends ServiceProvider
         // add user permissions
         $userPermissions =     array(
             array(
-                'permission' => 'klusbib.user.view',
+                'permission' => 'klusbib.users.view',
                 'label'      => 'View ',
                 'note'       => '',
                 'display'    => true,
             ),
             array(
-                'permission' => 'klusbib.user.create',
+                'permission' => 'klusbib.users.create',
                 'label'      => 'Create ',
                 'note'       => '',
                 'display'    => true,
             ),
             array(
-                'permission' => 'klusbib.user.edit',
+                'permission' => 'klusbib.users.edit',
                 'label'      => 'Edit ',
                 'note'       => '',
                 'display'    => true,
             ),
             array(
-                'permission' => 'klusbib.user.delete',
+                'permission' => 'klusbib.users.delete',
                 'label'      => 'Delete ',
                 'note'       => '',
                 'display'    => true,
@@ -237,25 +237,25 @@ class KlusbibServiceProvider extends ServiceProvider
         // add payment permissions
         $paymentPermissions =     array(
             array(
-                'permission' => 'klusbib.payment.view',
+                'permission' => 'klusbib.payments.view',
                 'label'      => 'View ',
                 'note'       => '',
                 'display'    => true,
             ),
 //            array(
-//                'permission' => 'klusbib.payment.create',
+//                'permission' => 'klusbib.payments.create',
 //                'label'      => 'Create ',
 //                'note'       => '',
 //                'display'    => true,
 //            ),
 //            array(
-//                'permission' => 'klusbib.payment.edit',
+//                'permission' => 'klusbib.payments.edit',
 //                'label'      => 'Edit ',
 //                'note'       => '',
 //                'display'    => true,
 //            ),
 //            array(
-//                'permission' => 'klusbib.payment.delete',
+//                'permission' => 'klusbib.payments.delete',
 //                'label'      => 'Delete ',
 //                'note'       => '',
 //                'display'    => true,
@@ -263,28 +263,57 @@ class KlusbibServiceProvider extends ServiceProvider
         );
         $permissions['Klusbib.Payments'] = $paymentPermissions;
 
-        // add user permissions
-        $lendingPermissions =     array(
+        // add membership permissions
+        $membershipsPermissions =     array(
             array(
-                'permission' => 'klusbib.lending.view',
+                'permission' => 'klusbib.memberships.view',
                 'label'      => 'View ',
                 'note'       => '',
                 'display'    => true,
             ),
 //            array(
-//                'permission' => 'klusbib.lending.create',
+//                'permission' => 'klusbib.memberships.create',
 //                'label'      => 'Create ',
 //                'note'       => '',
 //                'display'    => true,
 //            ),
 //            array(
-//                'permission' => 'klusbib.lending.edit',
+//                'permission' => 'klusbib.memberships.edit',
 //                'label'      => 'Edit ',
 //                'note'       => '',
 //                'display'    => true,
 //            ),
 //            array(
-//                'permission' => 'klusbib.lending.delete',
+//                'permission' => 'klusbib.memberships.delete',
+//                'label'      => 'Delete ',
+//                'note'       => '',
+//                'display'    => true,
+//            ),
+        );
+        $permissions['Klusbib.Memberships'] = $membershipsPermissions;
+
+        // add lendings permissions
+        $lendingPermissions =     array(
+            array(
+                'permission' => 'klusbib.lendings.view',
+                'label'      => 'View ',
+                'note'       => '',
+                'display'    => true,
+            ),
+//            array(
+//                'permission' => 'klusbib.lendings.create',
+//                'label'      => 'Create ',
+//                'note'       => '',
+//                'display'    => true,
+//            ),
+//            array(
+//                'permission' => 'klusbib.lendings.edit',
+//                'label'      => 'Edit ',
+//                'note'       => '',
+//                'display'    => true,
+//            ),
+//            array(
+//                'permission' => 'klusbib.lendings.delete',
 //                'label'      => 'Delete ',
 //                'note'       => '',
 //                'display'    => true,
