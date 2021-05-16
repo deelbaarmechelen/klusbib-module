@@ -43,18 +43,18 @@
             </tr>
             @endif
 
-            {{--@if (isset($delivery->tool_id))--}}
-            {{--<tr>--}}
-              {{--<td>{{ trans('klusbib::admin/deliveries/general.tool_id') }}:</td>--}}
-              {{--<td>{{ $delivery->tool_id }}</td>--}}
-            {{--</tr>--}}
-            {{--@endif--}}
+            @if (isset($delivery->type))
+            <tr>
+              <td>{{ trans('klusbib::admin/deliveries/general.type') }}:</td>
+              <td>{{ $delivery->type }}</td>
+            </tr>
+            @endif
 
             @if (isset($delivery->state))
-            <tr>
-              <td>{{ trans('klusbib::admin/deliveries/general.state') }}:</td>
-              <td>{{ $delivery->state }}</td>
-            </tr>
+                <tr>
+                    <td>{{ trans('klusbib::admin/deliveries/general.state') }}:</td>
+                    <td>{{ $delivery->state }}</td>
+                </tr>
             @endif
 
             @if (isset($delivery->pick_up_date))
@@ -83,6 +83,24 @@
                 <td>{{ trans('klusbib::admin/deliveries/general.drop_off_address') }}:</td>
                 <td>{{ $delivery->drop_off_address }}</td>
               </tr>
+            @endif
+
+            @if ($delivery->price)
+                <tr>
+                    <td>{{ trans('klusbib::admin/deliveries/general.price') }}:</td>
+                    <td>
+                        {{ $delivery->price }} €
+                    </td>
+                </tr>
+            @endif
+
+            @if ($delivery->consumers)
+                <tr>
+                    <td>{{ trans('klusbib::admin/deliveries/general.consumers') }}:</td>
+                    <td>
+                        {!! nl2br(e($delivery->consumers)) !!}
+                    </td>
+                </tr>
             @endif
 
             @if ($delivery->comment)

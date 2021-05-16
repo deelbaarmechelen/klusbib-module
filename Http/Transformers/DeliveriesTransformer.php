@@ -28,6 +28,7 @@ class DeliveriesTransformer
         $array = [
             'id' => (int) $delivery->id,
             'state' => e($delivery->state),
+            'type' => ($delivery->type) ? e($delivery->type) : null,
             'tool_id' => e($delivery->tool_id),
             'tool' => ($delivery->tool) ? [
                 'id' => (int) $delivery->tool->id,
@@ -43,6 +44,8 @@ class DeliveriesTransformer
             'pick_up_address' => ($delivery->pick_up_address) ? e($delivery->pick_up_address) : null,
             'drop_off_date' => Helper::getFormattedDateObject($delivery->drop_off_date, 'date'),
             'drop_off_address' => ($delivery->drop_off_address) ? e($delivery->drop_off_address) : null,
+            'price' => ($delivery->price) ? e($delivery->price) : null,
+            'consumers' => ($delivery->consumers) ? e($delivery->consumers) : null,
             'comment' => ($delivery->comment) ? e($delivery->comment) : null,
             'created_at' => (isset($delivery->created_at) && isset($delivery->created_at->date)) ? Helper::getFormattedDateObject($delivery->created_at->date, 'datetime') : null,
             'updated_at' => (isset($delivery->updated_at) && isset($delivery->updated_at->date)) ? Helper::getFormattedDateObject($delivery->updated_at->date, 'datetime') : null,

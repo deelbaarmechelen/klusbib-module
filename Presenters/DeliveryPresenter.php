@@ -70,6 +70,14 @@ class DeliveryPresenter extends Presenter
                 "formatter" => "usersLinkObjFormatter"
             ],
             [
+                "field" => "type",
+                "searchable" => false,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('klusbib::admin/deliveries/general.type'),
+                "visible" => true,
+            ],
+            [
                 "field" => "state",
                 "searchable" => false,
                 "sortable" => true,
@@ -110,6 +118,22 @@ class DeliveryPresenter extends Presenter
                 "switchable" => true,
                 "title" => trans('klusbib::admin/deliveries/general.drop_off_address'),
                 "visible" => false,
+            ],
+            [
+                "field" => "price",
+                "searchable" => false,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('klusbib::admin/deliveries/general.price'),
+                "visible" => true,
+            ],
+            [
+                "field" => "consumers",
+                "searchable" => false,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('klusbib::admin/deliveries/general.consumers'),
+                "visible" => true,
             ],
             [
                 "field" => "comment",

@@ -4,7 +4,8 @@ return array(
 
     'does_not_exist' => 'Levering bestaat niet.',
     'user_does_not_exist' => 'Gebruiker bestaat niet.',
-
+    'price_missing' => 'Ontbrekende waarde voor prijs.',
+    'date_or_address_missing' => 'Ontbrekende waarde voor adres of datum',
 
     'create' => array(
         'error'   => 'Levering is niet aangemaakt, probeer het opnieuw.',

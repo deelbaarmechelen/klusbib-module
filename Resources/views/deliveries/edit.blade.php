@@ -27,6 +27,17 @@
     </div>
 </div>
 
+<!-- Type -->
+<div class="form-group {{ $errors->has('type') ? ' has-error' : '' }}">
+    <label for="state" class="col-md-3 control-label">{{ trans('klusbib::admin/deliveries/general.type') }}</label>
+    <div class="col-md-7{{  (\App\Helpers\Helper::checkIfRequired($item, 'type')) ? ' required' : '' }}">
+        <select class="form-control"  name="type" id="type_select">{{ Input::old('type', $item->state) }}
+            <option value="PICKUP" {{ (Input::old("type", $item->type) == "PICKUP" ? "selected":"") }}>Ophaling</option>
+            <option value="DROPOFF" {{ (Input::old("type", $item->type) == "DROPOFF" ? "selected":"") }}>Levering</option>
+        </select>
+        {!! $errors->first('type', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
+    </div>
+</div>
 <!-- Pick Up Date -->
 <div class="form-group {{ $errors->has('pick_up_date') ? ' has-error' : '' }}">
     <label for="pick_up_date" class="col-md-3 control-label">{{ trans('klusbib::admin/deliveries/general.pick_up_date') }}</label>
@@ -73,6 +84,25 @@
         {!! $errors->first('drop_off_address', '<span class="alert-msg">:message</span>') !!}
     </div>
 </div>
+
+<!-- Price -->
+<div class="form-group {{ $errors->has('price') ? ' has-error' : '' }}">
+    <label for="price" class="col-md-3 control-label">{{ trans('klusbib::admin/deliveries/general.price') }}</label>
+    <div class="col-md-4">
+        <input class="form-control" type="text" name="price" id="price" value="{{ Input::old('price', $item->price) }}" />
+        {!! $errors->first('price', '<span class="alert-msg">:message</span>') !!}
+    </div>
+</div>
+
+<!-- Consumers -->
+<div class="form-group {{ $errors->has('consumers') ? ' has-error' : '' }}">
+    <label for="consumers" class="col-md-3 control-label">{{ trans('klusbib::admin/deliveries/general.consumers') }}</label>
+    <div class="col-md-7 col-sm-12">
+        <textarea class="col-md-6 form-control" id="consumers" name="consumers">{{ Input::old('consumers', $item->consumers) }}</textarea>
+        {!! $errors->first('consumers', '<span class="alert-msg">:message</span>') !!}
+    </div>
+</div>
+
 
 <!-- Notes -->
 <div class="form-group {{ $errors->has('notes') ? ' has-error' : '' }}">

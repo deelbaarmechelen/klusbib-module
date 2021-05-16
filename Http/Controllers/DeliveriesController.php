@@ -64,6 +64,11 @@ class DeliveriesController extends Controller
         $delivery->tool_id           = $request->input('tool_id');
         $delivery->state             = $request->input('state');
         $delivery->user_id           = $request->input('user_id');
+        $delivery->type              = $request->input('type');
+        $delivery->price             = $request->input('price');
+        $delivery->consumers         = $request->input('consumers');
+        $delivery->payment_id        = $request->input('payment_id');
+        $delivery->contact_id        = $request->input('contact_id');
         Log::info('Delivery: ' . \json_encode($delivery));
 //        $delivery->user_id           = Auth::id();
 
@@ -101,10 +106,19 @@ class DeliveriesController extends Controller
     public function confirm($deliveryId = null)
     {
         $this->authorize('update', Delivery::class);
+
         $delivery = Delivery::find($deliveryId);
         if (is_null($delivery)) {
             return redirect()->route('klusbib.deliveries.index')->with('error', trans('klusbib::admin/deliveries/message.does_not_exist'));
         }
+        if (is_null($delivery->price)) {
+            return redirect()->route('klusbib.deliveries.index')->with('error', trans('klusbib::admin/deliveries/message.price_missing'));
+        }
+        if ($delivery->type == "PICKUP" && (is_null($delivery->pick_up_date) || is_null($delivery->pick_up_address))
+         || $delivery->type == "DROPOFF" && (is_null($delivery->drop_off_date) || is_null($delivery->drop_off_address)) ) {
+            return redirect()->route('klusbib.deliveries.index')->with('error', trans('klusbib::admin/deliveries/message.date_or_address_missing'));
+        }
+
         $delivery->state = 'CONFIRMED';
         if ($delivery->save()) {
             return redirect()->route("klusbib.deliveries.index")->with('success', trans('klusbib::admin/deliveries/message.update.success'));
@@ -157,6 +171,11 @@ class DeliveriesController extends Controller
 //        $delivery->tool_id           = $request->input('tool_id');
         $delivery->state             = $request->input('state');
         $delivery->user_id           = $request->input('user_id');
+        $delivery->type              = $request->input('type');
+        $delivery->price             = $request->input('price');
+        $delivery->consumers         = $request->input('consumers');
+        $delivery->payment_id        = $request->input('payment_id');
+        $delivery->contact_id        = $request->input('contact_id');
         Log::info('Delivery: ' . \json_encode($delivery));
 
         if ($delivery->save()) {
