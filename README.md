@@ -40,7 +40,11 @@ dokku apps:create <app-name>
 dokku mysql:create <app-name>db
 dokku mysql:link <app-name>db <app-name>
 dokku storage:mount <app-name> /var/lib/dokku/data/storage/<app-name>/storage:/app/storage
+dokku storage:mount <app-name> /var/lib/dokku/data/storage/<app-name>/public/uploads:/app/public/uploads
 ```
+
+*IMPORTANT: create directory structure under storage and uploads*
+
 Make sure to **not** specify the BUILDPACK_URL env variable in order to let the .buildpacks file indicate the appropriate buildpacks  
 
 **Database settings**  
@@ -51,9 +55,15 @@ DB_DATABASE=<from mysql service>
 DB_USERNAME=mysql
 DB_PASSWORD=<from mysql service>
 DB_PREFIX=null
-DB_DUMP_PATH='/usr/bin'
+DB_DUMP_PATH='/app/.apt/usr/bin'
 DB_CHARSET=utf8mb4
 DB_COLLATION=utf8mb4_unicode_ci
+```
+For backups, the application requires mysqldump. Add mysql-client to Aptfile and update DB_DUMP_PATH to '/app/.apt/usr/bin'
+
+Install Laravel passport keys
+```
+php artisan passport:install
 ```
 
 **Email settings**  
@@ -88,8 +98,8 @@ APP_LOG_LEVEL=debug
 To generate the APP_KEY, a .env file needs to exist in /app directory. Dokku, however, overwrites the default .env file...  
 The workaround is to persist the .env file by copying it to the storage directory (which is a mounted volume - see above) and restore it from there before running the ```php artisan key:generate``` command
 
-**Enrich .env file with Klusbib specific settings**  
-Extra configuration settings are required for the Klusbib module to interact with API
+**Connection with Klusbib API**  
+Extra configuration settings are required for the Klusbib module to interact with API in .env file
 ```
 # ---------------------------------------------
 # KLUSBIB
@@ -98,6 +108,14 @@ KLUSBIB_API_URL=https://api.klusbib.be
 KLUSBIB_API_USER=<your user>
 KLUSBIB_API_PASSWORD=<your password>
 ```
+
+The Klusbib API will also need an API key to enable API-Inventory synchronisation
+
+Seeding data:
+```
+php artisan module:seed Klusbib
+```
+
 
 **Update of app configuration from .env file**  
 Convert a .env file into dokku config:set command:  
@@ -121,6 +139,37 @@ dokku enter <app-name>
 # relaunch database migration
 php artisan migrate
 ```
+
+**Enable SSL (https)**
+
+Enabling SSL with letsencrypt on dokku:  
+```
+dokku config:set --no-restart <app-name> DOKKU_LETSENCRYPT_EMAIL=<your-email>
+dokku letsencrypt <app-name>
+dokku config:set <app-name> APP_ENV=production
+```
+
+Forcing https for all routes
+```
+// web.php
+
+if (env('APP_ENV') === 'production') {
+    URL::forceScheme('https');
+}
+```
+
+**Backup and restore**
+
+Backup database
+```
+ dokku mysql:export inventorydb > /tmp/inventorydb.sql
+```
+
+Restore database
+```
+ dokku mysql:import inventorydb < /tmp/inventorydb.sql
+```
+ 
 
 ## Troubleshooting
 * **Problem**:  
@@ -155,7 +204,7 @@ Repeat php artisan migrate command on app:
 ```
 dokku enter <app-name>
 php artisan migrate
-# php artisan passport:install (no longer needed?)
+php artisan passport:install      # to install passport keys
 ```
 
 * **Problem**:  
@@ -176,3 +225,25 @@ Changes are listed here https://github.com/laravel/framework/compare/v5.5.49...v
 The issue might be related to a cookie security fix (see https://blog.laravel.com/laravel-cookie-security-releases)  
 The applied workaround is to force use of 5.5.49 in composer.json  
 Note that latest version of snipe upgraded to laravel/framework 6.x and no longer has this issue, so the long term solution is to upgrade snipe IT
+
+* **Problem**:  
+*Trying to get property of non-object at /app/vendor/laravel/passport/src/ClientRepository.php:81)*  
+Install Laravel Passport keys with 
+```
+dokku enter <app-name>
+php artisan passport:install
+```
+
+
+* **Problem**:  
+*ErrorException: Replicating claims as headers is deprecated and will removed from v4.0. Please manually set the header if you need it replicated. in /app/vendor/lcobucci/jwt/src/Builder.php:334*  
+Downgrade jwt package to version 3.3.3
+```
+composer require lcobucci/jwt=3.3.3
+```
+
+* **Problem**:  
+*Command not found : sh: 1: /usr/bin/mysqldump: not found*  
+Update the DB_DUMP_PATH environment variable  
+Make sure mysqldump is installed (eventually add the mysql-client package with apt)  
+See also https://github.com/spatie/db-dumper
