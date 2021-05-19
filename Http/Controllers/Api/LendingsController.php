@@ -244,7 +244,6 @@ class LendingsController extends Controller
         $params["_sortField"] = 'due_date';
         $lendingsPaginator = \Modules\Klusbib\Models\Api\Lending::all($params);
 
-        $labels=[];
         $catCount=[];
         foreach ($lendingsPaginator->items() as $lending) {
 //            $tool = \json_decode($lending->tool);
@@ -263,6 +262,9 @@ class LendingsController extends Controller
         arsort($catCount); // sort by value
         $catTop = array_slice($catCount, 0, self::CAT_MAX_VALUES);
         $catOthers = array_slice($catCount, self::CAT_MAX_VALUES);
+
+        $labels=[];
+        $points=[];
         foreach($catTop as $cat => $count) {
             $labels[] = $cat;
             $points[] = $count;

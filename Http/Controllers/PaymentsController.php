@@ -2,7 +2,7 @@
 
 namespace Modules\Klusbib\Http\Controllers;
 
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
 use Modules\Klusbib\Http\KlusbibApi;
 use Modules\Klusbib\Models\Api\Payment;
 
