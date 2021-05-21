@@ -202,7 +202,7 @@
               array(
                 'deleted' => (Input::get('status')=='deleted') ? 'true' : 'false',
                 'user_id' => $user->user_id,
-                'status'  => 'OPEN'
+                'status'  => 'ALL'
                 ) ) }}">
     </table>
 
