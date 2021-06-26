@@ -1,6 +1,8 @@
 
 @section('klusbib-menu')
 
+@if ( \Illuminate\Support\Facades\Route::has('klusbib.home')
+        && !is_null(Auth::user()) )
 <li class="treeview active }}">
     <a href="#"><i class="fa fa-wrench"></i>
         <span>{{ trans('klusbib::general.name') }}</span>
@@ -12,14 +14,12 @@
         {{--{{ trans('general.list_all') }}--}}
         {{--</a>--}}
         {{--</li>--}}
-        @if (\Illuminate\Support\Facades\Route::has('klusbib.home'))
-            <li>
-                <a href="{{ route('klusbib.home') }}">
-                    <i class="fa fa-dashboard"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-        @endif
+        <li>
+            <a href="{{ route('klusbib.home') }}">
+                <i class="fa fa-dashboard"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
         @if (\Illuminate\Support\Facades\Route::has('klusbib.users.index')
         && Auth::user()->can('index',\Modules\Klusbib\Models\Api\User::class))
             <li>
@@ -76,4 +76,5 @@
         @endif
     </ul>
 </li>
+@endif
 @endsection
