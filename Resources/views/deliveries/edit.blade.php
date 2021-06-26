@@ -18,10 +18,11 @@
     <label for="state" class="col-md-3 control-label">{{ trans('klusbib::admin/deliveries/general.state') }}</label>
     <div class="col-md-7{{  (\App\Helpers\Helper::checkIfRequired($item, 'state')) ? ' required' : '' }}">
         <select class="form-control"  name="state" id="state_select">{{ Input::old('state', $item->state) }}
-            <option value="REQUESTED" {{ (Input::old("state", $item->state) == "REQUESTED" ? "selected":"") }}>Aanvraag</option>
-            <option value="CONFIRMED" {{ (Input::old("state", $item->state) == "CONFIRMED" ? "selected":"") }}>Bevestigd</option>
-            <option value="DELIVERED" {{ (Input::old("state", $item->state) == "DELIVERED" ? "selected":"") }}>Geleverd</option>
-            <option value="CANCELLED" {{ (Input::old("state", $item->state) == "CANCELLED" ? "selected":"") }}>Geannuleerd</option>
+            @foreach ( $allowed_delivery_states as $delivery_state )
+                <option value="{{$delivery_state["value"]}}" {{ (Input::old("state", $item->state) == $delivery_state["value"] ? "selected":"") }}
+                        {{ ($delivery_state["enabled"] ? "":"disabled class=disabled") }}>
+                    {{trans( 'klusbib::types/deliverystates.'.$delivery_state["value"])}}</option>
+            @endforeach
         </select>
         {!! $errors->first('state', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
     </div>

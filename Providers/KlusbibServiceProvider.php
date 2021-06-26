@@ -167,6 +167,12 @@ class KlusbibServiceProvider extends ServiceProvider
                 'display'    => true,
             ),
             array(
+                'permission' => 'klusbib.deliveries.confirm',
+                'label'      => 'Confirm ',
+                'note'       => '',
+                'display'    => true,
+            ),
+            array(
                 'permission' => 'klusbib.deliveries.delete',
                 'label'      => 'Delete ',
                 'note'       => '',
@@ -396,11 +402,6 @@ class KlusbibServiceProvider extends ServiceProvider
         Accessory::$checkinClass = NotifyAccessoryCheckin::class;
     }
 
-//    private function registerCommands() {
-//        Log::debug('Regsitering Klusbib commands');
-//        $kernel = $this->app->make(\Illuminate\Contracts\Console\Kernel::class);
-//        $kernel->registerCommand(\Modules\Klusbib\Console\SyncLendings::class);
-//    }
     private function registerObservers() {
         Log::debug('Registering Klusbib observers');
         Asset::observe(AssetObserver::class);

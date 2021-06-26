@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Asset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Modules\Klusbib\Http\KlusbibApi;
 use Modules\Klusbib\Http\Transformers\InventoryItemsTransformer;
@@ -107,7 +108,7 @@ class DeliveriesController extends Controller
     {
 
         $delivery = Delivery::find($deliveryId);
-        $this->authorize('update', $delivery);
+        $this->authorize('confirm', $delivery);
         if (is_null($delivery)) {
             return redirect()->route('klusbib.deliveries.index')->with('error', trans('klusbib::admin/deliveries/message.does_not_exist'));
         }
@@ -140,10 +141,24 @@ class DeliveriesController extends Controller
         $this->authorize('update', $item);
         Log::info('Delivery item found' . \json_encode(compact('item')) );
 
-        return view('klusbib::deliveries/edit', compact('item'));
+        return view('klusbib::deliveries/edit')
+            ->with('item', $item)
+            ->with('allowed_delivery_states', $this->getAllowedDeliveryStates());
     }
 
-
+    /**
+     * @return array of allowed delivery states
+     */
+    private function getAllowedDeliveryStates(): array
+    {
+        $allowed_delivery_states = array(
+            array("value" => "REQUESTED", "enabled" => true),
+            array("value" => "CONFIRMED", "enabled" => Gate::allows('confirm', Delivery::class)),
+            array("value" => "DELIVERED", "enabled" => true),
+            array("value" => "CANCELLED", "enabled" => true),
+        );
+        return $allowed_delivery_states;
+    }
     /**
      * Validates and stores the delivery form data submitted from the edit
      * delivery form.
@@ -160,6 +175,12 @@ class DeliveriesController extends Controller
         }
         Log::info('Delivery exists: ' . $delivery->exists);
         $this->authorize('update', $delivery);
+        if ($request->input('state') == 'CONFIRMED' && $delivery->state != 'CONFIRMED') {
+            Log::info('Delivery confirmation: ' . \json_encode($delivery));
+            $this->authorize('confirm', $delivery);
+        }
+        $delivery->state             = $request->input('state');
+
         // test validating error
 //        return redirect()->back()->withInput()->withErrors(new MessageBag(array ("state" => "Invalid state - test")) );
 

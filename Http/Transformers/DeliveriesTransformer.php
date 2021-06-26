@@ -2,10 +2,9 @@
 namespace Modules\Klusbib\Http\Transformers;
 
 use App\Http\Transformers\DatatablesTransformer;
-use App\Models\Delivery;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
-//use Modules\Klusbib\Models\Api\Delivery;
+use Modules\Klusbib\Models\Api\Delivery;
 use phpDocumentor\Reflection\Types\Integer;
 use Gate;
 use App\Helpers\Helper;
@@ -53,9 +52,9 @@ class DeliveriesTransformer
 
         $permissions_array['available_actions'] = [
             'show' => ($delivery->deleted_at=='') ? true : false,
-            'update' => ($delivery->deleted_at=='')  ? true : false,
-            'cancel' => (($delivery->deleted_at=='') && ($delivery->state != 'CANCELLED')) ? true : false,
-            'confirm' => (($delivery->deleted_at=='') && ($delivery->state == 'REQUESTED')) ? true : false,
+            'update' => (Gate::allows('update', Delivery::class) && ($delivery->deleted_at==''))  ? true : false,
+            'cancel' => (Gate::allows('update', Delivery::class) && ($delivery->deleted_at=='') && ($delivery->state != 'CANCELLED')) ? true : false,
+            'confirm' => (Gate::allows('confirm', Delivery::class) && ($delivery->deleted_at=='') && ($delivery->state == 'REQUESTED')) ? true : false,
             'delete' => ($delivery->deleted_at=='') ? true : false,
 //            'update' => (Gate::allows('update', Delivery::class) && ($delivery->deleted_at==''))  ? true : false,
 //            'cancel' => (Gate::allows('update', Delivery::class) && ($delivery->deleted_at=='')) && ($delivery->state != 'CANCELLED') ? true : false,
