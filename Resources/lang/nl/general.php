@@ -5,6 +5,7 @@
         'checkout'              => 'Ontleningen',
         'checkin'               => 'Inleveren',
         'deliveries'            => 'Leveringen',
+        'extend'                => 'Verlengen',
         'id'                    => 'Id',
         'inventory'             => 'Inventaris',
         'lendings'              => 'Ontleningen',

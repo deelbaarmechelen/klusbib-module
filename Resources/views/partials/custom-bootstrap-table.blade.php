@@ -95,6 +95,34 @@
 
         };
     }
+    function customHardwareCheckinCheckoutFormatter(destination) {
+        return function (value,row) {
+
+            // The user is allowed to check items out, AND the item is deployable
+            if ((row.available_actions.checkout == true) && (row.user_can_checkout == true) && ((!row.asset_id) && (!row.assigned_to))) {
+                return '<a href="{{ url('/') }}/' + destination + '/' + row.id + '/checkout" class="btn btn-sm bg-maroon" data-tooltip="true" title="Check this item out">{{ trans('general.checkout') }}</a>';
+
+                // The user is allowed to check items out, but the item is not deployable
+            } else if (((row.user_can_checkout == false)) && (row.available_actions.checkout == true) && (!row.assigned_to)) {
+                return '<div  data-tooltip="true" title="This item has a status label that is undeployable and cannot be checked out at this time."><a class="btn btn-sm bg-maroon disabled">{{ trans('general.checkout') }}</a></div>';
+
+                // The user is allowed to check items in
+            } else if (row.available_actions.checkin == true)  {
+                if (row.assigned_to) {
+                    return '<a href="{{ url('/') }}/' + destination + '/' + row.id + '/checkin" class="btn btn-sm bg-purple" data-tooltip="true" title="Check this item in so it is available for re-imaging, re-issue, etc.">{{ trans('general.checkin') }}</a>'
+                         + '<a href="{{ url('/') }}/' + destination + '/' + row.id + '/extend" class="btn btn-sm bg-teal" data-tooltip="true" title="Extend expected checkin date">{{ trans('klusbib::general.extend') }}</a>';
+                } else if (row.assigned_pivot_id) {
+                    return '<a href="{{ url('/') }}/' + destination + '/' + row.assigned_pivot_id + '/checkin" class="btn btn-sm bg-purple" data-tooltip="true" title="Check this item in so it is available for re-imaging, re-issue, etc.">{{ trans('general.checkin') }}</a>' +
+                           '<a href="{{ url('/') }}/' + destination + '/' + row.id + '/extend" class="btn btn-sm bg-teal" data-tooltip="true" title="Extend expected checkin date">{{ trans('klusbib::general.extend') }}</a>';
+                }
+
+            }
+
+        }
+
+
+    }
+
     var extraFormatters = [
         'reservations',
         'deliveries',
@@ -108,6 +136,7 @@
         window[extraFormatters[i] + 'InOutFormatter'] = genericCheckinCheckoutFormatter(extraFormatters[i]);
     }
 
+    window['hardwareInOutFormatter'] = customHardwareCheckinCheckoutFormatter('hardware');
     window['reservationsActionsFormatter'] = customKlusbibActionsFormatter('reservations');
     window['deliveriesActionsFormatter'] = customKlusbibActionsFormatter('deliveries');
     @isset($deliveryId)
