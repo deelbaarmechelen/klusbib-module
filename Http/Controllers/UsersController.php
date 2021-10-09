@@ -126,7 +126,7 @@ class UsersController extends Controller
             if ($enrolmentType === "NONE") {
                 // no enrolment -> simply save user
                 return redirect()->route("klusbib.users.index")->with('success', trans('klusbib::admin/users/message.create.success'));
-            } else if ($enrolmentType === "RENEWAL") {
+            } else if ($enrolmentType === "RENEWAL" || $enrolmentType === "RENEWALREDUCED" || $enrolmentType === "RENEWALORG") {
                 $errorMessage = trans('klusbib::admin/users/message.renewal_new_user.error');
                 return redirect()->back()->withInput()->with('error', $errorMessage);
             } else if ($request->input("payment_mode") === "MOLLIE") {
@@ -228,6 +228,10 @@ class UsersController extends Controller
             return "REGULARORG";
         } elseif ($subscriptionId == 6) {
             return "RENEWALORG";
+        } elseif ($subscriptionId == 7) {
+            return "REGULARREDUCED";
+        } elseif ($subscriptionId == 8) {
+            return "RENEWALREDUCED";
         } else {
             return "NONE"; // or throw exception??
         }
@@ -258,6 +262,15 @@ class UsersController extends Controller
             || $currentMembershipType == "RENEWAL") {
             array_push($allowed_new_memberships, "STROOM");
         }
+        // Reduced tarif memberships
+        if ($currentMembershipType == "NONE") {
+            array_push($allowed_new_memberships, "REGULARREDUCED");
+        }
+        if ($currentMembershipType == "REGULARREDUCED"
+            || $currentMembershipType == "RENEWALREDUCED") {
+            array_push($allowed_new_memberships, "RENEWALREDUCED");
+        }
+
         // Company memberships
         if ($currentMembershipType == "NONE") {
             array_push($allowed_new_memberships, "REGULARORG");
@@ -380,10 +393,10 @@ class UsersController extends Controller
             }
 
             if ( ($origMembershipType === "NONE"
-                && ($newMembershipType === "REGULAR" || $newMembershipType === "REGULARORG" || $newMembershipType === "TEMPORARY") )
+                && ($newMembershipType === "REGULAR" || $newMembershipType === "REGULARREDUCED" || $newMembershipType === "REGULARORG" || $newMembershipType === "TEMPORARY") )
                 // FIXME: should be considered as a special case of renewal? -> currently fails with "Enrolment not supported for user state ACTIVE"
                 || ($origMembershipType === "TEMPORARY"
-                        && ($newMembershipType === "REGULAR" || $newMembershipType === "STROOM" ) )
+                        && ($newMembershipType === "REGULAR" || $newMembershipType === "REGULARREDUCED" || $newMembershipType === "STROOM" ) )
             ){
                 $now = new \DateTime();
                 $orderId = $user->user_id . '-' . $now->format('YmdHis');
@@ -419,9 +432,11 @@ class UsersController extends Controller
                 }
             } elseif (  ( ( $origMembershipType === "REGULAR" || $origMembershipType === "STROOM" || $origMembershipType === "RENEWAL")
                             && $newMembershipType === "RENEWAL")
-                     || (   $origMembershipType === "REGULARORG"
-                            && $newMembershipType === "RENEWALORG")
-                     )
+                    || (   $origMembershipType === "REGULARREDUCED"
+                        && $newMembershipType === "RENEWALREDUCED")
+                    || (   $origMembershipType === "REGULARORG"
+                        && $newMembershipType === "RENEWALORG")
+                    )
             { // renewal: send request without providing start membership date
                 $now = new \DateTime();
                 $orderId = $user->user_id . '-' . $now->format('YmdHis');
@@ -444,7 +459,8 @@ class UsersController extends Controller
                     $errorMessage .= $this->formatApiErrorMessage($this->apiClient->errors());
                     return redirect()->back()->withInput()->with('error', $errorMessage);
                 }
-            } elseif ( ($origMembershipType === "NONE" || $origMembershipType === "REGULAR" || $origMembershipType === "TEMPORARY" || $origMembershipType === "RENEWAL")
+            } elseif ( ($origMembershipType === "NONE" || $origMembershipType === "REGULAR" || $origMembershipType === "TEMPORARY"
+                    || $origMembershipType === "RENEWAL" || $origMembershipType === "REGULARREDUCED" || $origMembershipType === "RENEWALREDUCED")
                 && $newMembershipType === "STROOM"){
                 $now = new \DateTime();
                 $orderId = $user->user_id . '-' . $now->format('YmdHis');
