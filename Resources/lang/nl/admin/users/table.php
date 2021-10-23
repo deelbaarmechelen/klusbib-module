@@ -22,7 +22,7 @@ return array(
     'payment_mode'          => 'Betalingswijze',
     'postal_code'           => 'Postcode',
     'phone'                 => 'Telefoon',
-    'registration_number'   => 'Registratienummer',
+    'registration_number'   => 'Rijksregisternummer',
     'role'                  => 'Rol',
     'state'                 => 'Status',
     'user_id'               => 'Klusbib Id',
