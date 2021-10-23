@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Modules\Klusbib\Api\Client;
+//use Modules\Klusbib\Console\Commands\SendExpectedCheckinAlerts;
+//use Modules\Klusbib\Console\Commands\SyncLendings;
 use Modules\Klusbib\Models\Api\Delivery;
 use Modules\Klusbib\Models\Api\Lending;
 use Modules\Klusbib\Models\Api\Membership;
@@ -73,9 +75,9 @@ class KlusbibServiceProvider extends ServiceProvider
         $this->registerApiClient($router);
 
         $this->registerNotifications();
-//        $this->registerCommands();
         $this->registerObservers();
         $this->registerPolicies();
+//        $this->registerCommands();
 
         Log::debug("Boot Klusbib Service Provider completed");
     }
@@ -338,16 +340,23 @@ class KlusbibServiceProvider extends ServiceProvider
     public function registerViews()
     {
         $viewPath = resource_path('views/modules/klusbib');
-
         $sourcePath = __DIR__.'/../Resources/views';
 
         $this->publishes([
             $sourcePath => $viewPath
         ],'views');
 
+        // register an path to override Snipe-IT views with custom Klusbib ones
+        // override path: Modules/Klusbib/Resources/views/overrides
+        $paths = \Config::get('view.paths');
+        array_unshift($paths, $sourcePath . '/overrides');
+        \Config::set('view.paths', $paths);
+
+        // Load view for klusbib module
         $this->loadViewsFrom(array_merge(array_map(function ($path) {
             return $path . '/modules/klusbib';
         }, \Config::get('view.paths')), [$sourcePath]), 'klusbib');
+
     }
 
     /**
@@ -401,6 +410,21 @@ class KlusbibServiceProvider extends ServiceProvider
         Accessory::$checkoutClass = NotifyAccessoryCheckout::class;
         Accessory::$checkinClass = NotifyAccessoryCheckin::class;
     }
+
+////    private function registerCommands() {
+////        Log::debug('Regsitering Klusbib commands');
+////        $kernel = $this->app->make(\Illuminate\Contracts\Console\Kernel::class);
+////        $kernel->registerCommand(\Modules\Klusbib\Console\SyncLendings::class);
+////    }
+//    private function registerCommands() {
+//        Log::debug('Regsitering Klusbib commands');
+//        if ($this->app->runningInConsole()) {
+//            $this->commands([
+//                SendExpectedCheckinAlerts::class,
+//                SyncLendings::class,
+//            ]);
+//        }
+//    }
 
     private function registerObservers() {
         Log::debug('Registering Klusbib observers');
