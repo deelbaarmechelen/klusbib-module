@@ -29,7 +29,7 @@ class AssetsController
 
     /**
      * Return a 2D barcode for the asset
-     * Copy of Snipe IT AssetsController::getBarCode, customizing the barcode sizes to match our scanner needs
+     * Copy of Snipe IT AssetsController::getBarCode, customizing the barcode type and sizes to match our scanner needs
      *
      * @param int $assetId
      * @return Response
@@ -49,7 +49,8 @@ class AssetsController
                 $barcode_width = ($settings->labels_width - $settings->labels_display_sgutter) * 96.000000000001;
 
                 $barcode = new \Com\Tecnick\Barcode\Barcode();
-                $barcode_obj = $barcode->getBarcodeObj($settings->alt_barcode,$asset->asset_tag,($barcode_width < 200 ? $barcode_width : 200),75);
+                $barcode_obj = $barcode->getBarcodeObj($settings->alt_barcode, $asset->asset_tag, -3, 100, 'black', array(-0.2, -0.2, -0.2, -0.2));
+                //$barcode_obj = $barcode->getBarcodeObj($settings->alt_barcode,$asset->asset_tag,($barcode_width < 200 ? $barcode_width : 200),75);
 
                 file_put_contents($barcode_file, $barcode_obj->getPngData());
                 return response($barcode_obj->getPngData())->header('Content-type', 'image/png');
