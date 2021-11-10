@@ -115,18 +115,31 @@
                     return '<a href="{{ url('/') }}/' + destination + '/' + row.assigned_pivot_id + '/checkin" class="btn btn-sm bg-purple" data-tooltip="true" title="Check this item in so it is available for re-imaging, re-issue, etc.">{{ trans('general.checkin') }}</a>' +
                            '<a href="{{ url('/') }}/' + destination + '/' + row.id + '/extend" class="btn btn-sm bg-teal" data-tooltip="true" title="Extend expected checkin date">{{ trans('klusbib::general.extend') }}</a>';
                 }
-
             }
-
         }
+    }
 
+    function customMembershipsActionsFormatter(destination) {
+        return function (value,row) {
 
+            var actions = '<nobr>';
+            var dest = 'klusbib/' + destination;
+
+            if ((row.available_actions) && (row.available_actions.confirm === true)) {
+                actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/confirm" class="btn btn-sm btn-success" data-tooltip="true" title="Confirm"><i class="fa fa-check"></i></a>&nbsp;';
+            }
+            if ((row.available_actions) && (row.available_actions.cancel === true)) {
+                actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/cancel" class="btn btn-sm btn-danger" data-tooltip="true" title="Cancel"><i class="fa fa-close"></i></a>&nbsp;';
+            }
+            actions +='</nobr>';
+            return actions;
+        }
     }
 
     var extraFormatters = [
         'reservations',
         'deliveries',
-        'membership',
+        'memberships',
         'payments'
     ];
     for (var i in extraFormatters) {
@@ -137,6 +150,7 @@
     }
 
     window['hardwareInOutFormatter'] = customHardwareCheckinCheckoutFormatter('hardware');
+    window['membershipsActionsFormatter'] = customMembershipsActionsFormatter('memberships');
     window['reservationsActionsFormatter'] = customKlusbibActionsFormatter('reservations');
     window['deliveriesActionsFormatter'] = customKlusbibActionsFormatter('deliveries');
     @isset($deliveryId)

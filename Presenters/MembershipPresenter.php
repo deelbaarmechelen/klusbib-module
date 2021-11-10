@@ -137,15 +137,15 @@ class MembershipPresenter extends Presenter
 //                "visible" => false,
 //                'formatter' => 'dateDisplayFormatter'
 //            ],
-//            [
-//                "field" => "actions",
-//                "searchable" => false,
-//                "sortable" => false,
-//                "switchable" => false,
-//                "title" => trans('table.actions'),
-//                "visible" => true,
-//                "formatter" => "membershipsActionsFormatter",
-//            ]
+            [
+                "field" => "actions",
+                "searchable" => false,
+                "sortable" => false,
+                "switchable" => false,
+                "title" => trans('table.actions'),
+                "visible" => true,
+                "formatter" => "membershipsActionsFormatter",
+            ]
         ];
 
         return json_encode($layout);

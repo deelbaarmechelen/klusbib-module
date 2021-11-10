@@ -3,6 +3,7 @@
 namespace Modules\Klusbib\Api\Endpoints;
 
 
+use Illuminate\Support\Facades\Log;
 use Modules\Klusbib\Api\Client;
 
 class Enrolment
@@ -34,4 +35,37 @@ class Enrolment
         return $this->client->post('enrolment', $params);
     }
 
+    /**
+     * Confirm a pending enrolment.
+     *
+     * @param  array $params
+     *
+     * @return boolean true if no errors occured
+     */
+    public function confirm(array $params)
+    {
+        try {
+            $this->client->post('enrolment_confirm', $params); // response expected to be empty
+            return empty($this->client->errors());
+        } catch (\Exception $ex) {
+            return false;
+        }
+    }
+
+    /**
+     * Decline a pending enrolment.
+     *
+     * @param  array $params
+     *
+     * @return boolean true if no errors occured
+     */
+    public function decline(array $params)
+    {
+        try {
+            $this->client->post('enrolment_decline', $params); // response expected to be empty
+            return empty($this->client->errors());
+        } catch (\Exception $ex) {
+            return false;
+        }
+    }
 }

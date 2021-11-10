@@ -79,6 +79,12 @@ Route::prefix('klusbib')->group(function() {
     Route::get('/memberships', [
         'as' => 'klusbib.memberships.index',
         'uses' => 'MembershipsController@index' ]);
+    Route::get('/memberships/{membership}/confirm', [
+        'as' => 'klusbib.memberships.confirm',
+        'uses' => 'MembershipsController@confirm' ]);
+    Route::get('/memberships/{membership}/cancel', [
+        'as' => 'klusbib.memberships.cancel',
+        'uses' => 'MembershipsController@cancel' ]);
     Route::get('/payments', [
         'as' => 'klusbib.payments.index',
         'uses' => 'PaymentsController@index' ]);

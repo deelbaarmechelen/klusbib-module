@@ -55,8 +55,8 @@ class MembershipsTransformer
 
         $permissions_array['available_actions'] = [
 //            'update' => (($membership->deleted_at==''))  ? true : false,
-//            'cancel' => (($membership->deleted_at=='')) && ($membership->state != 'CANCELLED') ? true : false,
-//            'confirm' => (($membership->deleted_at=='')) && ($membership->state == 'REQUESTED') ? true : false,
+            'confirm' => (($membership->deleted_at=='')) && ($membership->status == 'PENDING') ? true : false,
+            'cancel' => (($membership->deleted_at=='')) && ($membership->status == 'PENDING') ? true : false,
 //            'delete' => (($membership->deleted_at=='')) ? true : false,
         ];
 

@@ -432,9 +432,9 @@ class UsersController extends Controller
                 }
             } elseif (  ( ( $origMembershipType === "REGULAR" || $origMembershipType === "STROOM" || $origMembershipType === "RENEWAL")
                             && $newMembershipType === "RENEWAL")
-                    || (   $origMembershipType === "REGULARREDUCED"
+                    || (   ($origMembershipType === "REGULARREDUCED" || $origMembershipType === "RENEWALREDUCED")
                         && $newMembershipType === "RENEWALREDUCED")
-                    || (   $origMembershipType === "REGULARORG"
+                    || (   ($origMembershipType === "REGULARORG" || $origMembershipType === "RENEWALORG")
                         && $newMembershipType === "RENEWALORG")
                     )
             { // renewal: send request without providing start membership date

@@ -260,7 +260,7 @@ class Client
 
             $time_end = microtime(true);
             $execution_time = ($time_end - $time_start);
-            Log::debug("Klusbib API request: $method; $target; duration=$execution_time secs; response=" . json_encode($res));
+            Log::debug("Klusbib API response: $method; $target; status=" . $res->getStatusCode() . "; duration=$execution_time secs; response=" . json_encode($res));
 
         } catch (ClientException $clientException) {
             Log::error( "Client exception - " . $clientException->getMessage());
