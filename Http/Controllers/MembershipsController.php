@@ -40,7 +40,7 @@ class MembershipsController extends Controller
     public function confirm($membershipId = null)
     {
         $membership = Membership::find($membershipId);
-        //$this->authorize('update', $membership);
+        $this->authorize('update', $membership);
         if (is_null($membership)) {
             return redirect()->route('klusbib.memberships.index')->with('error', trans('klusbib::admin/memberships/message.does_not_exist'));
         }
@@ -63,7 +63,7 @@ class MembershipsController extends Controller
     public function cancel($membershipId = null)
     {
         $membership = Membership::find($membershipId);
-        //$this->authorize('update', $membership);
+        $this->authorize('update', $membership);
         if (is_null($membership)) {
             return redirect()->route('klusbib.memberships.index')->with('error', trans('klusbib::admin/memberships/message.does_not_exist'));
         }

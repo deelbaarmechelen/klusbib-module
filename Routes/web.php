@@ -82,7 +82,7 @@ Route::prefix('klusbib')->group(function() {
     Route::get('/memberships/{membership}/confirm', [
         'as' => 'klusbib.memberships.confirm',
         'uses' => 'MembershipsController@confirm' ]);
-    Route::get('/memberships/{membership}/cancel', [
+    Route::delete('/memberships/{membership}/cancel', [
         'as' => 'klusbib.memberships.cancel',
         'uses' => 'MembershipsController@cancel' ]);
     Route::get('/payments', [

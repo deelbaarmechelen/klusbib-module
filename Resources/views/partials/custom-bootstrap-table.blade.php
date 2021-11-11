@@ -129,7 +129,12 @@
                 actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/confirm" class="btn btn-sm btn-success" data-tooltip="true" title="Confirm"><i class="fa fa-check"></i></a>&nbsp;';
             }
             if ((row.available_actions) && (row.available_actions.cancel === true)) {
-                actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/cancel" class="btn btn-sm btn-danger" data-tooltip="true" title="Cancel"><i class="fa fa-close"></i></a>&nbsp;';
+                actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/cancel" '
+                    + ' class="btn btn-danger btn-sm delete-asset"  data-tooltip="true"  '
+                    + ' data-toggle="modal" '
+                    + ' data-content="{{ trans('klusbib::admin/memberships/general.sure_to_decline') }} ?" '
+                    + ' data-title="{{  trans('klusbib::admin/memberships/general.decline') }}" onClick="return false;">'
+                    + '<i class="fa fa-close"></i></a>&nbsp;';
             }
             actions +='</nobr>';
             return actions;
