@@ -27,6 +27,8 @@ Route::group(
 //            'uses' => '\App\Http\Controllers\AssetsController@overdueForAudit'
 //        ]);
 
+//Route::get('{assetId}/qr_code', [ 'as' => 'qr_code/hardware', 'uses' => 'AssetsController@getQrCode' ]);
+//Route::get('{assetId}/barcode', [ 'as' => 'barcode/hardware', 'uses' => 'AssetsController@getBarCode' ]);
     });
 
 Route::group(
@@ -39,4 +41,17 @@ Route::group(
             'uses' => '\Modules\Klusbib\Http\Controllers\UsersController@edit'
             //            'uses' => 'AssetsController@dueForAudit'
         ]);
+    });
+
+//Route::get('barcodes', ['as' => 'settings.barcodes.index','uses' => 'SettingsController@getBarcodes' ]);
+//Route::post('barcodes', ['as' => 'settings.barcodes.save','uses' => 'SettingsController@postBarcodes' ]);
+
+Route::group(
+    ['prefix' => 'hardware',
+        'middleware' => ['auth']],
+    function () {
+
+//Route::get('{assetId}/qr_code', [ 'as' => 'qr_code/hardware', 'uses' => 'AssetsController@getQrCode' ]);
+//Route::get('{assetId}/barcode', [ 'as' => 'barcode/hardware', 'uses' => 'AssetsController@getBarCode' ]);
+
     });
