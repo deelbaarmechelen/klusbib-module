@@ -35,7 +35,7 @@ class ReservationsTransformer
             ] : null,
             'user' => ($reservation->user_id) ? [
                 'id' => (int) $reservation->user_id,
-                'name'=> e($reservation->user->first_name) .' '.e($reservation->user->last_name),
+                'name'=> ($reservation->user) ? (e($reservation->user->first_name) .' '.e($reservation->user->last_name)) : e($reservation->username),
 //                'full_name'=> e($reservation->firstname).' '.e($reservation->lastname)
             ] : null,
             'user_id' => e($reservation->user_id),
