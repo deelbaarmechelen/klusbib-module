@@ -390,7 +390,7 @@ class KlusbibServiceProvider extends ServiceProvider
 
     private function registerApiClient(Router $router) {
 
-        Log::debug('aliasMiddleware added');
+        //Log::debug('aliasMiddleware added');
         //$router->aliasMiddleware('apicontext', \Modules\Klusbib\Http\Middleware\ApiContextMiddleware::class);
 
         $this->app->singleton('Modules\Klusbib\Api\Client', function ()
