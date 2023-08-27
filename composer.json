@@ -25,14 +25,10 @@
     ],
     "require": {
         "guzzlehttp/guzzle": "^6.3",
-        "cloudcreativity/laravel-json-api": "^1.5",
 	    "deelbaarmechelen/remote-model": "dev-master",
         "fzaninotto/faker": "~1.4",
         "joshbrw/laravel-module-installer": "^2.0",
         "lcobucci/jwt": "3.3.3"
-    },
-    "require-dev": {
-        "cloudcreativity/json-api-testing": "^1.2|^2.0"
     },
     "config": {
         "platform": {
