@@ -27,7 +27,8 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'api'], fun
     Route::group(['prefix' => 'klusbib'], function () {
     //Route::group(['prefix' => 'klusbib', 'middleware' => 'apicontext'], function () {
 
-        Route::withoutMiddleware([ApiContextMiddleware::class])->group(['prefix' => 'sync'], function () {
+	    //Route::withoutMiddleware([ApiContextMiddleware::class])->group(['prefix' => 'sync'], function () {
+	Route::->group(['prefix' => 'sync'], function () {
         //Route::group(['prefix' => 'sync', 'middleware' => 'apicontext'], function () {
             // reserved for syncing requests from Klusbib API
             Route::post('users',
