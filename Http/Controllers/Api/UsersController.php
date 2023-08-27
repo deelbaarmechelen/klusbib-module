@@ -81,6 +81,7 @@ class UsersController extends Controller
      * Sync user data from Klusbib API to this inventory
      */
     public function syncUpdate(Request $request, $id) {
+        Log::debug("UsersController Sync Update for id $id");
         //Model::getClient()->updateToken($request->session());
         if (is_null($user = User::find($id))) {
             // Redirect to the models management page
@@ -114,8 +115,9 @@ class UsersController extends Controller
         } else {
             $user->avatar = \Modules\Klusbib\Models\Api\User::STATE_INACTIVE_AVATAR;
         }
-
+        Log::debug("UsersController Sync Update before save");
         if ($user->save()) {
+            Log::debug("UsersController Sync Update after save");
             return response()->json(Helper::formatStandardApiResponse('success', (new UsersTransformer)->transformSyncedUser($user), trans('admin/users/message.success.update')));
         }
         $query = $user->newModelQuery();

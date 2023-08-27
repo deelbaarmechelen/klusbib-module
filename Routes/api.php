@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Modules\Klusbib\Http\Middleware\ApiContextMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,9 +24,11 @@ Route::middleware('auth:api')->get('/klusbib', function (Request $request) {
 Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'api'], function () {
 
 //    Route::middleware(['apicontext'])->group(['prefix' => 'klusbib'], function () {
-    Route::group(['prefix' => 'klusbib', 'middleware' => 'apicontext'], function () {
+    Route::group(['prefix' => 'klusbib'], function () {
+    //Route::group(['prefix' => 'klusbib', 'middleware' => 'apicontext'], function () {
 
-        Route::group(['prefix' => 'sync', 'middleware' => 'apicontext'], function () {
+        Route::withoutMiddleware([ApiContextMiddleware::class])->group(['prefix' => 'sync'], function () {
+        //Route::group(['prefix' => 'sync', 'middleware' => 'apicontext'], function () {
             // reserved for syncing requests from Klusbib API
             Route::post('users',
                 [
