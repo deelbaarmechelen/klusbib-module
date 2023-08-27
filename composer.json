@@ -37,6 +37,9 @@
     "config": {
         "platform": {
             "php": "7.2"
+        },
+        "allow-plugins": {
+            "joshbrw/laravel-module-installer": true
         }
     }
 }
