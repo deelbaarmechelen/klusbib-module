@@ -19,7 +19,7 @@ class UsersController extends Controller
      * Sync user data from Klusbib API to this inventory
      */
     public function syncNew(Request $request) {
-        Log::debug("UsersController Sync New for id $id");
+        Log::debug("UsersController Sync New");
         $state = $request->input('state');
         $first_name = $request->input('first_name');
         $last_name = $request->input('last_name');
