@@ -74,7 +74,7 @@ class KlusbibServiceProvider extends ServiceProvider
 
         $this->registerApiClient($router);
 
-        $this->registerNotifications();
+        //$this->registerNotifications(); // disabled -> replaced by sync_loans batch on API
         $this->registerObservers();
         $this->registerPolicies();
 //        $this->registerCommands();
@@ -405,10 +405,10 @@ class KlusbibServiceProvider extends ServiceProvider
     }
 
     private function registerNotifications() {
-        Asset::$checkoutClass = NotifyAssetCheckout::class;
-        Asset::$checkinClass = NotifyAssetCheckin::class;
-        Accessory::$checkoutClass = NotifyAccessoryCheckout::class;
-        Accessory::$checkinClass = NotifyAccessoryCheckin::class;
+        //Asset::$checkoutClass = NotifyAssetCheckout::class;
+        //Asset::$checkinClass = NotifyAssetCheckin::class;
+        //Accessory::$checkoutClass = NotifyAccessoryCheckout::class;
+        //Accessory::$checkinClass = NotifyAccessoryCheckin::class;
     }
 
 ////    private function registerCommands() {
