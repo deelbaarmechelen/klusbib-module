@@ -2,6 +2,7 @@
 
     return [
         'activity'		        => 'Ontleningen',
+        'by_membership_type'    => 'per lidmaatschapstype',
         'checkout'              => 'Ontleningen',
         'checkin'               => 'Inleveren',
         'deliveries'            => 'Leveringen',
@@ -9,6 +10,7 @@
         'id'                    => 'Id',
         'inventory'             => 'Inventaris',
         'lendings'              => 'Ontleningen',
+        'members'               => 'Leden',
         'memberships'           => 'Lidmaatschappen',
         'name'			        => 'Klusbib',
         'new_users'             => 'Nieuwe leden',

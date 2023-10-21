@@ -20,9 +20,8 @@ class Stat extends BaseModel
         $now = new DateTimeImmutable("now");
         $prevMonth = $now->sub(new \DateInterval('P1M'));
         $statsPrevMonth = $instance->request($instance->getEndpoint(), 'monthly', ['version' => 2, 'statMonth' => $prevMonth->format('Y-m')]);
-        $prevStat = array();
-        $prevStat["user"] = \json_decode($statsPrevMonth["user-statistics"], true);
-        $prevStat["activity"] = \json_decode($statsPrevMonth["activity-statistics"], true);
+        $prevUserStat = \json_decode($statsPrevMonth["user-statistics"], true);
+        $prevActivityStat = \json_decode($statsPrevMonth["activity-statistics"], true);
 
         // Calling monthly method on stats endpoint with parameter version set to 2
         $stats = $instance->request($instance->getEndpoint(), 'monthly', ['version' => 2]);
@@ -35,7 +34,10 @@ class Stat extends BaseModel
             "tool" => $toolStats,
             "activity" => $activityStats,
             "membership" => $membershipStats,
-            "prevMonth" => $prevStat
+            "prevMonth" => [
+                "user" => $prevUserStat,
+                "activity" => $prevActivityStat,    
+            ]
         );
     }
 

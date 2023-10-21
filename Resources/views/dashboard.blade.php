@@ -217,7 +217,7 @@
     <div class="col-md-4">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title">{{ trans('general.users') }} per Membership</h3>
+                <h3 class="box-title">{{ trans('klusbib::general.members') }} {{ trans('klusbib::general.by_membership_type') }}</h3>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -238,7 +238,7 @@
     <div class="col-md-4">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title">{{ trans('general.users') }} per Status</h3>
+                <h3 class="box-title">{{ trans('klusbib::general.members') }} per Status</h3>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -508,7 +508,8 @@
         type: 'pie',
         data: {
             datasets: [{
-                data: [ {{number_format($counts['user_active'])}},{{number_format($counts['user_expired'])}}, {{number_format($counts['user_deleted'])}}],
+                data: [ {{number_format($counts['membership']['active'])}},{{number_format($counts['membership']['expired'])}},
+                        {{number_format($counts['membership']['pending'])}},{{number_format($counts['membership']['cancelled'])}}],
                 backgroundColor: [
                     '#f56954',
                     '#00a65a',
@@ -524,7 +525,8 @@
             labels: [
                 'Actief',
                 'Vervallen',
-                'Verwijderd'
+                'In behandeling',
+                'Geannuleerd'
             ]
         },
         options: pieOptions
@@ -565,7 +567,7 @@
                 maxBarThickness: 8,
                 minBarLength: 2,
                 borderWidth: 1,
-                data: [{{number_format($counts['new_user_prev_month'])}},{{number_format($counts['new_user_curr_month'])}}]
+                data: [{{number_format($counts['membership']['new_members_prev_month'])}},{{number_format($counts['membership']['new_members_curr_month'])}}]
             }],
             options: barOptions,
         }

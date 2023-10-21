@@ -9,4 +9,6 @@ return array(
     'tool_code'					=> 'Materiaal Code',
     'user'  					=> 'Gebruiker',
     'user_id'  					=> 'Gebruiker Id',
+    'total_users'			=> 'totaal aantal personen',
+    'total_activity'		=> 'totaal aantal ontleningen'
 );
