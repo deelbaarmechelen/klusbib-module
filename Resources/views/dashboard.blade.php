@@ -43,24 +43,7 @@
         <a href="{{ route('klusbib.users.index') }}" class="small-box-footer">{{ trans('general.moreinfo') }} <i class="fa fa-arrow-circle-right"></i></a>
       @endcan
     </div>
-  </div><!-- ./col -->
-    <!-- panel -->
-    {{--<div class="col-lg-3 col-xs-6">--}}
-        {{--<!-- small box -->--}}
-        {{--<div class="small-box bg-aqua">--}}
-            {{--<div class="inner">--}}
-                {{--<h3>{{ number_format($counts['user_stroom']) }}</h3>--}}
-                {{--<p>{{ trans('klusbib::general.stroom_users') }}</p>--}}
-            {{--</div>--}}
-            {{--<div class="icon">--}}
-                {{--<i class="fa fa-users"></i>--}}
-            {{--</div>--}}
-            {{--@can('index', \App\Models\Asset::class)--}}
-                {{--<a href="{{ route('klusbib.users.index') }}" class="small-box-footer">{{ trans('general.moreinfo') }} <i class="fa fa-arrow-circle-right"></i></a>--}}
-            {{--@endcan--}}
-        {{--</div>--}}
-    {{--</div><!-- ./col -->--}}
-
+  </div>
   <div class="col-lg-3 col-xs-6">
     <!-- small box -->
     <div class="small-box bg-teal">
@@ -229,11 +212,12 @@
   {{--</div>--}}
 
 {{--</div> <!--/row-->--}}
+<!-- First line of charts -->
 <div class="row">
     <div class="col-md-4">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title">{{ trans('general.users') }} per Project</h3>
+                <h3 class="box-title">{{ trans('general.users') }} per Membership</h3>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -244,7 +228,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="chart-responsive">
-                            <canvas id="usersProjectPieChart" height="120"></canvas>
+                            <canvas id="usersMembershipPieChart" height="120"></canvas>
                         </div> <!-- ./chart-responsive -->
                     </div> <!-- /.col -->
                 </div> <!-- /.row -->
@@ -295,6 +279,7 @@
         </div> <!-- /.box -->
     </div>
 </div>
+<!-- Second line of charts -->
 <div class="row">
     <div class="col-md-4">
         <div class="box box-default">
@@ -360,6 +345,8 @@
         </div> <!-- /.box -->
     </div>
 </div>
+
+<!-- Lendings -->
 <div class="row">
 
     <div class="col-md-12">
@@ -463,242 +450,180 @@
 
 <script nonce="{{ csrf_token() }}">
 
-    var pieChartUserProjectCanvas = $("#usersProjectPieChart").get(0).getContext("2d");
-    var pieChartUserProject = new Chart(pieChartUserProjectCanvas);
-    var ctxUsersProject = document.getElementById("usersProjectPieChart");
+    var pieChartUserMembershipCanvas = $("#usersMembershipPieChart").get(0).getContext("2d");
+    var pieChartUserMembership = new Chart(pieChartUserMembershipCanvas);
+    var ctxUsersMembership = document.getElementById("usersMembershipPieChart");
 
-        var myPieChartUserStatus = new Chart(ctxUsersProject,{
+    var myPieChartUserMembership = new Chart(ctxUsersMembership,{
 
-            type: 'pie',
-            data: {
-                datasets: [{
-                    data: [ {{number_format($counts['user_stroom'])}}, {{number_format($counts['user']) - number_format($counts['user_stroom'])}}],
-                    backgroundColor: [
-                        '#f56954',
-                        '#00a65a',
-                        '#f39c12',
-                        '#00c0ef',
-                        '#3c8dbc',
-                        '#d2d6de',
-                        '#0005dc',
-                    ]
-                    // backgroundColor: [
-                    //     window.chartColors.red,
-                    //     window.chartColors.orange,
-                    //     window.chartColors.yellow,
-                    //     window.chartColors.green,
-                    //     window.chartColors.blue,
-                    // ]
-                }],
-
-                // These labels appear in the legend and in the tooltips when hovering different arcs
-                labels: [
-                    'Stroom',
-                    'Anderen'
-                ]
-            },
-            options: pieOptions
-        });
-
-        var pieChartUserStatusCanvas = $("#usersStatusPieChart").get(0).getContext("2d");
-        var pieChartUserStatus = new Chart(pieChartUserStatusCanvas);
-        var ctxUsersStatus = document.getElementById("usersStatusPieChart");
-
-        var myPieChartUserStatus = new Chart(ctxUsersStatus,{
-
-            type: 'pie',
-            data: {
-                datasets: [{
-                    data: [ {{number_format($counts['user_active'])}},{{number_format($counts['user_expired'])}}, {{number_format($counts['user_deleted'])}}],
-                    backgroundColor: [
-                        '#f56954',
-                        '#00a65a',
-                        '#f39c12',
-                        '#00c0ef',
-                        '#3c8dbc',
-                        '#d2d6de',
-                        '#0005dc',
-                    ]
-                }],
-
-                // These labels appear in the legend and in the tooltips when hovering different arcs
-                labels: [
-                    'Actief',
-                    'Vervallen',
-                    'Verwijderd'
-                ]
-            },
-            options: pieOptions
-        });
-
-        // var pieChartActivityProjectCanvas = $("#activityProjectPieChart").get(0).getContext("2d");
-        // var pieChartActivityProject = new Chart(pieChartActivityProjectCanvas);
-        // var ctxActivityProject = document.getElementById("activityProjectPieChart");
-
-        {{--var myPieChartActivityProject = new Chart(ctxActivityProject,{--}}
-
-            {{--type: 'pie',--}}
-            {{--data: {--}}
-                {{--datasets: [{--}}
-                    {{--data: [ {{number_format($counts['activity_stroom'])}}, {{number_format($counts['activity']) - number_format($counts['activity_stroom'])}}],--}}
-                    {{--backgroundColor: [--}}
-                        {{--'#f56954',--}}
-                        {{--'#00a65a',--}}
-                        {{--'#f39c12',--}}
-                        {{--'#00c0ef',--}}
-                        {{--'#3c8dbc',--}}
-                        {{--'#d2d6de',--}}
-                        {{--'#0005dc',--}}
-                    {{--]--}}
-                    {{--// backgroundColor: [--}}
-                    {{--//     window.chartColors.red,--}}
-                    {{--//     window.chartColors.orange,--}}
-                    {{--//     window.chartColors.yellow,--}}
-                    {{--//     window.chartColors.green,--}}
-                    {{--//     window.chartColors.blue,--}}
-                    {{--// ]--}}
-                {{--}],--}}
-
-                {{--// These labels appear in the legend and in the tooltips when hovering different arcs--}}
-                {{--labels: [--}}
-                    {{--'Stroom',--}}
-                    {{--'Anderen'--}}
-                {{--]--}}
-            {{--},--}}
-            {{--options: pieOptions--}}
-        {{--});--}}
-
-        let barOptions = {
-            scales: {
-                xAxes: [{
-                    gridLines: {
-                        offsetGridLines: true,
-                    }
-                }],
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                        stepSize: 1
-                    }
-                }]
-            }
-        };
-
-        var barChartNewUsersCanvas = $("#newUsersBarChart").get(0).getContext("2d");
-        var barChartNewUsers = new Chart(barChartNewUsersCanvas);
-        var ctxNewUsers = document.getElementById("newUsersBarChart");
-        var myNewUsersBarChart = new Chart(ctxNewUsers, {
-            type: 'bar',
-            data: {
-                labels: [
-                    'Vorige maand',
-                    'Huidige maand'
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: [ {{number_format($counts['membership']['regular'])}}, 
+                  {{number_format($counts['membership']['renewal'])}},
+                  {{number_format($counts['membership']['reduced_regular'])}},
+                  {{number_format($counts['membership']['reduced_renewal'])}},
+                  {{number_format($counts['membership']['org_regular'])}},
+                  {{number_format($counts['membership']['org_renewal'])}},
+                  {{number_format($counts['membership']['temporary'])}},
                 ],
-                datasets: [{
-                    label: 'Stroom',
-                    backgroundColor: '#00a65a',
-                    barPercentage: 0.5,
-                    barThickness: 6,
-                    maxBarThickness: 8,
-                    minBarLength: 2,
-                    borderWidth: 1,
-                    data: [{{number_format($counts['new_user_prev_month_stroom'])}},{{number_format($counts['new_user_curr_month_stroom'])}}]
-                },{
-                    label: 'Anderen',
-                    backgroundColor: '#f56954',
-                    barPercentage: 0.5,
-                    barThickness: 6,
-                    maxBarThickness: 8,
-                    minBarLength: 2,
-                    borderWidth: 1,
-                    data: [{{number_format($counts['new_user_prev_month']) - number_format($counts['new_user_prev_month_stroom'])}}
-                        ,{{number_format($counts['new_user_curr_month']) - number_format($counts['new_user_curr_month_stroom'])}}]
-                },{
-                    label: 'Totaal',
-                    backgroundColor: '#f39c12',
-                    barPercentage: 0.5,
-                    barThickness: 6,
-                    maxBarThickness: 8,
-                    minBarLength: 2,
-                    borderWidth: 1,
-                    data: [{{number_format($counts['new_user_prev_month'])}},{{number_format($counts['new_user_curr_month'])}}]
-                }],
-                options: barOptions,
+                backgroundColor: [
+                    '#f56954',
+                    '#00a65a',
+                    '#f39c12',
+                    '#00c0ef',
+                    '#3c8dbc',
+                    '#d2d6de',
+                    '#0005dc',
+                ]
+                // backgroundColor: [
+                //     window.chartColors.red,
+                //     window.chartColors.orange,
+                //     window.chartColors.yellow,
+                //     window.chartColors.green,
+                //     window.chartColors.blue,
+                // ]
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Standaard',
+                'Hernieuwing',
+                'Standaard (UIT-pas)',
+                'Hernieuwing (UIT-pas)',
+                'Standaard (Vereniging)',
+                'Hernieuwing (Vereniging)',
+                'Proef'
+            ]
+        },
+        options: pieOptions
+    });
+
+    var pieChartUserStatusCanvas = $("#usersStatusPieChart").get(0).getContext("2d");
+    var pieChartUserStatus = new Chart(pieChartUserStatusCanvas);
+    var ctxUsersStatus = document.getElementById("usersStatusPieChart");
+
+    var myPieChartUserStatus = new Chart(ctxUsersStatus,{
+
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: [ {{number_format($counts['user_active'])}},{{number_format($counts['user_expired'])}}, {{number_format($counts['user_deleted'])}}],
+                backgroundColor: [
+                    '#f56954',
+                    '#00a65a',
+                    '#f39c12',
+                    '#00c0ef',
+                    '#3c8dbc',
+                    '#d2d6de',
+                    '#0005dc',
+                ]
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Actief',
+                'Vervallen',
+                'Verwijderd'
+            ]
+        },
+        options: pieOptions
+    });
+
+
+    let barOptions = {
+        scales: {
+            xAxes: [{
+                gridLines: {
+                    offsetGridLines: true,
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    stepSize: 1
+                }
+            }]
+        }
+    };
+
+    var barChartNewUsersCanvas = $("#newUsersBarChart").get(0).getContext("2d");
+    var barChartNewUsers = new Chart(barChartNewUsersCanvas);
+    var ctxNewUsers = document.getElementById("newUsersBarChart");
+    var myNewUsersBarChart = new Chart(ctxNewUsers, {
+        type: 'bar',
+        data: {
+            labels: [
+                'Vorige maand',
+                'Huidige maand'
+            ],
+            datasets: [{
+                label: 'Totaal',
+                backgroundColor: '#f39c12',
+                barPercentage: 0.5,
+                barThickness: 6,
+                maxBarThickness: 8,
+                minBarLength: 2,
+                borderWidth: 1,
+                data: [{{number_format($counts['new_user_prev_month'])}},{{number_format($counts['new_user_curr_month'])}}]
+            }],
+            options: barOptions,
+        }
+    });
+
+
+    var barChartCheckoutCanvas = $("#checkoutBarChart").get(0).getContext("2d");
+    var barChartCheckout = new Chart(barChartCheckoutCanvas);
+    var ctxCheckout = document.getElementById("checkoutBarChart");
+    var myCheckoutBarChart = new Chart(ctxCheckout, {
+        type: 'bar',
+        data: {
+            labels: [
+                'Vorige maand',
+                'Huidige maand'
+            ],
+            datasets: [{
+                label: 'Totaal',
+                backgroundColor: '#f39c12',
+                barPercentage: 0.5,
+                barThickness: 6,
+                maxBarThickness: 8,
+                minBarLength: 2,
+                borderWidth: 1,
+                data: [{{number_format($counts['activity_co_prev_month'])}},{{number_format($counts['activity_co_curr_month'])}}]
+            }],
+            options: barOptions,
+        }
+    });
+
+
+    var ctxLendings = document.getElementById('lendingsChart').getContext("2d")
+    var myChart = new Chart(ctxLendings, {
+        type: 'bar',
+        options: barOptions
+    });
+
+
+    $.ajax({
+        type: 'GET',
+        url: '{{  route('api.klusbib.lendings.byduedate') }}',
+        headers: {
+            "X-Requested-With": 'XMLHttpRequest',
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+        },
+
+        dataType: 'json',
+        success: function (data) {
+            var ctx = new Chart(ctxLendings,{
+                type: 'bar',
+                data: data.chart,
+                options: barOptions
+            });
+        },
+        error: function (error) {
+            console.log('error in lendings.byduedate: ' + error);
             }
         });
-
-
-        var barChartCheckoutCanvas = $("#checkoutBarChart").get(0).getContext("2d");
-        var barChartCheckout = new Chart(barChartCheckoutCanvas);
-        var ctxCheckout = document.getElementById("checkoutBarChart");
-        var myCheckoutBarChart = new Chart(ctxCheckout, {
-            type: 'bar',
-            data: {
-                labels: [
-                    'Vorige maand',
-                    'Huidige maand'
-                ],
-                datasets: [{
-                    label: 'Stroom',
-                    backgroundColor: '#00a65a',
-                    barPercentage: 0.5,
-                    barThickness: 6,
-                    maxBarThickness: 8,
-                    minBarLength: 2,
-                    borderWidth: 1,
-                    data: [{{number_format($counts['activity_co_prev_month_stroom'])}},{{number_format($counts['activity_co_curr_month_stroom'])}}]
-                },{
-                    label: 'Anderen',
-                    backgroundColor: '#f56954',
-                    barPercentage: 0.5,
-                    barThickness: 6,
-                    maxBarThickness: 8,
-                    minBarLength: 2,
-                    borderWidth: 1,
-                    data: [{{number_format($counts['activity_co_prev_month']) - number_format($counts['activity_co_prev_month_stroom'])}}
-                        ,{{number_format($counts['activity_co_curr_month']) - number_format($counts['activity_co_curr_month_stroom'])}}]
-                },{
-                    label: 'Totaal',
-                    backgroundColor: '#f39c12',
-                    barPercentage: 0.5,
-                    barThickness: 6,
-                    maxBarThickness: 8,
-                    minBarLength: 2,
-                    borderWidth: 1,
-                    data: [{{number_format($counts['activity_co_prev_month'])}},{{number_format($counts['activity_co_curr_month'])}}]
-                }],
-                options: barOptions,
-            }
-        });
-
-
-        var ctxLendings = document.getElementById('lendingsChart').getContext("2d")
-        var myChart = new Chart(ctxLendings, {
-            type: 'bar',
-            options: barOptions
-        });
-
-
-        $.ajax({
-            type: 'GET',
-            url: '{{  route('api.klusbib.lendings.byduedate') }}',
-            headers: {
-                "X-Requested-With": 'XMLHttpRequest',
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-            },
-
-            dataType: 'json',
-            success: function (data) {
-               var ctx = new Chart(ctxLendings,{
-                  type: 'bar',
-                  data: data.chart,
-                  options: barOptions
-                });
-            },
-            error: function (error) {
-                console.log('error in lendings.byduedate: ' + error);
-             }
-         });
 
     var ctxLendingsByCat = document.getElementById('lendingsByCatChart').getContext("2d")
     let barOptionsLendingsByCat = {
@@ -743,48 +668,6 @@
     });
 
 
-    var barChartCheckinCanvas = $("#checkinBarChart").get(0).getContext("2d");
-        var barChartCheckin = new Chart(barChartCheckinCanvas);
-        var ctxCheckin = document.getElementById("checkinBarChart");
-        var myCheckinBarChart = new Chart(ctxCheckin, {
-            type: 'bar',
-            data: {
-                labels: [
-                    'Vorige maand',
-                    'Huidige maand'
-                ],
-                datasets: [{
-                    label: 'Stroom',
-                    backgroundColor: '#00a65a',
-                    barPercentage: 0.5,
-                    barThickness: 6,
-                    maxBarThickness: 8,
-                    minBarLength: 2,
-                    borderWidth: 1,
-                    data: [{{number_format($counts['activity_co_prev_month_stroom'])}},{{number_format($counts['activity_co_curr_month_stroom'])}}]
-                },{
-                    label: 'Anderen',
-                    backgroundColor: '#f56954',
-                    barPercentage: 0.5,
-                    barThickness: 6,
-                    maxBarThickness: 8,
-                    minBarLength: 2,
-                    borderWidth: 1,
-                    data: [{{number_format($counts['activity_co_prev_month']) - number_format($counts['activity_co_prev_month_stroom'])}}
-                        ,{{number_format($counts['activity_co_curr_month']) - number_format($counts['activity_co_curr_month_stroom'])}}]
-                },{
-                    label: 'Totaal',
-                    backgroundColor: '#f39c12',
-                    barPercentage: 0.5,
-                    barThickness: 6,
-                    maxBarThickness: 8,
-                    minBarLength: 2,
-                    borderWidth: 1,
-                    data: [{{number_format($counts['activity_co_prev_month'])}},{{number_format($counts['activity_co_curr_month'])}}]
-                }],
-                options: barOptions,
-            }
-        });
 </script>
 
 

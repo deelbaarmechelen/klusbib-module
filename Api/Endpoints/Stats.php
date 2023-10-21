@@ -27,9 +27,16 @@ class Stats
      *
      * @return array
      */
-    public function monthly() {
+    public function monthly($version = 1, $statMonth = null) {
         try {
-            $statsResult = $this->client->get('stats/monthly');
+            $target = 'stats/monthly';
+            if ($version > 1) {
+                $target .= "?version=$version";
+                if (isset($statMonth)) {
+                    $target.= "&stat-month=$statMonth";
+                }
+            }
+            $statsResult = $this->client->get($target);
             \Log::debug('Klusbib Stats endpoint: monthly stats=' . \json_encode($statsResult));
 
             return $statsResult;

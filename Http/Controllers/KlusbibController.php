@@ -16,39 +16,32 @@ class KlusbibController extends Controller
     public function index()
     {
         $monthlyStats = Stat::monthly();
-//        \Log::debug('Klusbib Dashboard: monthly stats=' . var_dump($monthlyStats));
+    //    \Log::info('Klusbib Dashboard: monthly stats=' . var_dump($monthlyStats));
         $counts['user'] = isset($monthlyStats["user"]) ? $monthlyStats["user"]["total-count"] : "0";
         $counts['user_active'] = isset($monthlyStats["user"]) ? $monthlyStats["user"]["active-count"] : "0";
         $counts['user_expired'] = isset($monthlyStats["user"]) ? $monthlyStats["user"]["expired-count"] : "0";
         $counts['user_deleted'] = isset($monthlyStats["user"]) ? $monthlyStats["user"]["deleted-count"] : "0";
-        $counts['user_stroom'] = isset($monthlyStats["user"]) && isset($monthlyStats["user"]["stroom"]) ?
-            $monthlyStats["user"]["stroom"]["total-count"] : "0";
-        $counts['new_user_prev_month'] = isset($monthlyStats["user"]) ? $monthlyStats["user"]["new-users-prev-month-count"] : "0";
-        $counts['new_user_prev_month_stroom'] = isset($monthlyStats["user"]) && isset($monthlyStats["user"]["stroom"]) ?
-            $monthlyStats["user"]["stroom"]["new-users-prev-month-count"] : "0";
-        $counts['new_user_curr_month'] = isset($monthlyStats["user"]) ? $monthlyStats["user"]["new-users-curr-month-count"] : "0";
-        $counts['new_user_curr_month_stroom'] = isset($monthlyStats["user"]) && isset($monthlyStats["user"]["stroom"]) ?
-            $monthlyStats["user"]["stroom"]["new-users-curr-month-count"] : "0";
+        $counts['new_user_prev_month'] = isset($monthlyStats["prevMonth"]["user"]) ? $monthlyStats["prevMonth"]["user"]["new-users-count"] : "0";
+        $counts['new_user_curr_month'] = isset($monthlyStats["user"]) ? $monthlyStats["user"]["new-users-count"] : "0";
         $counts['asset'] = isset($monthlyStats["tool"]) ? $monthlyStats["tool"]["total-count"] : "0";
-        $counts['accessory'] = isset($monthlyStats["accessory"]) ? $monthlyStats["accessory"]["total-count"] : "0";
+        $counts['accessory'] = isset($monthlyStats["accessory"]) ? $monthlyStats["accessory"]["total-count"] : \App\Models\Accessory::count();
         $counts['consumable'] = \App\Models\Consumable::count();
         $counts['activity'] = isset($monthlyStats["activity"]) ? $monthlyStats["activity"]["total-count"] : "0";
         $counts['activity_active'] = isset($monthlyStats["activity"]) ? $monthlyStats["activity"]["active-count"] : "0";
         $counts['activity_overdue'] = isset($monthlyStats["activity"]) ? $monthlyStats["activity"]["overdue-count"] : "0";
-        $counts['activity_co_prev_month'] = isset($monthlyStats["activity"]) ? $monthlyStats["activity"]["checkout-prev-month-count"] : "0";
-        $counts['activity_co_curr_month'] = isset($monthlyStats["activity"]) ? $monthlyStats["activity"]["checkout-curr-month-count"] : "0";
-        $counts['activity_ci_prev_month'] = isset($monthlyStats["activity"]) ? $monthlyStats["activity"]["checkin-prev-month-count"] : "0";
-        $counts['activity_ci_curr_month'] = isset($monthlyStats["activity"]) ? $monthlyStats["activity"]["checkin-curr-month-count"] : "0";
-        $counts['activity_stroom'] = isset($monthlyStats["activity"]) && isset($monthlyStats["activity"]["stroom"]) ? $monthlyStats["activity"]["stroom"]["total-count"] : "0";
-        $counts['activity_co_prev_month_stroom'] = isset($monthlyStats["activity"]) && isset($monthlyStats["activity"]["stroom"]) ?
-            $monthlyStats["activity"]["stroom"]["checkout-prev-month-count"] : "0";
-        $counts['activity_co_curr_month_stroom'] = isset($monthlyStats["activity"]) && isset($monthlyStats["activity"]["stroom"]) ?
-            $monthlyStats["activity"]["stroom"]["checkout-curr-month-count"] : "0";
-        $counts['activity_ci_prev_month_stroom'] = isset($monthlyStats["activity"]) && isset($monthlyStats["activity"]["stroom"]) ?
-            $monthlyStats["activity"]["stroom"]["checkin-prev-month-count"] : "0";
-        $counts['activity_ci_curr_month_stroom'] = isset($monthlyStats["activity"]) && isset($monthlyStats["activity"]["stroom"]) ?
-            $monthlyStats["activity"]["stroom"]["checkin-curr-month-count"] : "0";
+        $counts['activity_co_prev_month'] = isset($monthlyStats["prevMonth"]["activity"]) ? $monthlyStats["prevMonth"]["activity"]["checkout-count"] : "0";
+        $counts['activity_ci_prev_month'] = isset($monthlyStats["prevMonth"]["activity"]) ? $monthlyStats["prevMonth"]["activity"]["checkin-count"] : "0";
+        $counts['activity_co_curr_month'] = isset($monthlyStats["activity"]) ? $monthlyStats["activity"]["checkout-count"] : "0";
+        $counts['activity_ci_curr_month'] = isset($monthlyStats["activity"]) ? $monthlyStats["activity"]["checkin-count"] : "0";
         $counts['grand_total'] = $counts['asset'] + $counts['accessory'] + $counts['consumable'];
+        $counts['membership'] = array();
+        $counts['membership']['regular'] = isset($monthlyStats["membership"]) && isset($monthlyStats["membership"]["Regular"]) ? $monthlyStats["membership"]["Regular"]["total-count"] : "0";
+        $counts['membership']['renewal'] = isset($monthlyStats["membership"]) && isset($monthlyStats["membership"]["Renewal"])? $monthlyStats["membership"]["Renewal"]["total-count"] : "0";
+        $counts['membership']['reduced_regular'] = isset($monthlyStats["membership"]) && isset($monthlyStats["membership"]["RegularReduced"])? $monthlyStats["membership"]["RegularReduced"]["total-count"] : "0";
+        $counts['membership']['reduced_renewal'] = isset($monthlyStats["membership"]) && isset($monthlyStats["membership"]["RenewalReduced"])? $monthlyStats["membership"]["RenewalReduced"]["total-count"] : "0";
+        $counts['membership']['org_regular'] = isset($monthlyStats["membership"]) && isset($monthlyStats["membership"]["RegularOrg"])? $monthlyStats["membership"]["RegularOrg"]["total-count"] : "0";
+        $counts['membership']['org_renewal'] = isset($monthlyStats["membership"]) && isset($monthlyStats["membership"]["RenewalOrg"])? $monthlyStats["membership"]["RenewalOrg"]["total-count"] : "0";
+        $counts['membership']['temporary'] = isset($monthlyStats["membership"]) && isset($monthlyStats["membership"]["Temporary"]) ? $monthlyStats["membership"]["Temporary"]["total-count"] : "0";
 
 //        return view('dashboard')->with('asset_stats', $asset_stats)->with('counts', $counts);
         return view('klusbib::dashboard')->with('counts', $counts);

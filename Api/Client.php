@@ -177,7 +177,7 @@ class Client
                 $this->user,
                 $this->password
             ],
-//            "debug" => true
+         // "debug" => true
         ];
         Log::debug("Klusbib API request: POST; /token; (user:" . \json_encode($this->user)
             . "; options=" . \json_encode($options) . ")");
