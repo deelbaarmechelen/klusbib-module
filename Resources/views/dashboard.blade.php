@@ -450,8 +450,8 @@
 
 <script nonce="{{ csrf_token() }}">
 
-    var pieChartUserMembershipCanvas = $("#usersMembershipPieChart").get(0).getContext("2d");
-    var pieChartUserMembership = new Chart(pieChartUserMembershipCanvas);
+    // var pieChartUserMembershipCanvas = $("#usersMembershipPieChart").get(0).getContext("2d");
+    // var pieChartUserMembership = new Chart(pieChartUserMembershipCanvas);
     var ctxUsersMembership = document.getElementById("usersMembershipPieChart");
 
     var myPieChartUserMembership = new Chart(ctxUsersMembership,{
@@ -499,8 +499,8 @@
         options: pieOptions
     });
 
-    var pieChartUserStatusCanvas = $("#usersStatusPieChart").get(0).getContext("2d");
-    var pieChartUserStatus = new Chart(pieChartUserStatusCanvas);
+    // var pieChartUserStatusCanvas = $("#usersStatusPieChart").get(0).getContext("2d");
+    // var pieChartUserStatus = new Chart(pieChartUserStatusCanvas);
     var ctxUsersStatus = document.getElementById("usersStatusPieChart");
 
     var myPieChartUserStatus = new Chart(ctxUsersStatus,{
@@ -508,8 +508,9 @@
         type: 'pie',
         data: {
             datasets: [{
-                data: [ {{number_format($counts['membership']['active'])}},{{number_format($counts['membership']['expired'])}},
-                        {{number_format($counts['membership']['pending'])}},{{number_format($counts['membership']['cancelled'])}}],
+                data: [ {{number_format($counts['user_active'])}},{{number_format($counts['user_expired'])}},
+                        {{number_format($counts['user_check_payment'])}},{{number_format($counts['user_disabled'])}},
+                        {{number_format($counts['user_deleted'])}}],
                 backgroundColor: [
                     '#f56954',
                     '#00a65a',
@@ -526,12 +527,12 @@
                 'Actief',
                 'Vervallen',
                 'In behandeling',
-                'Geannuleerd'
+                'Inactief',
+                'Verwijderd'
             ]
         },
         options: pieOptions
     });
-
 
     let barOptions = {
         scales: {
@@ -549,8 +550,8 @@
         }
     };
 
-    var barChartNewUsersCanvas = $("#newUsersBarChart").get(0).getContext("2d");
-    var barChartNewUsers = new Chart(barChartNewUsersCanvas);
+    // var barChartNewUsersCanvas = $("#newUsersBarChart").get(0).getContext("2d");
+    // var barChartNewUsers = new Chart(barChartNewUsersCanvas);
     var ctxNewUsers = document.getElementById("newUsersBarChart");
     var myNewUsersBarChart = new Chart(ctxNewUsers, {
         type: 'bar',
@@ -559,23 +560,44 @@
                 'Vorige maand',
                 'Huidige maand'
             ],
-            datasets: [{
+            datasets: [
+            {
+                label: 'Actief',
+                backgroundColor: '#f56954',
+                barPercentage: 0.5,
+                barThickness: 6,
+                maxBarThickness: 8,
+                minBarLength: 0,
+                borderWidth: 1,
+                data: [{{number_format($counts['membership']['new_active_members_prev_month'])}},{{number_format($counts['membership']['new_active_members_curr_month'])}}]
+            },
+            {
+                label: 'In behandeling',
+                backgroundColor: '#00a65a',
+                barPercentage: 0.5,
+                barThickness: 6,
+                maxBarThickness: 8,
+                minBarLength: 0,
+                borderWidth: 1,
+                data: [{{number_format($counts['membership']['new_pending_members_prev_month'])}},{{number_format($counts['membership']['new_pending_members_curr_month'])}}]
+            },
+            {
                 label: 'Totaal',
                 backgroundColor: '#f39c12',
                 barPercentage: 0.5,
                 barThickness: 6,
                 maxBarThickness: 8,
-                minBarLength: 2,
+                minBarLength: 0,
                 borderWidth: 1,
                 data: [{{number_format($counts['membership']['new_members_prev_month'])}},{{number_format($counts['membership']['new_members_curr_month'])}}]
-            }],
-            options: barOptions,
-        }
+            }]
+        },
+        options: barOptions,
     });
 
 
-    var barChartCheckoutCanvas = $("#checkoutBarChart").get(0).getContext("2d");
-    var barChartCheckout = new Chart(barChartCheckoutCanvas);
+    // var barChartCheckoutCanvas = $("#checkoutBarChart").get(0).getContext("2d");
+    // var barChartCheckout = new Chart(barChartCheckoutCanvas);
     var ctxCheckout = document.getElementById("checkoutBarChart");
     var myCheckoutBarChart = new Chart(ctxCheckout, {
         type: 'bar',
@@ -594,8 +616,8 @@
                 borderWidth: 1,
                 data: [{{number_format($counts['activity_co_prev_month'])}},{{number_format($counts['activity_co_curr_month'])}}]
             }],
-            options: barOptions,
-        }
+        },
+        options: barOptions,
     });
 
 

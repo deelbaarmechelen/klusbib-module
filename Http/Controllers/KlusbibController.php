@@ -20,6 +20,8 @@ class KlusbibController extends Controller
         $counts['user'] = isset($monthlyStats["user"]) ? $monthlyStats["user"]["total-count"] : "0";
         $counts['user_active'] = isset($monthlyStats["user"]) ? $monthlyStats["user"]["active-count"] : "0";
         $counts['user_expired'] = isset($monthlyStats["user"]) ? $monthlyStats["user"]["expired-count"] : "0";
+        $counts['user_check_payment'] = isset($monthlyStats["user"]) ? $monthlyStats["user"]["check-payment-count"] : "0";
+        $counts['user_disabled'] = isset($monthlyStats["user"]) ? $monthlyStats["user"]["disabled-count"] : "0";
         $counts['user_deleted'] = isset($monthlyStats["user"]) ? $monthlyStats["user"]["deleted-count"] : "0";
         $counts['asset'] = isset($monthlyStats["tool"]) ? $monthlyStats["tool"]["total-count"] : "0";
         $counts['accessory'] = isset($monthlyStats["accessory"]) ? $monthlyStats["accessory"]["total-count"] : \App\Models\Accessory::count();
@@ -48,9 +50,13 @@ class KlusbibController extends Controller
                 ? $monthlyStats["prevMonth"]["membership"]["all"]["new-active-count"] : 0;
         $prevNewPendingMembers = isset($monthlyStats["prevMonth"]) && isset($monthlyStats["prevMonth"]["membership"]) && isset($monthlyStats["prevMonth"]["membership"]["all"])
                 ? $monthlyStats["prevMonth"]["membership"]["all"]["new-pending-count"] : 0;
+        $counts['membership']['new_active_members_prev_month'] = $prevNewActiveMembers;
+        $counts['membership']['new_pending_members_prev_month'] = $prevNewPendingMembers;
         $counts['membership']['new_members_prev_month'] = $prevNewActiveMembers + $prevNewPendingMembers;
         $newActiveMembers = isset($monthlyStats["membership"]) && isset($monthlyStats["membership"]["all"]) ? $monthlyStats["membership"]["all"]["new-active-count"] : 0;
         $newPendingMembers = isset($monthlyStats["membership"]) && isset($monthlyStats["membership"]["all"]) ? $monthlyStats["membership"]["all"]["new-pending-count"] : 0;
+        $counts['membership']['new_active_members_curr_month'] = $newActiveMembers;
+        $counts['membership']['new_pending_members_curr_month'] = $newPendingMembers;
         $counts['membership']['new_members_curr_month'] = $newActiveMembers + $newPendingMembers;
 
 //        return view('dashboard')->with('asset_stats', $asset_stats)->with('counts', $counts);

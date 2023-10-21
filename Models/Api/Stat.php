@@ -22,6 +22,7 @@ class Stat extends BaseModel
         $statsPrevMonth = $instance->request($instance->getEndpoint(), 'monthly', ['version' => 2, 'statMonth' => $prevMonth->format('Y-m')]);
         $prevUserStat = \json_decode($statsPrevMonth["user-statistics"], true);
         $prevActivityStat = \json_decode($statsPrevMonth["activity-statistics"], true);
+        $prevMembershipStats = \json_decode($statsPrevMonth["membership-statistics"], true);
 
         // Calling monthly method on stats endpoint with parameter version set to 2
         $stats = $instance->request($instance->getEndpoint(), 'monthly', ['version' => 2]);
@@ -35,6 +36,7 @@ class Stat extends BaseModel
             "activity" => $activityStats,
             "membership" => $membershipStats,
             "prevMonth" => [
+                "membership" => $prevMembershipStats,
                 "user" => $prevUserStat,
                 "activity" => $prevActivityStat,    
             ]
