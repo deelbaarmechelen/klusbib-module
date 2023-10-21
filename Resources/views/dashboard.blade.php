@@ -450,8 +450,8 @@
 
 <script nonce="{{ csrf_token() }}">
 
-    // var pieChartUserMembershipCanvas = $("#usersMembershipPieChart").get(0).getContext("2d");
-    // var pieChartUserMembership = new Chart(pieChartUserMembershipCanvas);
+    var pieChartUserMembershipCanvas = $("#usersMembershipPieChart").get(0).getContext("2d");// forces a minimal canvas size?
+    var pieChartUserMembership = new Chart(pieChartUserMembershipCanvas);
     var ctxUsersMembership = document.getElementById("usersMembershipPieChart");
 
     var myPieChartUserMembership = new Chart(ctxUsersMembership,{
@@ -499,8 +499,8 @@
         options: pieOptions
     });
 
-    // var pieChartUserStatusCanvas = $("#usersStatusPieChart").get(0).getContext("2d");
-    // var pieChartUserStatus = new Chart(pieChartUserStatusCanvas);
+    var pieChartUserStatusCanvas = $("#usersStatusPieChart").get(0).getContext("2d");// forces a minimal canvas size?
+    var pieChartUserStatus = new Chart(pieChartUserStatusCanvas);
     var ctxUsersStatus = document.getElementById("usersStatusPieChart");
 
     var myPieChartUserStatus = new Chart(ctxUsersStatus,{
@@ -544,14 +544,14 @@
             yAxes: [{
                 ticks: {
                     beginAtZero: true,
-                    stepSize: 1
+                    // stepSize: 1
                 }
             }]
         }
     };
 
-    // var barChartNewUsersCanvas = $("#newUsersBarChart").get(0).getContext("2d");
-    // var barChartNewUsers = new Chart(barChartNewUsersCanvas);
+    var barChartNewUsersCanvas = $("#newUsersBarChart").get(0).getContext("2d"); // forces a minimal canvas size?
+    var barChartNewUsers = new Chart(barChartNewUsersCanvas);
     var ctxNewUsers = document.getElementById("newUsersBarChart");
     var myNewUsersBarChart = new Chart(ctxNewUsers, {
         type: 'bar',
@@ -596,8 +596,8 @@
     });
 
 
-    // var barChartCheckoutCanvas = $("#checkoutBarChart").get(0).getContext("2d");
-    // var barChartCheckout = new Chart(barChartCheckoutCanvas);
+    var barChartCheckoutCanvas = $("#checkoutBarChart").get(0).getContext("2d");// forces a minimal canvas size?
+    var barChartCheckout = new Chart(barChartCheckoutCanvas);
     var ctxCheckout = document.getElementById("checkoutBarChart");
     var myCheckoutBarChart = new Chart(ctxCheckout, {
         type: 'bar',
