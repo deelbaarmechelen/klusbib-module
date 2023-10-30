@@ -38,42 +38,6 @@
                 </a>
             </li>
         @endif
-        @if (\Illuminate\Support\Facades\Route::has('klusbib.deliveries.index')
-        && Auth::user()->can('index',\Modules\Klusbib\Models\Api\Delivery::class))
-            <li>
-                <a href="{{ route('klusbib.deliveries.index') }}">
-                    <i class="fa fa-bicycle"></i>
-                    <span>Leveringen</span>
-                </a>
-            </li>
-        @endif
-        @if (\Illuminate\Support\Facades\Route::has('klusbib.memberships.index')
-        && Auth::user()->can('index',\Modules\Klusbib\Models\Api\Membership::class))
-            <li>
-                <a href="{{ route('klusbib.memberships.index') }}">
-                    <i class="fa fa-id-card"></i>
-                    <span>Lidmaatschappen</span>
-                </a>
-            </li>
-        @endif
-        @if (\Illuminate\Support\Facades\Route::has('klusbib.payments.index')
-        && Auth::user()->can('index',\Modules\Klusbib\Models\Api\Payment::class))
-            <li>
-                <a href="{{ route('klusbib.payments.index') }}">
-                    <i class="fa fa-money"></i>
-                    <span>Betalingen</span>
-                </a>
-            </li>
-        @endif
-        @if (\Illuminate\Support\Facades\Route::has('klusbib.lendings.index')
-        && Auth::user()->can('index',\Modules\Klusbib\Models\Api\Lending::class))
-            <li>
-                <a href="{{ route('klusbib.lendings.index') }}">
-                    <i class="fa"></i>
-                    <span>Ontleningen</span>
-                </a>
-            </li>
-        @endif
     </ul>
 </li>
 @endif

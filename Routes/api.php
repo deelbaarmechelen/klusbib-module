@@ -111,12 +111,6 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'api'], fun
                 'uses' => 'ReservationsController@index'
             ]
         );
-        Route::get('deliveries',
-            [
-                'as' => 'api.klusbib.deliveries.index',
-                'uses' => 'DeliveriesController@index'
-            ]
-        );
         Route::get('lendings',
             [
                 'as' => 'api.klusbib.lendings.index',
@@ -133,12 +127,6 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'api'], fun
             [
                 'as' => 'api.klusbib.lendings.bycategory',
                 'uses' => 'LendingsController@getLendingsByCategory'
-            ]
-        );
-        Route::get('payments',
-            [
-                'as' => 'api.klusbib.payments.index',
-                'uses' => 'PaymentsController@index'
             ]
         );
         Route::get('membership',

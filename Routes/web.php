@@ -46,51 +46,51 @@ Route::prefix('klusbib')->group(function() {
     Route::get('/reservations/export', [
         'as' => 'klusbib.reservations.export',
         'uses' => 'ReservationsController@export' ]);
-    Route::get('/deliveries', [
-        'as' => 'klusbib.deliveries.index',
-        'uses' => 'DeliveriesController@index' ]);
-    Route::get('/deliveries/{delivery}/cancel', [
-        'as' => 'klusbib.deliveries.cancel',
-        'uses' => 'DeliveriesController@cancel' ]);
-    Route::get('/deliveries/{delivery}/confirm', [
-        'as' => 'klusbib.deliveries.confirm',
-        'uses' => 'DeliveriesController@confirm' ]);
-    Route::get('/deliveries/export', [
-        'as' => 'klusbib.deliveries.export',
-        'uses' => 'DeiveriesController@export' ]);
-    Route::get('/deliveries/{delivery}/items/new', [
-        'as' => 'klusbib.deliveries.items.new',
-        'uses' => 'DeliveriesController@newItem' ]);
-    Route::get('/deliveries/{delivery}/items/{item}', [
-        'as' => 'klusbib.deliveries.items.show',
-        'uses' => 'DeliveriesController@showItem' ]);
-    Route::post('/deliveries/{delivery}/items', [
-        'as' => 'klusbib.deliveries.items.add',
-        'uses' => 'DeliveriesController@addItem' ]);
-    Route::get('/deliveries/{delivery}/items/{item}/edit', [
-        'as' => 'klusbib.deliveries.items.edit',
-        'uses' => 'DeliveriesController@editItem' ]);
-    Route::put('/deliveries/{delivery}/items/{item}', [
-        'as' => 'klusbib.deliveries.items.update',
-        'uses' => 'DeliveriesController@updateItem' ]);
-    Route::delete('/deliveries/{delivery}/items/{item}', [
-        'as' => 'klusbib.deliveries.items.remove',
-        'uses' => 'DeliveriesController@removeItem' ]);
-    Route::get('/memberships', [
-        'as' => 'klusbib.memberships.index',
-        'uses' => 'MembershipsController@index' ]);
-    Route::get('/memberships/{membership}/confirm', [
-        'as' => 'klusbib.memberships.confirm',
-        'uses' => 'MembershipsController@confirm' ]);
-    Route::delete('/memberships/{membership}/cancel', [
-        'as' => 'klusbib.memberships.cancel',
-        'uses' => 'MembershipsController@cancel' ]);
-    Route::get('/payments', [
-        'as' => 'klusbib.payments.index',
-        'uses' => 'PaymentsController@index' ]);
-    Route::get('/lendings', [
-        'as' => 'klusbib.lendings.index',
-        'uses' => 'LendingsController@index' ]);
+    // Route::get('/deliveries', [
+    //     'as' => 'klusbib.deliveries.index',
+    //     'uses' => 'DeliveriesController@index' ]);
+    // Route::get('/deliveries/{delivery}/cancel', [
+    //     'as' => 'klusbib.deliveries.cancel',
+    //     'uses' => 'DeliveriesController@cancel' ]);
+    // Route::get('/deliveries/{delivery}/confirm', [
+    //     'as' => 'klusbib.deliveries.confirm',
+    //     'uses' => 'DeliveriesController@confirm' ]);
+    // Route::get('/deliveries/export', [
+    //     'as' => 'klusbib.deliveries.export',
+    //     'uses' => 'DeiveriesController@export' ]);
+    // Route::get('/deliveries/{delivery}/items/new', [
+    //     'as' => 'klusbib.deliveries.items.new',
+    //     'uses' => 'DeliveriesController@newItem' ]);
+    // Route::get('/deliveries/{delivery}/items/{item}', [
+    //     'as' => 'klusbib.deliveries.items.show',
+    //     'uses' => 'DeliveriesController@showItem' ]);
+    // Route::post('/deliveries/{delivery}/items', [
+    //     'as' => 'klusbib.deliveries.items.add',
+    //     'uses' => 'DeliveriesController@addItem' ]);
+    // Route::get('/deliveries/{delivery}/items/{item}/edit', [
+    //     'as' => 'klusbib.deliveries.items.edit',
+    //     'uses' => 'DeliveriesController@editItem' ]);
+    // Route::put('/deliveries/{delivery}/items/{item}', [
+    //     'as' => 'klusbib.deliveries.items.update',
+    //     'uses' => 'DeliveriesController@updateItem' ]);
+    // Route::delete('/deliveries/{delivery}/items/{item}', [
+    //     'as' => 'klusbib.deliveries.items.remove',
+    //     'uses' => 'DeliveriesController@removeItem' ]);
+    // Route::get('/memberships', [
+    //     'as' => 'klusbib.memberships.index',
+    //     'uses' => 'MembershipsController@index' ]);
+    // Route::get('/memberships/{membership}/confirm', [
+    //     'as' => 'klusbib.memberships.confirm',
+    //     'uses' => 'MembershipsController@confirm' ]);
+    // Route::delete('/memberships/{membership}/cancel', [
+    //     'as' => 'klusbib.memberships.cancel',
+    //     'uses' => 'MembershipsController@cancel' ]);
+    // Route::get('/payments', [
+    //     'as' => 'klusbib.payments.index',
+    //     'uses' => 'PaymentsController@index' ]);
+    // Route::get('/lendings', [
+    //     'as' => 'klusbib.lendings.index',
+    //     'uses' => 'LendingsController@index' ]);
 });
 Route::resource('klusbib/reservations', 'ReservationsController', [
     'middleware' => ['auth'],
@@ -105,18 +105,18 @@ Route::resource('klusbib/reservations', 'ReservationsController', [
     'destroy' => 'klusbib.reservations.destroy',
 ]);
 
-Route::resource('klusbib/deliveries', 'DeliveriesController', [
-    'middleware' => ['auth'],
-    'parameters' => ['delivery' => 'delivery_id'],
-])->names([
-    'index' => 'klusbib.deliveries.index',
-    'create' => 'klusbib.deliveries.create',
-    'store' => 'klusbib.deliveries.store',
-    'show' => 'klusbib.deliveries.show',
-    'edit' => 'klusbib.deliveries.edit',
-    'update' => 'klusbib.deliveries.update',
-    'destroy' => 'klusbib.deliveries.destroy',
-]);
+// Route::resource('klusbib/deliveries', 'DeliveriesController', [
+//     'middleware' => ['auth'],
+//     'parameters' => ['delivery' => 'delivery_id'],
+// ])->names([
+//     'index' => 'klusbib.deliveries.index',
+//     'create' => 'klusbib.deliveries.create',
+//     'store' => 'klusbib.deliveries.store',
+//     'show' => 'klusbib.deliveries.show',
+//     'edit' => 'klusbib.deliveries.edit',
+//     'update' => 'klusbib.deliveries.update',
+//     'destroy' => 'klusbib.deliveries.destroy',
+// ]);
 /*
  * Resource actions (see https://laravel.com/docs/7.x/controllers#resource-controllers)
  * Verb 	URI 	        Action 	    Route Name

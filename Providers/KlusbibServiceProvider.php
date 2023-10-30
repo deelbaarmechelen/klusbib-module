@@ -148,41 +148,6 @@ class KlusbibServiceProvider extends ServiceProvider
         );
         $permissions['Klusbib.Reservations'] = $reservationPermissions;
 
-        // Add deliveries permissions
-        $deliveryPermissions =     array(
-            array(
-                'permission' => 'klusbib.deliveries.view',
-                'label'      => 'View ',
-                'note'       => '',
-                'display'    => true,
-            ),
-            array(
-                'permission' => 'klusbib.deliveries.create',
-                'label'      => 'Create ',
-                'note'       => '',
-                'display'    => true,
-            ),
-            array(
-                'permission' => 'klusbib.deliveries.edit',
-                'label'      => 'Edit ',
-                'note'       => '',
-                'display'    => true,
-            ),
-            array(
-                'permission' => 'klusbib.deliveries.confirm',
-                'label'      => 'Confirm ',
-                'note'       => '',
-                'display'    => true,
-            ),
-            array(
-                'permission' => 'klusbib.deliveries.delete',
-                'label'      => 'Delete ',
-                'note'       => '',
-                'display'    => true,
-            ),
-        );
-        $permissions['Klusbib.Deliveries'] = $deliveryPermissions;
-
         // add enrolment permissions
         $enrolmentPermissions =     array(
             array(
@@ -240,36 +205,6 @@ class KlusbibServiceProvider extends ServiceProvider
             ),
         );
         $permissions['Klusbib.Users'] = $userPermissions;
-
-
-        // add payment permissions
-        $paymentPermissions =     array(
-            array(
-                'permission' => 'klusbib.payments.view',
-                'label'      => 'View ',
-                'note'       => '',
-                'display'    => true,
-            ),
-//            array(
-//                'permission' => 'klusbib.payments.create',
-//                'label'      => 'Create ',
-//                'note'       => '',
-//                'display'    => true,
-//            ),
-//            array(
-//                'permission' => 'klusbib.payments.edit',
-//                'label'      => 'Edit ',
-//                'note'       => '',
-//                'display'    => true,
-//            ),
-//            array(
-//                'permission' => 'klusbib.payments.delete',
-//                'label'      => 'Delete ',
-//                'note'       => '',
-//                'display'    => true,
-//            ),
-        );
-        $permissions['Klusbib.Payments'] = $paymentPermissions;
 
         // add membership permissions
         $membershipsPermissions =     array(
