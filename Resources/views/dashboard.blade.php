@@ -346,6 +346,52 @@
     </div>
 </div>
 
+<!-- Third line of charts -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">{{ trans('klusbib::general.evolution') }} - {{ trans('klusbib::general.members') }}</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="min-height: 120px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="chart-responsive">
+                            <canvas id="membersEvolutionChart" height="120"></canvas>
+                        </div> <!-- ./chart-responsive -->
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
+            </div><!-- /.box-body -->
+        </div> <!-- /.box -->
+    </div>   
+    <div class="col-md-6">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">{{ trans('klusbib::general.evolution') }} - {{ trans('klusbib::general.lendings') }}</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="min-height: 120px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="chart-responsive">
+                            <canvas id="lendingsEvolutionChart" height="120"></canvas>
+                        </div> <!-- ./chart-responsive -->
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
+            </div><!-- /.box-body -->
+        </div> <!-- /.box -->
+    </div>   
+</div>
+
 <!-- Lendings -->
 <div class="row">
 
@@ -627,6 +673,57 @@
         options: barOptions
     });
 
+    // let lineOptions = {
+    //     scales: {
+    //         xAxes: [{
+    //             gridLines: {
+    //                 offsetGridLines: true,
+    //             }
+    //         }],
+    //         yAxes: [{
+    //             ticks: {
+    //                 beginAtZero: true,
+    //                 // stepSize: 1
+    //             }
+    //         }]
+    //     }
+    // };
+
+    // const moment = require('moment');
+    // const labels = moment.months();
+    const labels = ["Jan", "Feb", "Mar", "Apr", "Mei","Juni", "Juli", "Aug", "Sept", "Okt", "Nov", "Dec"];
+
+    var ctxMembersEvolution = document.getElementById('membersEvolutionChart').getContext("2d")
+    var myChart = new Chart(ctxMembersEvolution, {
+        type: 'line',
+        data: {
+            labels: labels,
+            // datasets: [{
+            //     label: 'Totaal',
+            //     backgroundColor: '#f39c12',
+            //     barPercentage: 0.5,
+            //     barThickness: 6,
+            //     maxBarThickness: 8,
+            //     minBarLength: 2,
+            //     borderWidth: 1,
+            //     data: [{{number_format($counts['activity_co_prev_month'])}},{{number_format($counts['activity_co_curr_month'])}}]
+            // }],
+        },
+        // options: lineOptions
+    });
+    var ctxLendingsEvolution = document.getElementById('lendingsEvolutionChart').getContext("2d")
+    var myChart = new Chart(ctxLendingsEvolution, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                data : [1,2,3,4,5,6,7,8,9,10,
+                {{number_format($counts['activity_co_prev_month'])}},
+                {{number_format($counts['activity_co_curr_month'])}}]
+            }]
+        }
+        // options: lineOptions
+    });
 
     $.ajax({
         type: 'GET',

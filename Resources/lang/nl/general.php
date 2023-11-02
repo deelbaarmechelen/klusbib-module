@@ -7,6 +7,7 @@
         'checkin'               => 'Inleveren',
         'deliveries'            => 'Leveringen',
         'extend'                => 'Verlengen',
+        'evolution'             => 'Evolutie',
         'id'                    => 'Id',
         'inventory'             => 'Inventaris',
         'lendings'              => 'Ontleningen',
