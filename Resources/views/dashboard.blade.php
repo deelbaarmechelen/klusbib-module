@@ -347,7 +347,7 @@
 </div>
 
 <!-- Third line of charts -->
-<div class="row">
+{{-- <div class="row">
     <div class="col-md-6">
         <div class="box box-default">
             <div class="box-header with-border">
@@ -390,7 +390,7 @@
             </div><!-- /.box-body -->
         </div> <!-- /.box -->
     </div>   
-</div>
+</div> --}}
 
 <!-- Lendings -->
 <div class="row">
@@ -689,41 +689,41 @@
     //     }
     // };
 
-    // const moment = require('moment');
-    // const labels = moment.months();
-    const labels = ["Jan", "Feb", "Mar", "Apr", "Mei","Juni", "Juli", "Aug", "Sept", "Okt", "Nov", "Dec"];
+    // // const moment = require('moment');
+    // // const labels = moment.months();
+    // const labels = ["Jan", "Feb", "Mar", "Apr", "Mei","Juni", "Juli", "Aug", "Sept", "Okt", "Nov", "Dec"];
 
-    var ctxMembersEvolution = document.getElementById('membersEvolutionChart').getContext("2d")
-    var myChart = new Chart(ctxMembersEvolution, {
-        type: 'line',
-        data: {
-            labels: labels,
-            // datasets: [{
-            //     label: 'Totaal',
-            //     backgroundColor: '#f39c12',
-            //     barPercentage: 0.5,
-            //     barThickness: 6,
-            //     maxBarThickness: 8,
-            //     minBarLength: 2,
-            //     borderWidth: 1,
-            //     data: [{{number_format($counts['activity_co_prev_month'])}},{{number_format($counts['activity_co_curr_month'])}}]
-            // }],
-        },
-        // options: lineOptions
-    });
-    var ctxLendingsEvolution = document.getElementById('lendingsEvolutionChart').getContext("2d")
-    var myChart = new Chart(ctxLendingsEvolution, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                data : [1,2,3,4,5,6,7,8,9,10,
-                {{number_format($counts['activity_co_prev_month'])}},
-                {{number_format($counts['activity_co_curr_month'])}}]
-            }]
-        }
-        // options: lineOptions
-    });
+    // var ctxMembersEvolution = document.getElementById('membersEvolutionChart').getContext("2d")
+    // var myChart = new Chart(ctxMembersEvolution, {
+    //     type: 'line',
+    //     data: {
+    //         labels: labels,
+    //         // datasets: [{
+    //         //     label: 'Totaal',
+    //         //     backgroundColor: '#f39c12',
+    //         //     barPercentage: 0.5,
+    //         //     barThickness: 6,
+    //         //     maxBarThickness: 8,
+    //         //     minBarLength: 2,
+    //         //     borderWidth: 1,
+    //         //     data: [{{number_format($counts['activity_co_prev_month'])}},{{number_format($counts['activity_co_curr_month'])}}]
+    //         // }],
+    //     },
+    //     // options: lineOptions
+    // });
+    // var ctxLendingsEvolution = document.getElementById('lendingsEvolutionChart').getContext("2d")
+    // var myChart = new Chart(ctxLendingsEvolution, {
+    //     type: 'line',
+    //     data: {
+    //         labels: labels,
+    //         datasets: [{
+    //             data : [1,2,3,4,5,6,7,8,9,10,
+    //             {{number_format($counts['activity_co_prev_month'])}},
+    //             {{number_format($counts['activity_co_curr_month'])}}]
+    //         }]
+    //     }
+    //     // options: lineOptions
+    // });
 
     $.ajax({
         type: 'GET',
