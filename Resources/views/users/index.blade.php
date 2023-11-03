@@ -3,14 +3,14 @@
 {{-- Page title --}}
 @section('title')
 
-@if (Input::get('status')=='deleted')
-    {{ trans('general.deleted') }}
-@else
-    {{ trans('general.current') }}
-@endif
- {{ trans('general.users') }}
+    @if (request('status')=='deleted')
+        {{ trans('general.deleted') }}
+    @else
+        {{ trans('general.current') }}
+    @endif
+    {{ trans('general.users') }}
+    @parent
 
-@parent
 @stop
 
 @section('header_right')
@@ -18,7 +18,7 @@
       <a href="{{ route('klusbib.users.create') }}" class="btn btn-primary pull-right" style="margin-right: 5px;">  {{ trans('general.create') }}</a>
     {{--@endcan--}}
 
-    {{--@if (Input::get('status')=='deleted')--}}
+    {{--@if (request('status')=='deleted')--}}
       {{--<a class="btn btn-default pull-right" href="{{ route('klusbib.users.index') }}" style="margin-right: 5px;">{{ trans('admin/users/table.show_current') }}</a>--}}
     {{--@else--}}
       {{--<a class="btn btn-default pull-right" href="{{ route('klusbib.users.index', ['status' => 'deleted']) }}" style="margin-right: 5px;">{{ trans('admin/users/table.show_deleted') }}</a>--}}
@@ -41,7 +41,7 @@
                {{--'class' => 'form-inline',--}}
                 {{--'id' => 'bulkForm']) }}--}}
 
-            {{--@if (Input::get('status')!='deleted')--}}
+            {{--@if (request('status')!='deleted')--}}
               {{--@can('delete', \App\Models\User::class)--}}
                 {{--<div id="toolbar">--}}
                   {{--<select name="bulk_actions" class="form-control select2" style="width: 200px;">--}}
@@ -70,7 +70,7 @@
                     id="usersTable"
                     class="table table-striped snipe-table"
                     data-url="{{ route('api.klusbib.users.index',
-              array('deleted'=> (Input::get('status')=='deleted') ? 'true' : 'false','company_id'=>e(Input::get('company_id')))) }}"
+              array('deleted'=> (request('status')=='deleted') ? 'true' : 'false','company_id'=>e(request('company_id')))) }}"
                     data-export-options='{
                 "fileName": "export-users-{{ date('Y-m-d') }}",
                 "ignoreColumn": ["actions","image","change","checkbox","checkincheckout","icon"]
