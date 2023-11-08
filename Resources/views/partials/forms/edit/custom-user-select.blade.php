@@ -8,7 +8,7 @@
 
     <div class="col-md-7{{  ((isset($required)) && ($required=='true')) ? ' required' : '' }}">
         <select class="js-data-ajax" data-endpoint="klusbib/users" data-placeholder="{{ trans('general.select_user') }}" name="{{ $fieldname }}" style="width: 100%" id="assigned_user_select">
-            @if ($employee_num = Input::old($fieldname, (isset($item)) ? $item->{$fieldname} : ''))
+            @if ($employee_num = Request::old($fieldname, (isset($item)) ? $item->{$fieldname} : ''))
                 <option value="{{ $employee_num }}" selected="selected">
                     {{ (\App\Models\User::where('employee_num', '=', $employee_num)->first()) ? \App\Models\User::where('employee_num', '=', $employee_num)->first()->present()->fullName : '' }}
                 </option>

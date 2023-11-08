@@ -90,7 +90,7 @@
                 <div class="form-group {{ $errors->has('firstname') ? 'has-error' : '' }}">
                   <label class="col-md-3 control-label" for="firstname">{{ trans('klusbib::admin/users/table.firstname') }}</label>
                   <div class="col-md-8 {{  (\App\Helpers\Helper::checkIfRequired($item, 'firstname')) ? ' required' : '' }}">
-                    <input class="form-control" type="text" name="firstname" id="firstname" value="{{ Input::old('firstname', $item->firstname) }}" />
+                    <input class="form-control" type="text" name="firstname" id="firstname" value="{{ Request::old('firstname', $item->firstname) }}" />
                     {!! $errors->first('firstname', '<span class="alert-msg">:message</span>') !!}
                   </div>
                 </div>
@@ -99,7 +99,7 @@
                 <div class="form-group {{ $errors->has('lastname') ? 'has-error' : '' }}">
                   <label class="col-md-3 control-label" for="lastname">{{ trans('klusbib::admin/users/table.lastname') }} </label>
                   <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'lastname')) ? ' required' : '' }}">
-                    <input class="form-control" type="text" name="lastname" id="lastname" value="{{ Input::old('lastname', $item->lastname) }}" />
+                    <input class="form-control" type="text" name="lastname" id="lastname" value="{{ Request::old('lastname', $item->lastname) }}" />
                     {!! $errors->first('lastname', '<span class="alert-msg">:message</span>') !!}
                   </div>
                 </div>
@@ -108,7 +108,7 @@
                 <div class="form-group {{ $errors->has('company') ? 'has-error' : '' }}">
                     <label class="col-md-3 control-label" for="company">{{ trans('klusbib::admin/users/table.company') }} </label>
                     <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'company')) ? ' required' : '' }}">
-                        <input class="form-control" type="text" name="company" id="company" value="{{ Input::old('company', $item->company) }}" />
+                        <input class="form-control" type="text" name="company" id="company" value="{{ Request::old('company', $item->company) }}" />
                         {!! $errors->first('company', '<span class="alert-msg">:message</span>') !!}
                     </div>
                 </div>
@@ -117,10 +117,10 @@
                 <div class="form-group {{ $errors->has('role') ? 'has-error' : '' }}">
                     <label class="col-md-3 control-label" for="role">{{ trans('klusbib::admin/users/table.role') }} </label>
                     <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'role')) ? ' required' : '' }}">
-                        <select class="form-control"  name="role" id="role_select">{{ Input::old('role', $item->role) }}
-                            <option value="member" {{ ((Input::old("role", $item->role) == "member" || Input::old("role", $item->role) == "") ? "selected":"") }}>Lid</option>
-                            <option value="supporter" {{ (Input::old("role", $item->role) == "supporter" ? "selected":"") }}>Steunlid</option>
-                            <option value="admin" {{ (Input::old("role", $item->role) == "admin" ? "selected":"") }}>Admin</option>
+                        <select class="form-control"  name="role" id="role_select">{{ Request::old('role', $item->role) }}
+                            <option value="member" {{ ((Request::old("role", $item->role) == "member" || Request::old("role", $item->role) == "") ? "selected":"") }}>Lid</option>
+                            <option value="supporter" {{ (Request::old("role", $item->role) == "supporter" ? "selected":"") }}>Steunlid</option>
+                            <option value="admin" {{ (Request::old("role", $item->role) == "admin" ? "selected":"") }}>Admin</option>
                         </select>
                         {!! $errors->first('role', '<span class="alert-msg">:message</span>') !!}
                     </div>
@@ -192,7 +192,7 @@
                       type="text"
                       name="email"
                       id="email"
-                      value="{{ Input::old('email', $item->email) }}"
+                      value="{{ Request::old('email', $item->email) }}"
                       {{ ((config('app.lock_passwords') && ($item->id)) ? ' disabled' : '') }}
                       autocomplete="off"
                       readonly
@@ -208,7 +208,7 @@
                 <div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
                   <label class="col-md-3 control-label" for="phone">{{ trans('klusbib::admin/users/table.phone') }}</label>
                   <div class="col-md-4">
-                    <input class="form-control" type="text" name="phone" id="phone" value="{{ Input::old('phone', $item->phone) }}" />
+                    <input class="form-control" type="text" name="phone" id="phone" value="{{ Request::old('phone', $item->phone) }}" />
                     {!! $errors->first('phone', '<span class="alert-msg">:message</span>') !!}
                   </div>
                 </div>
@@ -217,7 +217,7 @@
                   <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
                       <label class="col-md-3 control-label" for="address">{{ trans('klusbib::admin/users/table.address') }}</label>
                       <div class="col-md-4">
-                          <input class="form-control" type="text" name="address" id="address" value="{{ Input::old('address', $item->address) }}" />
+                          <input class="form-control" type="text" name="address" id="address" value="{{ Request::old('address', $item->address) }}" />
                           {!! $errors->first('address', '<span class="alert-msg">:message</span>') !!}
                       </div>
                   </div>
@@ -226,7 +226,7 @@
                   <div class="form-group{{ $errors->has('city') ? ' has-error' : '' }}">
                       <label class="col-md-3 control-label" for="city">{{ trans('klusbib::admin/users/table.city') }}</label>
                       <div class="col-md-4">
-                          <input class="form-control" type="text" name="city" id="city" value="{{ Input::old('city', $item->city) }}" />
+                          <input class="form-control" type="text" name="city" id="city" value="{{ Request::old('city', $item->city) }}" />
                           {!! $errors->first('city', '<span class="alert-msg">:message</span>') !!}
                       </div>
                   </div>
@@ -235,7 +235,7 @@
                   <div class="form-group{{ $errors->has('postal_code') ? ' has-error' : '' }}">
                       <label class="col-md-3 control-label" for="postal_code">{{ trans('klusbib::admin/users/table.postal_code') }}</label>
                       <div class="col-md-4">
-                          <input class="form-control" type="text" name="postal_code" id="postal_code" value="{{ Input::old('postal_code', $item->postal_code) }}" maxlength="5" />
+                          <input class="form-control" type="text" name="postal_code" id="postal_code" value="{{ Request::old('postal_code', $item->postal_code) }}" maxlength="5" />
                           {!! $errors->first('postal_code', '<span class="alert-msg">:message</span>') !!}
                       </div>
                   </div>
@@ -244,7 +244,7 @@
                   <div class="form-group{{ $errors->has('registration_number') ? ' has-error' : '' }}">
                       <label class="col-md-3 control-label" for="registration_number">{{ trans('klusbib::admin/users/table.registration_number') }}</label>
                       <div class="col-md-4">
-                          <input class="form-control" type="text" name="registration_number" id="registration_number" value="{{ Input::old('registration_number', $item->registration_number) }}" maxlength="11" />
+                          <input class="form-control" type="text" name="registration_number" id="registration_number" value="{{ Request::old('registration_number', $item->registration_number) }}" maxlength="11" />
                           {!! $errors->first('registration_number', '<span class="alert-msg">:message</span>') !!}
                       </div>
                   </div>
@@ -253,7 +253,7 @@
                   <div class="form-group{!! $errors->has('notes') ? ' has-error' : '' !!}">
                       <label for="comment" class="col-md-3 control-label">{{ trans('klusbib::admin/users/table.comment') }}</label>
                       <div class="col-md-8">
-                          <textarea class="form-control" id="comment" name="comment">{{ Input::old('comment', $item->comment) }}</textarea>
+                          <textarea class="form-control" id="comment" name="comment">{{ Request::old('comment', $item->comment) }}</textarea>
                           {!! $errors->first('comment', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
                       </div>
                   </div>
@@ -265,9 +265,9 @@
                   <div class="form-group {{ $errors->has('membership_type') ? 'has-error' : '' }}">
                       <label class="col-md-3 control-label" for="membership_type">{{ trans('klusbib::admin/users/general.membership_type') }} </label>
                       <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'membership_type')) ? ' required' : '' }}">
-                          <select x-model="membershiptype" class="form-control"  name="membership_type" id="membership_type_select">{{ Input::old('membership_type', $item->membership_type) }}
+                          <select x-model="membershiptype" class="form-control"  name="membership_type" id="membership_type_select">{{ Request::old('membership_type', $item->membership_type) }}
                               @foreach ( $allowed_new_memberships as $value )
-                                  <option value="{{$value}}" {{ (Input::old("membership_type", $item->membership_type) == $value ? "selected":"") }}>
+                                  <option value="{{$value}}" {{ (Request::old("membership_type", $item->membership_type) == $value ? "selected":"") }}>
                                       {{trans( 'klusbib::types/membershiptypes.'.$value)}}</option>
                               @endforeach
                           </select>
@@ -280,7 +280,7 @@
                        class="form-group {{ $errors->has('membership_start_date') ? 'has-error' : '' }}">
                       <label class="col-md-3 control-label" for="membership_start_date">{{ trans('klusbib::admin/users/table.membership_start_date') }} </label>
                       <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'membership_start_date')) ? ' required' : '' }}">
-                          <input class="form-control" type="date" name="membership_start_date" id="membership_start_date" value="{{ Input::old('membership_start_date', $item->membership_start_date) }}" />
+                          <input class="form-control" type="date" name="membership_start_date" id="membership_start_date" value="{{ Request::old('membership_start_date', $item->membership_start_date) }}" />
                           {!! $errors->first('membership_start_date', '<span class="alert-msg">:message</span>') !!}
                       </div>
                   </div>
@@ -289,7 +289,7 @@
                   {{--<div x-show="membershiptype !== 'NONE'" class="form-group {{ $errors->has('membership_end_date') ? 'has-error' : '' }}">--}}
                       {{--<label class="col-md-3 control-label" for="membership_end_date">{{ trans('klusbib::admin/users/table.membership_end_date') }} </label>--}}
                       {{--<div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'membership_end_date')) ? ' required' : '' }}">--}}
-                          {{--<input class="form-control" type="date" name="membership_end_date" id="membership_end_date" value="{{ Input::old('membership_end_date', $item->membership_end_date) }}" />--}}
+                          {{--<input class="form-control" type="date" name="membership_end_date" id="membership_end_date" value="{{ Request::old('membership_end_date', $item->membership_end_date) }}" />--}}
                           {{--{!! $errors->first('membership_end_date', '<span class="alert-msg">:message</span>') !!}--}}
                       {{--</div>--}}
                   {{--</div>--}}
@@ -298,9 +298,9 @@
                   <div x-show="membershiptype === 'REGULAR' || membershiptype === 'REGULARREDUCED' || membershiptype === 'REGULARORG'" class="form-group{{ $errors->has('payment_mode') ? ' has-error' : '' }}">
                       <label class="col-md-3 control-label" for="payment_mode">{{ trans('klusbib::admin/users/table.payment_mode') }}</label>
                       <div class="col-md-4">
-                          <select class="form-control"  name="payment_mode" id="payment_mode_select">{{ Input::old('payment_mode', $item->payment_mode) }}
+                          <select class="form-control"  name="payment_mode" id="payment_mode_select">{{ Request::old('payment_mode', $item->payment_mode) }}
                               @foreach ( $allowed_payment_modes as $value )
-                                  <option value="{{$value}}" {{ (Input::old("payment_mode", $item->payment_mode) == $value ? "selected":"") }}>
+                                  <option value="{{$value}}" {{ (Request::old("payment_mode", $item->payment_mode) == $value ? "selected":"") }}>
                                       {{trans( 'klusbib::types/paymentmodes.'.$value)}}</option>
                               @endforeach
                           </select>
@@ -312,7 +312,7 @@
                 <div x-show="membershiptype !== 'NONE'" class="form-group{!! $errors->has('accept_terms_date') ? ' has-error' : '' !!}">
                   <label for="accept_terms_date" class="col-md-3 control-label">{{ trans('klusbib::admin/users/table.accept_terms_date') }}</label>
                   <div class="col-md-8{{  (\App\Helpers\Helper::checkIfRequired($item, 'accept_terms_date')) ? ' required' : '' }}">
-                    <input class="form-control" type="date" id="accept_terms_date" name="accept_terms_date" value="{{ Input::old('accept_terms_date', $item->accept_terms_date) }}" />
+                    <input class="form-control" type="date" id="accept_terms_date" name="accept_terms_date" value="{{ Request::old('accept_terms_date', $item->accept_terms_date) }}" />
                     {!! $errors->first('accept_terms_date', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
                   </div>
                 </div>

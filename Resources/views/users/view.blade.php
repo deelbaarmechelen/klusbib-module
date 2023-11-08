@@ -200,7 +200,7 @@
             class="table table-striped snipe-table"
             data-url="{{ route('api.klusbib.membership.index',
               array(
-                'deleted' => (Input::get('status')=='deleted') ? 'true' : 'false',
+                'deleted' => (request('status')=='deleted') ? 'true' : 'false',
                 'user_id' => $user->user_id,
                 'status'  => 'ALL'
                 ) ) }}">

@@ -32,7 +32,7 @@
             {{--data-url="Modules/Modules/data.json"--}}
             data-url="http://klusbibapi/tools"
             data-export-options='{
-                "fileName": "export{{ (Input::has('status')) ? '-'.str_slug(Input::get('status')) : '' }}-assets-{{ date('Y-m-d') }}",
+                "fileName": "export{{ (Request::has('status')) ? '-'.str_slug(Request::get('status')) : '' }}-assets-{{ date('Y-m-d') }}",
                 "ignoreColumn": ["actions","image","change","checkbox","checkincheckout","icon"]
                 }'>
     </table>
