@@ -24,15 +24,15 @@
         }
     ],
     "require": {
-        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/guzzle": "^6.5",
 	    "deelbaarmechelen/remote-model": "dev-master",
-        "fzaninotto/faker": "~1.4",
+        "fzaninotto/faker": "^1.9",
         "joshbrw/laravel-module-installer": "^2.0",
-        "lcobucci/jwt": "3.3.3"
+        "lcobucci/jwt": "^3.3.3"
     },
     "config": {
         "platform": {
-            "php": "7.2"
+            "php": "7.2.5"
         },
         "allow-plugins": {
             "joshbrw/laravel-module-installer": true
