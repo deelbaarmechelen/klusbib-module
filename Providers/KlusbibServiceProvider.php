@@ -69,7 +69,6 @@ class KlusbibServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->updatePermissions();
         $this->registerViews();
-        $this->registerFactories();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
 
         $this->registerApiClient($router);
