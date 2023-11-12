@@ -8,7 +8,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\Klusbib\Api\Client;
 //use Modules\Klusbib\Console\Commands\SendExpectedCheckinAlerts;
 //use Modules\Klusbib\Console\Commands\SyncLendings;
