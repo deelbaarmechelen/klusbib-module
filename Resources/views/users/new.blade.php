@@ -70,7 +70,7 @@
     <form class="form-horizontal"
           method="post"
           autocomplete="off"
-          action="{{ ($item) ? route('klusbib.users.update', ['user' => $item->id]) : route('klusbib.users.store') }}"
+          action="{{ ($item && $item->id) ? route('klusbib.users.update', ['user' => $item->id]) : route('klusbib.users.store') }}"
           id="userForm">
       {{csrf_field()}}
 

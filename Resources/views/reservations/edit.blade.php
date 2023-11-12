@@ -3,7 +3,7 @@
     'updateText' => trans('klusbib::admin/reservations/form.update'),
     'helpTitle' => trans('klusbib::admin/reservations/general.about_reservations_title'),
     'helpText' => trans('klusbib::admin/reservations/general.about_reservations_text'),
-    'formAction' => ($item) ? route('klusbib.reservations.update', ['reservation' => $item->id]) : route('klusbib.reservations.store'),
+    'formAction' => ($item && $item->id) ? route('klusbib.reservations.update', ['reservation' => $item->id]) : route('klusbib.reservations.store'),
 ])
 
 {{-- Page content --}}
