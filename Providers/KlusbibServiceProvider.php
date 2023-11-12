@@ -311,18 +311,6 @@ class KlusbibServiceProvider extends ServiceProvider
         }
     }
 
-    /**
-     * Register an additional directory of factories.
-     * 
-     * @return void
-     */
-    public function registerFactories()
-    {
-        if (! app()->environment('production')) {
-            app(Factory::class)->load(__DIR__ . '/../Database/factories');
-        }
-    }
-
     private function registerApiClient(Router $router) {
 
         //Log::debug('aliasMiddleware added');

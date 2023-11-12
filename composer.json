@@ -14,7 +14,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Modules\\Klusbib\\": ""
+            "Modules\\Klusbib\\": "",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "repositories": [
