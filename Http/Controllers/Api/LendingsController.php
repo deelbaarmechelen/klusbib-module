@@ -207,7 +207,7 @@ class LendingsController extends Controller
                 "tool" => (isset($lending->tool) ? \json_decode($lending->tool) : null) );
             array_push($rows, $row);
         }
-        $colors_array = Helper::chartColors();
+        $colors_array = Helper::defaultChartColors();
 
         $chart= [
             "labels" => $labels,
@@ -279,7 +279,7 @@ class LendingsController extends Controller
             $points[] = $otherCount;
         }
 
-        $colors_array = Helper::chartColors();
+        $colors_array = Helper::defaultChartColors();
         $chart= [
             "labels" => $labels,
             "datasets" => array ([
