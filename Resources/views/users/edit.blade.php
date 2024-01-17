@@ -321,15 +321,6 @@
                       </div>
                   </div>
 
-                  <!-- Registration code -->
-                  <div class="form-group{{ $errors->has('registration_number') ? ' has-error' : '' }}">
-                      <label class="col-md-3 control-label" for="registration_number">{{ trans('klusbib::admin/users/table.registration_number') }}</label>
-                      <div class="col-md-4">
-                          <input class="form-control" type="text" name="registration_number" id="registration_number" value="{{ Request::old('registration_number', $item->registration_number) }}" maxlength="11" />
-                          {!! $errors->first('registration_number', '<span class="alert-msg">:message</span>') !!}
-                      </div>
-                  </div>
-
                   <!-- Comment -->
                   <div class="form-group{!! $errors->has('notes') ? ' has-error' : '' !!}">
                       <label for="comment" class="col-md-3 control-label">{{ trans('klusbib::admin/users/table.comment') }}</label>

@@ -107,7 +107,6 @@ class UsersController extends Controller
         $user->address               = $request->input('address');
         $user->city                  = $request->input('city');
         $user->postal_code           = $request->input('postal_code');
-        $user->registration_number   = $request->input('registration_number');
         $user->company               = $request->input('company');
         $user->comment               = $request->input('comment');
         Log::info('User: ' . \json_encode($user));
@@ -338,7 +337,6 @@ class UsersController extends Controller
         $user->address = $request->input('address');
         $user->city = $request->input('city');
         $user->postal_code = $request->input('postal_code');
-        $user->registration_number = $request->input('registration_number');
 
         $origMembershipType = $request->input('membership_type');
         $newMembershipType = $request->input('new_membership_type');

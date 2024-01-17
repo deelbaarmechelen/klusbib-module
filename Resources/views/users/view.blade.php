@@ -144,13 +144,6 @@
               </tr>
             @endif
 
-            @if ($user->registration_number)
-              <tr>
-                <td>{{ trans('klusbib::admin/users/table.registration_number') }}:</td>
-                <td>{{ $user->registration_number }}</td>
-              </tr>
-            @endif
-
             @if ($user->payment_mode)
               <tr>
                 <td>{{ trans('klusbib::admin/users/table.payment_mode') }}:</td>

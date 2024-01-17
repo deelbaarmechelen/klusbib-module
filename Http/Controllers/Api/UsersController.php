@@ -144,7 +144,7 @@ class UsersController extends Controller
         $allowed_columns =
             [
                 'user_id', 'state', 'firstname', 'lastname', 'email', 'email_state',
-                'role','membership_start_date','membership_end_date','address' ,'postal_code' ,'city' ,'phone' ,'mobile' ,'registration_number',
+                'role','membership_start_date','membership_end_date','address' ,'postal_code' ,'city' ,'phone' ,'mobile',
                 'payment_mode' ,'accept_terms_date' ,'created_at' ,'updated_at', 'id'
             ];
 

@@ -41,7 +41,6 @@ class UsersTransformer
             'city' => ($user->city) ? e($user->city) : null,
             'phone' => ($user->phone) ? e($user->phone) : null,
             'mobile' => ($user->mobile) ? e($user->mobile) : null,
-            'registration_number' => (int) $user->registration_number,
             'payment_mode' => ($user->payment_mode) ?
                 __('klusbib::types/paymentmodes.' . strtoupper(e($user->payment_mode)), array(), 'nl')
                 : null,
