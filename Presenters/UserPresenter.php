@@ -162,14 +162,6 @@ class UserPresenter extends Presenter
                 "visible" => false,
             ],
             [
-                "field" => "registration_number",
-                "searchable" => true,
-                "sortable" => true,
-                "switchable" => true,
-                "title" => trans('klusbib::admin/users/table.registration_number'),
-                "visible" => false,
-            ],
-            [
                 "field" => "payment_mode",
                 "searchable" => true,
                 "sortable" => true,
